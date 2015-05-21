@@ -143,7 +143,7 @@ describe('functions', function() {
       .expect({result: "bar"}, done);
   });
 
-  // 测试 api version 1.1 的有效性 
+  // 测试 `/__engine` URL namespace  的有效性 
   it('urlNamespace', function(done) {
     request(AV.Cloud)
       .post('/1.1/__engine/functions/foo')
