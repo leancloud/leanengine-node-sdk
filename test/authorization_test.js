@@ -29,7 +29,7 @@ describe('authorization', function() {
       .post('/1/functions/hello')
       .send({name: "张三"})
       .expect(401)
-      .expect({code: 1, error: 'Unauthorized.'}, done);
+      .expect({code: 401, error: 'Unauthorized.'}, done);
   });
 
   it('mismatching', function(done) {
@@ -37,7 +37,7 @@ describe('authorization', function() {
       .post('/1/functions/foo')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', 'errorKey')
-      .expect({code: 1, error: 'Unauthorized.'}, done);
+      .expect({code: 401, error: 'Unauthorized.'}, done);
   });
 
   it('masterKey', function(done) {
@@ -81,7 +81,7 @@ describe('authorization', function() {
       .post('/1/functions/foo')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Request-Sign', '11111111111111111111111111111111,1389085779854')
-      .expect({code: 1, error: 'Unauthorized.'}, done);
+      .expect({code: 401, error: 'Unauthorized.'}, done);
   });
 
 });

@@ -2,20 +2,20 @@
 
 LeanEngine Node.js SDK
 
-## Install
+## 安装
 
 ```bash
 npm install leanengine-sdk
 ```
 
-## Document
+## 文档
 
-Guide: [https://leancloud.cn/docs/leanengine_guide-node.htm](https://leancloud.cn/docs/leanengine_guide-node.htm)
+开发指南: [https://leancloud.cn/docs/leanengine_guide-node.htm](https://leancloud.cn/docs/leanengine_guide-node.htm)
 
-Demo: [https://github.com/leancloud/node-js-getting-started](https://github.com/leancloud/node-js-getting-started)
+示例: [https://github.com/leancloud/node-js-getting-started](https://github.com/leancloud/node-js-getting-started)
 
-## License
+## 许可协议
 
-License: MIT
+许可协议: MIT
 
-Author: wchen (wchen@leancloud.rocks)
+作者: wchen (wchen@leancloud.rocks)

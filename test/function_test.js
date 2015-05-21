@@ -116,6 +116,13 @@ var sessionToken_admin = config.sessionToken_admin;
 
 describe('functions', function() {
 
+  it('ping', function(done) {
+    request(AV.Cloud)
+      .post('/1/__engine/ping')
+      .expect(200)
+      .expect('pong', done);
+  });
+
   // 测试最基本方法的有效性
   it('foo', function(done) {
     request(AV.Cloud)
@@ -130,6 +137,16 @@ describe('functions', function() {
   it('version_1.1', function(done) {
     request(AV.Cloud)
       .post('/1.1/functions/foo')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .expect(200)
+      .expect({result: "bar"}, done);
+  });
+
+  // 测试 api version 1.1 的有效性 
+  it('urlNamespace', function(done) {
+    request(AV.Cloud)
+      .post('/1.1/__engine/functions/foo')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
       .expect(200)
