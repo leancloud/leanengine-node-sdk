@@ -1,5 +1,5 @@
 {
-  "name": "leanengine-sdk",
+  "name": "leanengine",
   "version": "0.1.0",
   "description": "LeanCloud LeanEngine Node.js SDK.",
   "repository": {

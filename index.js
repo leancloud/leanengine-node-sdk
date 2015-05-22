@@ -1,1 +1,1 @@
-module.exports = require('./lib/leanengine-sdk');
+module.exports = require('./lib/leanengine');
