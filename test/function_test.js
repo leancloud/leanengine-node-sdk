@@ -247,6 +247,7 @@ describe('functions', function() {
 
   // 测试带有 sessionToken 时，user 对象的正确解析
   it('testUser', function(done) {
+    this.timeout(5000);
     request(AV.Cloud)
       .post('/1/functions/testUser')
       .set('X-AVOSCloud-Application-Id', appId)
