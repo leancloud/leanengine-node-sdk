@@ -1,5 +1,7 @@
 # leanengine-node-sdk
 
+[![Build Status](https://travis-ci.org/leancloud/leanengine-node-sdk.svg?branch=develop)](https://travis-ci.org/leancloud/leanengine-node-sdk)
+
 LeanEngine Node.js SDK
 
 ## 安装
