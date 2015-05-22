@@ -383,7 +383,7 @@ describe('functions', function() {
       .set('Origin', 'http://foo.bar')
       .set('Access-Control-Request-Method', 'POST')
       .set('Access-Control-Request-Headers', 'X-AVOSCloud-Application-Id, X-AVOSCloud-Application-Key')
-      .expect('access-control-allow-origin', '*')
+      .expect('access-control-allow-origin', 'http://foo.bar')
       .expect(200, done);
   })
 
