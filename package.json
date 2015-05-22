@@ -23,6 +23,12 @@
     "should": "3.3.2",
     "supertest": "0.14.0"
   },
+  "keywords": [
+    "LeanCloud",
+    "LeanEngine",
+    "cloud",
+    "BaaS"
+  ],
   "config": {
     "blanket": {
       "pattern": "//^((?!(node_modules|test)).)*$/"
