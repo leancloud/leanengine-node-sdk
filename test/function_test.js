@@ -118,7 +118,7 @@ describe('functions', function() {
 
   it('ping', function(done) {
     request(AV.Cloud)
-      .post('/1/__engine/ping')
+      .get('/__engine/1/ping')
       .expect(200)
       .expect('pong', done);
   });
@@ -146,7 +146,7 @@ describe('functions', function() {
   // 测试 `/__engine` URL namespace  的有效性 
   it('urlNamespace', function(done) {
     request(AV.Cloud)
-      .post('/1.1/__engine/functions/foo')
+      .post('/__engine/1.1/functions/foo')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
       .expect(200)
