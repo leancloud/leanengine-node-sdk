@@ -7,7 +7,7 @@ LeanEngine Node.js SDK
 ## 安装
 
 ```bash
-npm install leanengine-sdk
+npm install leanengine
 ```
 
 ## 文档
