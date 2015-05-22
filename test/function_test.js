@@ -258,6 +258,7 @@ describe('functions', function() {
 
   // 测试调用 run 方法时，传递 user 对象的有效性
   it('testRunWithUser', function(done) {
+    this.timeout(5000);
     request(AV.Cloud)
       .post('/1/functions/testRunWithUser')
       .set('X-AVOSCloud-Application-Id', appId)
