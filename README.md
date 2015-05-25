@@ -12,9 +12,9 @@ npm install leanengine
 
 ## 文档
 
-开发指南: [https://leancloud.cn/docs/leanengine_guide-node.htm](https://leancloud.cn/docs/leanengine_guide-node.htm)
+开发指南: https://leancloud.cn/docs/leanengine_guide-node.html
 
-示例: [https://github.com/leancloud/node-js-getting-started](https://github.com/leancloud/node-js-getting-started)
+示例: https://github.com/leancloud/node-js-getting-started
 
 ## 更新日志
 
