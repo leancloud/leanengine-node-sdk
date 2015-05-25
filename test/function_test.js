@@ -120,7 +120,7 @@ describe('functions', function() {
     request(AV.Cloud)
       .get('/__engine/1/ping')
       .expect(200)
-      .expect('pong', done);
+      .expect('{"runtime":"nodejs-0.12","version":"0.1.1"}', done);
   });
 
   // 测试最基本方法的有效性
