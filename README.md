@@ -16,6 +16,10 @@ npm install leanengine
 
 示例: [https://github.com/leancloud/node-js-getting-started](https://github.com/leancloud/node-js-getting-started)
 
+## 更新日志
+
+详情查看: [CHANGELOG.m](https://github.com/leancloud/leanengine-node-sdk/blob/master/CHANGELOG.md)
+
 ## 许可协议
 
 许可协议: MIT
