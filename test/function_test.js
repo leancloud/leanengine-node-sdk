@@ -322,14 +322,14 @@ describe('functions', function() {
  
   // 用户串号测试 
   it('user_matching_func', function(done) {
-    this.timeout(20000);
+    this.timeout(30000);
     var count = 0;
     var cb = function(err) {
       if (err != null) {
         throw err;
       }
       count++;
-      if (count === 15) {
+      if (count === 10) {
         return done();
       }
     };
