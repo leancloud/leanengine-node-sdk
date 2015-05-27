@@ -112,6 +112,14 @@ AV.Cloud.define("userMatching", function(req, res) {
   }, Math.floor((Math.random() * 2000) + 1));
 });
 
+AV.BigQuery.on('end', function(err, result) {
+  assert.deepEqual({
+    "id" : "job id",
+    "status": "OK/ERROR",
+    "message": "当 status 为 ERROR 时的错误消息"
+  }, result);
+})
+
 var sessionToken_admin = config.sessionToken_admin;
 
 describe('functions', function() {
@@ -385,6 +393,19 @@ describe('functions', function() {
       .set('Access-Control-Request-Method', 'POST')
       .set('Access-Control-Request-Headers', 'X-AVOSCloud-Application-Id, X-AVOSCloud-Application-Key')
       .expect('access-control-allow-origin', 'http://foo.bar')
+      .expect(200, done);
+  })
+
+  it('onCompleteBigqueryJob', function(done) {
+    request(AV.Cloud)
+      .post('/1.1/functions/BigQuery/onComplete')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .send({
+        id : "job id",
+        status: "OK/ERROR",
+        message: "当 status 为 ERROR 时的错误消息"
+      })
       .expect(200, done);
   })
 
