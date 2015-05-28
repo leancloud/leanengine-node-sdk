@@ -20,8 +20,15 @@ npm install leanengine
 
 详情查看: [CHANGELOG.m](https://github.com/leancloud/leanengine-node-sdk/blob/master/CHANGELOG.md)
 
+## 贡献者
+
+在此表示感谢！
+
+* [filod](https://github.com/filod)
+
 ## 许可协议
 
 许可协议: MIT
 
 作者: wchen (wchen@leancloud.rocks)
+
