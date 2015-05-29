@@ -11,7 +11,7 @@ describe('av-extra', function() {
         done();   
       },
       error: function(httpResponse) {
-        throw httpResponse.text
+        throw httpResponse.text;
       }
     });
   });

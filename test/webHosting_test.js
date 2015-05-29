@@ -9,14 +9,14 @@ var masterKey = config.masterKey;
 
 AV.initialize(appId, appKey, masterKey);
 
-var app = express()
-app.use(AV.Cloud)
+var app = express();
+app.use(AV.Cloud);
 app.use(bodyParser.json());
 app.use(AV.Cloud.CookieSession({ secret: 'my secret', maxAge: 3600000, fetchUser: false }));
 
 app.get('/', function (req, res) {
-  res.send('Hello World!')
-})
+  res.send('Hello World!');
+});
 
 app.post('/login', function(req, res) {
   AV.User.logIn(req.body.username, req.body.password).then(
@@ -82,8 +82,8 @@ describe('webHosting', function() {
           throw err;
         }
         res.headers.location.should.equal('/profile');
-        res.headers['set-cookie'][0].indexOf('avos:sess=eyJfdWlkIjoiNTRmZDZhMDNlNGIwNmM0MWUwMGIxZjQwIiwiX3Nlc3Npb25Ub2tlbiI6IncyanJ0a2JlaHAzOG90cW1oYnF1N3liczkifQ==; path=/; expires=').should.equal(0)
-        res.headers['set-cookie'][1].indexOf('avos:sess.sig=jMYF3Iwhmw903-K1K12MVdAFOh0; path=/; expires=').should.equal(0)
+        res.headers['set-cookie'][0].indexOf('avos:sess=eyJfdWlkIjoiNTRmZDZhMDNlNGIwNmM0MWUwMGIxZjQwIiwiX3Nlc3Npb25Ub2tlbiI6IncyanJ0a2JlaHAzOG90cW1oYnF1N3liczkifQ==; path=/; expires=').should.equal(0);
+        res.headers['set-cookie'][1].indexOf('avos:sess.sig=jMYF3Iwhmw903-K1K12MVdAFOh0; path=/; expires=').should.equal(0);
         return request(app).get("/profile")
           .set('Cookie', 'avos:sess=eyJfdWlkIjoiNTRmZDZhMDNlNGIwNmM0MWUwMGIxZjQwIiwiX3Nlc3Npb25Ub2tlbiI6IncyanJ0a2JlaHAzOG90cW1oYnF1N3liczkifQ==; avos:sess.sig=jMYF3Iwhmw903-K1K12MVdAFOh0')
           .expect(200, function(err, res) {
@@ -95,7 +95,7 @@ describe('webHosting', function() {
             if (err) {
               throw err;
             }
-            res.headers['set-cookie'][0].indexOf('avos:sess=; path=/; expires=').should.equal(0)
+            res.headers['set-cookie'][0].indexOf('avos:sess=; path=/; expires=').should.equal(0);
             res.headers.location.should.equal('/profile');
             return request(app).get("/profile").set('Cookie', 'avos:sess=; avos:sess.sig=qRTO8CJG5Ccg4ZftDVoGbuhUH90').expect(200).expect({}, done);
           });
@@ -104,4 +104,4 @@ describe('webHosting', function() {
     });
   });
 
-})
+});

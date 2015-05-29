@@ -18,7 +18,7 @@ npm install leanengine
 
 ## 更新日志
 
-详情查看: [CHANGELOG.m](https://github.com/leancloud/leanengine-node-sdk/blob/master/CHANGELOG.md)
+详情查看: [CHANGELOG.md](https://github.com/leancloud/leanengine-node-sdk/blob/master/CHANGELOG.md)
 
 ## 贡献者
 
