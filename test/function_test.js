@@ -15,12 +15,20 @@ var TestObject = AV.Object.extend('TestObject');
 var ComplexObject = AV.Object.extend('ComplexObject');
 
 AV.Cloud.define('foo', function(request, response) {
-  assert.ok(request.meta.remoteAddress)
+  assert.ok(request.meta.remoteAddress);
   response.success("bar");
 });
 
 AV.Cloud.define('hello', function(request, response) {
   response.success({action: "hello", name: request.params.name});
+});
+
+AV.Cloud.define('choice', function(req, res) {
+  if (req.params.choice) {
+    res.success('OK~');
+  } else {
+    res.error('OMG...');
+  }
 });
 
 // TODO 该特性待后续 rpc 方法时再支持
@@ -55,10 +63,45 @@ AV.Cloud.define('testUser', function(request, response) {
 AV.Cloud.define('testRun', function(request, response) {
   AV.Cloud.run('hello', {name: '李四'}, {
     success: function(data) {
-      assert.deepEqual(data, {action: "hello", name: '李四'})
+      assert.deepEqual(data, {action: "hello", name: '李四'});
       response.success();
     }
-  })
+  });
+});
+
+AV.Cloud.define('testRun_options_callback', function(request, response) {
+  AV.Cloud.run('choice', {choice: true}, {
+    success: function(data) {
+      assert.equal('OK~', data);
+      AV.Cloud.run('choice', {choice: false}, {
+        success: function(data) {
+          assert.ifError(err);
+        },
+        error: function(err) {
+          assert.equal('OMG...', err);
+          response.success();
+        }
+      });
+    },
+    error: function(err) {
+      assert.ifError(err);
+    }
+  });
+});
+
+AV.Cloud.define('testRun_promise', function(request, response) {
+  AV.Cloud.run('choice', {choice: true}).then(function(data) {
+    assert.equal('OK~', data);
+    AV.Cloud.run('choice', {choice: false}).then(function(data) {
+      assert.ifError(data);
+    }, function(err) {
+      assert.equal('OMG...', err);
+      response.success();
+    });
+  },
+  function(err) {
+    assert.ifError(err);
+  });
 });
 
 AV.Cloud.define('testRunWithUser', function(request, response) {
@@ -67,8 +110,8 @@ AV.Cloud.define('testRunWithUser', function(request, response) {
       assert.equal('ok', data);
       response.success();
     }
-  })
-})
+  });
+});
 
 // TODO 该特性待后续 rpc 方法时再支持
 //AV.Cloud.define('testRunWithAVObject', function(request, response) {
@@ -81,9 +124,9 @@ AV.Cloud.define('testRunWithUser', function(request, response) {
 
 AV.Cloud.define('readDir', function(request, response) {
   fs.readdir('.', function(err, dir) {
-    dir.should.containEql('package.json')
+    dir.should.containEql('package.json');
     response.success(dir);
-  })
+  });
 });
 
 AV.Cloud.onVerified('sms', function(request) {
@@ -93,9 +136,9 @@ AV.Cloud.onVerified('sms', function(request) {
 });
 
 AV.Cloud.define('testThrowError', function(request, response) {
-  noThisMethod()
+  noThisMethod();
   response.success();
-})
+});
 
 AV.Cloud.define("userMatching", function(req, res) {
   setTimeout(function() {
@@ -108,7 +151,7 @@ AV.Cloud.define("userMatching", function(req, res) {
       }, error: function(err) {
         res.success({reqUser: req.user, currentUser: AV.User.current()});
       }
-    })
+    });
   }, Math.floor((Math.random() * 2000) + 1));
 });
 
@@ -118,7 +161,7 @@ AV.BigQuery.on('end', function(err, result) {
     "status": "OK/ERROR",
     "message": "当 status 为 ERROR 时的错误消息"
   }, result);
-})
+});
 
 var sessionToken_admin = config.sessionToken_admin;
 
@@ -250,7 +293,7 @@ describe('functions', function() {
       .expect({
         "code": 1,
         "error": "Cloud code not find function named 'noThisMethod' for app '" + appId + "' on development."
-      }, done)
+      }, done);
   });
 
   // 测试带有 sessionToken 时，user 对象的正确解析
@@ -261,8 +304,8 @@ describe('functions', function() {
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
       .set('x-avoscloud-session-token', sessionToken_admin)
-      .expect(200, done)
-  })
+      .expect(200, done);
+  });
 
   // 测试调用 run 方法时，传递 user 对象的有效性
   it('testRunWithUser', function(done) {
@@ -272,8 +315,30 @@ describe('functions', function() {
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
       .set('x-avoscloud-session-token', sessionToken_admin)
-      .expect(200, done)
-  })
+      .expect(200, done);
+  });
+
+  // 测试调用 run 方法 options callback
+  it('testRun_options_callback', function(done) {
+    this.timeout(5000);
+    request(AV.Cloud)
+      .post('/1/functions/testRun_options_callback')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .set('x-avoscloud-session-token', sessionToken_admin)
+      .expect(200, done);
+  });
+
+  // 测试调用 run 方法，返回值是 promise 类型
+  it('testRun_promise', function(done) {
+    this.timeout(5000);
+    request(AV.Cloud)
+      .post('/1/functions/testRun_promise')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .set('x-avoscloud-session-token', sessionToken_admin)
+      .expect(200, done);
+  });
 
   // 测试 fs 模块的有效性
   it('io', function(done) {
@@ -281,8 +346,8 @@ describe('functions', function() {
       .post('/1/functions/readDir')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
-      .expect(200, done)
-  })
+      .expect(200, done);
+  });
 
   // 测试 onVerified hook 的有效性
   it('onVerified', function(done) {
@@ -298,7 +363,7 @@ describe('functions', function() {
       })
       .expect(200)
       .expect({ result: 'ok'}, done);
-  })
+  });
 
   // 测试抛出异常时的处理
   it('throw Error', function(done) {
@@ -314,18 +379,18 @@ describe('functions', function() {
       .expect(500)
       .expect({result: 'ok'}, function() {
         assert.deepEqual('Execute \'testThrowError\' failed with error: ReferenceError: noThisMethod is not defined', strings[0].split('\n')[0]);
-        assert.equal(1, strings.length)
+        assert.equal(1, strings.length);
         global.process.stderr.write = stderr_write;
         done();
-      })
-  })
+      });
+  });
  
   // 用户串号测试 
   it('user_matching_func', function(done) {
     this.timeout(30000);
     var count = 0;
     var cb = function(err) {
-      if (err != null) {
+      if (err) {
         throw err;
       }
       count++;
@@ -384,7 +449,7 @@ describe('functions', function() {
           'userMatching' ]);
         done();
       });
-  }) 
+  });
 
   it('CORS', function(done) {
     request(AV.Cloud)
@@ -394,7 +459,7 @@ describe('functions', function() {
       .set('Access-Control-Request-Headers', 'X-AVOSCloud-Application-Id, X-AVOSCloud-Application-Key')
       .expect('access-control-allow-origin', 'http://foo.bar')
       .expect(200, done);
-  })
+  });
 
   it('onCompleteBigqueryJob', function(done) {
     request(AV.Cloud)
@@ -407,6 +472,6 @@ describe('functions', function() {
         message: "当 status 为 ERROR 时的错误消息"
       })
       .expect(200, done);
-  })
+  });
 
 });

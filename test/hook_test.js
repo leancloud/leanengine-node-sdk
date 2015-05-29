@@ -14,7 +14,7 @@ AV.Cloud.beforeSave("TestClass", function(request, response) {
     assert.equal(request.user.className, '_User');
   }
   assert.equal(request.object.className, 'TestClass');
-  request.object.set('user', request.user)
+  request.object.set('user', request.user);
   response.success();
 });
 
@@ -43,7 +43,7 @@ AV.Cloud.afterSave("TestError", function(request) {
 });
 
 AV.Cloud.onVerified('sms', function(request) {
-  assert.equal(request.object.id, '54fd6a03e4b06c41e00b1f40')
+  assert.equal(request.object.id, '54fd6a03e4b06c41e00b1f40');
 });
 
 AV.Cloud.onLogin(function(request, response) {
@@ -94,7 +94,7 @@ describe('hook', function() {
         }
       })
       .expect(400)
-      .expect({ code: 1, error: 'you cannot give less than one star' }, done)
+      .expect({ code: 1, error: 'you cannot give less than one star' }, done);
   });
 
   it('beforeSave_user', function(done) {
@@ -143,7 +143,7 @@ describe('hook', function() {
       .expect(200)
       .expect({
         "result": "ok"
-      }, done)
+      }, done);
   });
 
   it('afterSave_error', function(done) {
@@ -167,11 +167,11 @@ describe('hook', function() {
       .expect(200)
       .expect({result: 'ok'}, function() {
         assert.deepEqual('Execute \'__after_save_for_TestError\' failed with error: ReferenceError: noThisMethod is not defined', strings[0].split('\n')[0]);
-        assert.equal(1, strings.length)
+        assert.equal(1, strings.length);
         global.process.stderr.write = stderr_write;
         done();
-      })
-  })
+      });
+  });
 
   it('hook_not_found', function(done) {
     request(AV.Cloud)
@@ -187,8 +187,8 @@ describe('hook', function() {
       }
     })
     .expect(400)
-    .expect({ code: 1, error: "Cloud code not find hook \'__after_save_for_NoThisClass\' for app \'" + appId + "\' on development." }, done)
-  })
+    .expect({ code: 1, error: "Cloud code not find hook \'__after_save_for_NoThisClass\' for app \'" + appId + "\' on development." }, done);
+  });
 
   it('onVerified', function(done) {
     request(AV.Cloud)
@@ -224,7 +224,7 @@ describe('hook', function() {
       .expect({
         'result': 'ok'
       }, done);
-  })
+  });
 
   it('on_login_error', function(done) {
     request(AV.Cloud)
@@ -243,7 +243,7 @@ describe('hook', function() {
         'code': 1,
         'error': 'Forbidden'
       }, done);
-  })
+  });
 
   it('_metadatas', function(done) {
     request(AV.Cloud)
@@ -261,6 +261,6 @@ describe('hook', function() {
         ]);
         done();
       });
-  }) 
+  });
 
-})
+});
