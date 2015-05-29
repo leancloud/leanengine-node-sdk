@@ -1,5 +1,6 @@
 var config = require('./config'),
   AV = require('..'),
+  assert = require('assert'),
   express = require('express'),
   bodyParser = require('body-parser');
 
@@ -34,6 +35,27 @@ app.get('/logout', function(req, res) {
   AV.User.logOut();
   res.redirect('/profile');
 });
+
+app.post('/testCookieSession', function(req, res) {
+  AV.User.logIn(req.body.username, req.body.password).then(function(user) {
+    assert.equal(req.body.username, user.get('username'));
+    assert.equal(AV.User.current(), user);
+    AV.User.logOut();
+    assert(!AV.User.current())
+    // 登出再登入不会有问题
+    return AV.User.logIn(req.body.username, req.body.password)
+  }).then(function(user) {
+    assert.equal(AV.User.current(), user);
+    // 在已登录状态，直接用另外一个账户登录
+    return AV.User.logIn('zhangsan', 'zhangsan')
+  }).then(function(user) {
+    assert.equal('zhangsan', user.get('username'));
+    assert.equal(AV.User.current(), user);
+    res.send('ok');
+  }, function(err) {
+    assert.ifError(err);
+  });
+})
 
 app.get('/profile', function(req, res) {
   if (req.AV.user) {
@@ -102,6 +124,15 @@ describe('webHosting', function() {
         });
       });
     });
+  });
+
+  it("test cookie session", function(done) {
+    this.timeout(10000);
+    return request(app).post("/testCookieSession")
+      .send({
+        username: 'admin',
+        password: 'admin'
+      }).expect(200, done);
   });
 
 });
