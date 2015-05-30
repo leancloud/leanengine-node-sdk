@@ -33,6 +33,12 @@ AV.Cloud.beforeSave("TestReview", function(request, response){
   }
 });
 
+AV.Cloud.beforeSave("ErrorObject", function(request, response) {
+  var a = {};
+  a.noThisMethod();
+  response.success();
+})
+
 AV.Cloud.afterSave("TestReview", function(request) {
   assert.equal(request.object.className, 'TestReview');
   assert.equal(request.object.id, '5403e36be4b0b77b5746b292');
@@ -40,6 +46,24 @@ AV.Cloud.afterSave("TestReview", function(request) {
 
 AV.Cloud.afterSave("TestError", function(request) {
   noThisMethod();
+});
+
+AV.Cloud.afterUpdate("TestClass", function(request) {
+  var bizTime = new Date();
+  request.object.set('bizTime', bizTime);
+  request.object.save(null, {
+    success: function(obj) {
+      assert.equal(bizTime, obj.get('bizTime'));
+    }
+  });
+});
+
+AV.Cloud.beforeDelete("TestClass", function(request, response) {
+  assert.equal(request.object.className, 'TestClass');
+  if (request.object.get('foo') === 'important') {
+    return response.error('important note');
+  }
+  response.success();
 });
 
 AV.Cloud.onVerified('sms', function(request) {
@@ -75,10 +99,8 @@ describe('hook', function() {
       })
       .expect(200)
       .expect({
-        "result": {
-          "stars": 1,
-          "comment": "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567..."
-        }
+        "stars": 1,
+        "comment": "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567..."
       }, done);
   });
 
@@ -116,14 +138,50 @@ describe('hook', function() {
       })
       .expect(200)
       .expect({
-        "result": {
-          "user": {
-            "__type": "Pointer",
-            "className": "_User",
-            "objectId": "52aebbdee4b0c8b6fa455aa7"
-          }
+        "user": {
+          "__type": "Pointer",
+          "className": "_User",
+          "objectId": "52aebbdee4b0c8b6fa455aa7"
         }
       }, done);
+  });
+
+  it("beforeSave_throw_error", function(done) {
+    var ori = console.warn;
+    var warnLogs = [];
+    console.warn = function() {
+      warnLogs.push(arguments);
+    }
+    request(AV.Cloud)
+      .post("/1.1/functions/ErrorObject/beforeSave")
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .send({
+        object: {
+          foo: 'bar'
+        }
+      })
+      .expect(500, function(err, res) {
+        res.body.should.eql({ code: 1, error: 'undefined is not a function' });
+        console.warn = ori;
+        warnLogs.length.should.equal(1);
+        warnLogs[0][0].split('\n')[0].should.equal("Execute \'__before_save_for_ErrorObject\' failed with error: TypeError: undefined is not a function");
+        done();
+      });
+  });
+
+  it("beforeSave_not_found", function(done) {
+    request(AV.Cloud)
+      .post("/1.1/functions/NoThisObject/beforeSave")
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .send({
+        object: {
+          foo: 'bar'
+        }
+      })
+      .expect(404)
+      .expect({ code: 1, error: "LeanEngine not found hook '__before_save_for_NoThisObject' for app '" + appId + "' on development." }, done);
   });
 
   it('afterSave', function(done) {
@@ -186,8 +244,60 @@ describe('hook', function() {
         }
       }
     })
+    .expect(404)
+    .expect({ code: 1, error: "LeanEngine not found hook \'__after_save_for_NoThisClass\' for app \'" + appId + "\' on development." }, done);
+  });
+
+  it('afterUpdate', function(done) {
+    request(AV.Cloud)
+    .post('/1/functions/TestClass/afterUpdate')
+    .set('X-AVOSCloud-Application-Id', appId)
+    .set('X-AVOSCloud-Application-Key', appKey)
+    .set('Content-Type', 'application/json')
+    .send({
+      object: {
+        objectId: '556904d8e4b09419960c14bd',
+        foo: 'bar'
+      }
+    })
+    .expect(200, function(err, res) {
+      res.body.should.eql({ result: 'ok' });
+      setTimeout(function() { // 等待数据更新
+        done();
+      }, 1000);
+    });
+  });
+
+  it('should be deleted', function(done) {
+    request(AV.Cloud)
+    .post('/1/functions/TestClass/beforeDelete')
+    .set('X-AVOSCloud-Application-Id', appId)
+    .set('X-AVOSCloud-Application-Key', appKey)
+    .set('Content-Type', 'application/json')
+    .send({
+      object: {
+        objectId: '55690242e4b09419960c01f5',
+        foo: 'bar'
+      }
+    })
+    .expect(200)
+    .expect({}, done);
+  });
+
+  it('should not be deleted', function(done) {
+    request(AV.Cloud)
+    .post('/1/functions/TestClass/beforeDelete')
+    .set('X-AVOSCloud-Application-Id', appId)
+    .set('X-AVOSCloud-Application-Key', appKey)
+    .set('Content-Type', 'application/json')
+    .send({
+      object: {
+        objectId: '55690242e4b09419960c01f6',
+        foo: 'important'
+      }
+    })
     .expect(400)
-    .expect({ code: 1, error: "Cloud code not find hook \'__after_save_for_NoThisClass\' for app \'" + appId + "\' on development." }, done);
+    .expect({ code: 1, error: "important note" }, done);
   });
 
   it('onVerified', function(done) {
