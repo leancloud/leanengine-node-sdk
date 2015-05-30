@@ -289,10 +289,10 @@ describe('functions', function() {
       .post('/1/functions/noThisMethod')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
-      .expect(400)
+      .expect(404)
       .expect({
         "code": 1,
-        "error": "Cloud code not find function named 'noThisMethod' for app '" + appId + "' on development."
+        "error": "LeanEngine not found function named 'noThisMethod' for app '" + appId + "' on development."
       }, done);
   });
 
