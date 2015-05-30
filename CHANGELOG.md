@@ -1,5 +1,9 @@
 ## 更新日志
 
+### v0.1.3 (2015/05/30)
+
+* [ecc0014](https://github.com/leancloud/leanengine-node-sdk/commit/ecc0014a68c313f62fe11d395cf556acd5fbebf6) Bugfix: hook 函数返回对象的格式有误
+
 ### v0.1.2 (2015/05/29)
 
 * [999472b](https://github.com/leancloud/leanengine-node-sdk/commit/999472b8220c534ab96ac77406056e898ff4dcde) Bugfix: 简单跨域请求没有设置 Access-Control-Allow-Origin
