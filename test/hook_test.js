@@ -12,6 +12,7 @@ AV.initialize(appId, appKey, masterKey);
 AV.Cloud.beforeSave("TestClass", function(request, response) {
   if (request.user) {
     assert.equal(request.user.className, '_User');
+    assert.equal(request.user, AV.User.current());
   }
   assert.equal(request.object.className, 'TestClass');
   request.object.set('user', request.user);
