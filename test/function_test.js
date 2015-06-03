@@ -57,6 +57,7 @@ AV.Cloud.define('testUser', function(request, response) {
   assert.equal(request.user.className, '_User');
   assert.equal(request.user.id, '54fd6a03e4b06c41e00b1f40');
   assert.equal(request.user.get('username'), 'admin');
+  assert.equal(request.user, AV.User.current());
   response.success("ok");
 });
 
@@ -305,6 +306,21 @@ describe('functions', function() {
       .set('X-AVOSCloud-Application-Key', appKey)
       .set('x-avoscloud-session-token', sessionToken_admin)
       .expect(200, done);
+  });
+
+  // 无效 sessionToken 测试
+  it('testUser_invalid_sessionToken', function(done) {
+    this.timeout(5000);
+    request(AV.Cloud)
+      .post('/1/functions/testUser')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .set('x-avoscloud-session-token', '00000000000000000000')
+      .expect(400)
+      .end(function(err, res) {
+        res.body.should.eql({ code: 1, error: '找不到有效用户。' });
+        done();
+      });
   });
 
   // 测试调用 run 方法时，传递 user 对象的有效性
