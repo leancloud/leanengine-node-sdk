@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimal-ui" />
+        <script src="https://cdn1.lncld.net/static/js/av-mini-0.5.5.js"></script>
+        <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+        <script src="http://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+        <title>LeanEngine</title>
+        <style type="text/css">
+            html, body {
+                height : 100%;
+                width  : 100%;
+            }
+
+            body {
+                color       : #333;
+                font-family : "Helvetica Neue",Helvetica,STHeiti,"Microsoft Yahei","WenQuanYi Micro Hei",Arial,Verdana,sans-serif;
+                font-size   : 14px;
+                margin      : 0;
+            }
+
+            .panel {
+                width    : 50%;
+                height   : 100%;
+                position : relative;
+            }
+
+            .panel-splitter {
+                position   : absolute;
+                width      : 1px;
+                left       : 50%;
+                right      : 50%;
+                top        : 80px;
+                bottom     : 20px;
+                background : #ccc;
+            }
+
+            .panel h2 {
+                color       : #4078c0;
+                margin-left : 20px;
+            }
+
+            .panel .column {
+                padding : 40px;
+            }
+
+            .panel .column ul {
+                margin     : 0;
+                padding    : 0;
+                list-style : none;
+            }
+
+            .panel .column ul li {
+                padding : 8px;
+            }
+
+            .panel .column select,
+            .panel .column textarea,
+            .panel .column input[type=text] {
+                font-size  : 14px;
+                min-height : 28px;
+                width      : 100%;
+                padding    : 3px 5px;
+            }
+
+            .panel .column textarea {
+                font-size  : 14px;
+                min-height : 180px;
+            }
+
+            .panel .column input[type=submit] {
+                background-image : linear-gradient(#8add6d, #60b044);
+                background-color : #60b044;
+                border-color     : #5ca941;
+                border           : none;
+                border-radius    : 19px;
+                color            : #fff;
+                font-size        : 16px;
+                height           : 38px;
+                line-height      : 28px;
+                outline          : none;
+                margin           : 30px 0px;
+                padding          : 0px 20px;
+                width            : 120px;
+                display          : block;
+            }
+
+            .left {
+                float        : left;
+            }
+
+            .right {
+                float        : right;
+            }
+        </style>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                AV.initialize($.cookie('LC_APP_ID'), $.cookie('LC_APP_KEY'));
+
+                $.ajax({
+                    method : 'POST',
+                    url : '/1.1/functions/_ops/metadatas',
+                    dataType : 'json',
+                    headers : {
+                        'Content-TYpe'                        : 'application/json',
+                        'X-AVOSCloud-Application-Production'  : 0,
+                        'X-AVOSCloud-Application-Id'          : $.cookie('LC_APP_ID'),
+                        'X-AVOSCloud-Application-Key'         : $.cookie('LC_APP_KEY'),
+                        'X-AVOSCloud-Master-Key'              : $.cookie('LC_APP_MASTER_KEY'),
+                    },
+                    body : {},
+                }).done(function(json) {
+                    var classes = {};
+
+                    json.result.sort().forEach(function(fn) {
+                        var matcher = fn.match(/__(before|after)_(save|update|delete)_for_(\w+)/);
+                        if (matcher && matcher.length > 0) {
+                            var action =  matcher[1] + matcher[2][0].toUpperCase() + matcher[2].substr(1);
+                            var name = action + '(' + matcher[3] + ')';
+                            var hook = matcher[3] + '/' + action;
+                            $('#hook').append($('<option></option>').attr('value', hook).text(name));
+                        } else {
+                            $('#function').append($('<option></option>').attr('value', fn).text(fn));
+                        }
+                    });
+
+                    Object.keys(classes).forEach(function(clazz) {
+                    });
+                }).fail(function(xhr, statusText, e) {
+                    alert(xhr.responseText);
+                });
+
+                /*
+                 * Execute cloud function
+                 */
+                $('#run-cloud-function').click(function() {
+                    try {
+                        var args = JSON.parse($('#cloud-function #params').val());
+
+                        var userId = $('#cloud-function #uid').val();
+                        if (!/^\s*$/.test(userId)) {
+                            args.user = { id : userId };
+                        }
+
+                        $.ajax({
+                            method : 'POST',
+                            url    : '/1.1/functions/' + $('#cloud-function #function').val(),
+                            contentType : 'application/json; charset=UTF-8',
+                            headers : {
+                                'X-AVOSCloud-Application-Production'  : 0,
+                                'X-AVOSCloud-Application-Id'          : $.cookie('LC_APP_ID'),
+                                'X-AVOSCloud-Application-Key'         : $.cookie('LC_APP_KEY'),
+                                'X-AVOSCloud-Master-Key'              : $.cookie('LC_APP_MASTER_KEY'),
+                            },
+                            data : JSON.stringify(args),
+                            dataType : 'json',
+                        }).done(function(json) {
+                            var result = json.result;
+                            $('#cloud-function #result').val('object' === typeof result ? JSON.stringify(result) : result);
+                        }).fail(function(xhr, statusText, e) {
+                            $('#cloud-function #result').val(xhr.responseText || e.stack || e.message);
+                        });
+                    } catch (e) {
+                        console.error(e.stack || e.message);
+                        alert(e.message);
+                    }
+                });
+
+                /*
+                 * Execute class hook as a function
+                 */
+                $('#run-class-hook').click(function() {
+                    var args = {};
+                    var userId = $('#class-hook #uid').val();
+                    if (!/^\s*$/.test(userId)) {
+                        args.user = { id : userId };
+                    }
+
+                    try {
+                        var hook = $('#class-hook #hook').val();
+                        var objectId = $('#class-hook #oid').val();
+                        new AV.Query(hook.split(/\//)[0]).get(objectId, {
+                            success : function(obj) {
+                                args.object = obj;
+
+                                $.ajax({
+                                    method : 'POST',
+                                    url    : '/1.1/functions/' + hook,
+                                    contentType : 'application/json; charset=UTF-8',
+                                    headers : {
+                                        'X-AVOSCloud-Application-Production'  : 0,
+                                        'X-AVOSCloud-Application-Id'          : $.cookie('LC_APP_ID'),
+                                        'X-AVOSCloud-Application-Key'         : $.cookie('LC_APP_KEY'),
+                                        'X-AVOSCloud-Master-Key'              : $.cookie('LC_APP_MASTER_KEY'),
+                                    },
+                                    data : JSON.stringify(args),
+                                    dataType : 'json',
+                                }).done(function(json) {
+                                    var result = json.result;
+                                    $('#class-hook #result').val('object' === typeof result ? JSON.stringify(result) : result);
+                                }).fail(function(xhr, statusText, e) {
+                                    $('#class-hook #result').val(xhr.responseText || e.stack || e.message);
+                                });
+                            },
+                            error : function(e) {
+                                $('#class-hook #result').val(e.stack || e.message);
+                            },
+                        });
+                    } catch (e) {
+                        console.error(e.stack || e.message);
+                        alert(e.message);
+                    }
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <section>
+            <div class="panel left">
+                <h2>Cloud Functions</h2>
+                <hr />
+                <div class="column">
+                    <ul id="cloud-function">
+                        <li>
+                            <select id="function" name="function"></select>
+                        </li>
+                        <li><input type="text" id="uid" name="uid" placeholder="The user object id" value="" /></li>
+                        <li><textarea id="params" name="params" placeholder="JSON parameters for cloud function">{}</textarea></li>
+                        <li><textarea id="result" name="result" placeholder="The result of cloud function" readonly></textarea></li>
+                    </ul>
+                    <center><input type="submit" id="run-cloud-function" value="Run" /></center>
+                </div>
+            </div>
+            <div class="panel-splitter"></div>
+            <div class="panel right">
+                <h2>Class Hooks</h2>
+                <hr />
+                <div class="column">
+                    <ul id="class-hook">
+                        <li>
+                            <select id="hook" name="hook"></select>
+                        </li>
+                        <li><input type="text" id="uid" name="uid" placeholder="The user object id" value="" /></li>
+                        <li><input type="text" id="oid" name="oid" placeholder="The object id of the class" value="" /></li>
+                        <li><textarea id="result" name="result" placeholder="The result of class hook" readonly></textarea></li>
+                    </ul>
+                    <center><input type="submit" id="run-class-hook" value="Run" /></center>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>
