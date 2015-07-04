@@ -1,3 +1,4 @@
+'use strict';
 var config = require('./config'),
   AV = require('..'),
   should = require('should'),
@@ -12,7 +13,6 @@ var masterKey = config.masterKey;
 AV.initialize(appId, appKey, masterKey);
 
 var TestObject = AV.Object.extend('TestObject');
-var ComplexObject = AV.Object.extend('ComplexObject');
 
 AV.Cloud.define('foo', function(request, response) {
   assert.ok(request.meta.remoteAddress);
@@ -76,7 +76,7 @@ AV.Cloud.define('testRun_options_callback', function(request, response) {
       assert.equal('OK~', data);
       AV.Cloud.run('choice', {choice: false}, {
         success: function(data) {
-          assert.ifError(err);
+          assert.ifError(data);
         },
         error: function(err) {
           assert.equal('OMG...', err);
@@ -137,7 +137,9 @@ AV.Cloud.onVerified('sms', function(request) {
 });
 
 AV.Cloud.define('testThrowError', function(request, response) {
+  /* jshint ignore:start */
   noThisMethod();
+  /* jshint ignore:end */
   response.success();
 });
 
@@ -149,7 +151,7 @@ AV.Cloud.define("userMatching", function(req, res) {
       success: function(obj) {
         assert.equal(obj.get('foo'), 'bar');
         res.success({reqUser: req.user, currentUser: AV.User.current()});
-      }, error: function(err) {
+      }, error: function() {
         res.success({reqUser: req.user, currentUser: AV.User.current()});
       }
     });

@@ -1,4 +1,5 @@
-var should = require('should'),
+'use strict';
+var should = require('should'), // jshint ignore:line
     AV = require('../lib/av-extra');
 
 describe('av-extra', function() {
