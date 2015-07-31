@@ -1,3 +1,4 @@
+'use strict';
 var config = require('./config'),
   AV = require('..'),
   assert = require('assert'),
@@ -41,13 +42,13 @@ app.post('/testCookieSession', function(req, res) {
     assert.equal(req.body.username, user.get('username'));
     assert.equal(AV.User.current(), user);
     AV.User.logOut();
-    assert(!AV.User.current())
+    assert(!AV.User.current());
     // 登出再登入不会有问题
-    return AV.User.logIn(req.body.username, req.body.password)
+    return AV.User.logIn(req.body.username, req.body.password);
   }).then(function(user) {
     assert.equal(AV.User.current(), user);
     // 在已登录状态，直接用另外一个账户登录
-    return AV.User.logIn('zhangsan', 'zhangsan')
+    return AV.User.logIn('zhangsan', 'zhangsan');
   }).then(function(user) {
     assert.equal('zhangsan', user.get('username'));
     assert.equal(AV.User.current(), user);
@@ -55,7 +56,7 @@ app.post('/testCookieSession', function(req, res) {
   }, function(err) {
     assert.ifError(err);
   });
-})
+});
 
 app.get('/profile', function(req, res) {
   if (req.AV.user) {

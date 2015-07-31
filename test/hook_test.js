@@ -1,6 +1,7 @@
+'use strict';
 var config = require('./config'),
   AV = require('..'),
-  should = require('should'),
+  should = require('should'), // jshint ignore:line
   assert = require('assert');
 
 var appId = config.appId;
@@ -38,15 +39,15 @@ AV.Cloud.beforeSave("ErrorObject", function(request, response) {
   var a = {};
   a.noThisMethod();
   response.success();
-})
+});
 
 AV.Cloud.afterSave("TestReview", function(request) {
   assert.equal(request.object.className, 'TestReview');
   assert.equal(request.object.id, '5403e36be4b0b77b5746b292');
 });
 
-AV.Cloud.afterSave("TestError", function(request) {
-  noThisMethod();
+AV.Cloud.afterSave("TestError", function() {
+  noThisMethod(); // jshint ignore:line
 });
 
 AV.Cloud.afterUpdate("TestClass", function(request) {
@@ -152,7 +153,7 @@ describe('hook', function() {
     var warnLogs = [];
     console.warn = function() {
       warnLogs.push(arguments);
-    }
+    };
     request(AV.Cloud)
       .post("/1.1/functions/ErrorObject/beforeSave")
       .set('X-AVOSCloud-Application-Id', appId)

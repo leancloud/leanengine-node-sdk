@@ -1,6 +1,6 @@
+'use strict';
 var config = require('./config'),
-  AV = require('..'),
-  assert = require('assert');
+  AV = require('..');
 
 var appId = config.appId;
 var appKey = config.appKey;
