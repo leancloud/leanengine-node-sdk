@@ -84,5 +84,40 @@ describe('authorization', function() {
       .expect({code: 401, error: 'Unauthorized.'}, done);
   });
 
+  it('short_header', function(done) {
+    request(AV.Cloud)
+      .post('/1/functions/foo')
+      .set('X-LC-Id', appId)
+      .set('X-LC-Key', appKey)
+      .expect(200)
+      .expect({result: "bar"}, done);
+  });
+
+  it('short_header_masterKey', function(done) {
+    request(AV.Cloud)
+      .post('/1/functions/foo')
+      .set('X-LC-Id', appId)
+      .set('X-LC-Key', masterKey + ',master')
+      .expect(200)
+      .expect({result: "bar"}, done);
+  });
+
+  it('short_header_sign', function(done) {
+    request(AV.Cloud)
+      .post('/1/functions/foo')
+      .set('X-LC-Id', appId)
+      .set('X-LC-Sign', '4aaee8dee8821173931f03f7efd7067a,1389085779854')
+      .expect(200)
+      .expect({result: "bar"}, done);
+  });
+
+  it('short_header_mismatching', function(done) {
+    request(AV.Cloud)
+      .post('/1/functions/foo')
+      .set('X-LC-Id', appId)
+      .set('X-LC-Key', appKey + ',master')
+      .expect({code: 401, error: 'Unauthorized.'}, done);
+  });
+
 });
 
