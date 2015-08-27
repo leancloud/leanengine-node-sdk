@@ -158,7 +158,7 @@ AV.Cloud.define("userMatching", function(req, res) {
   }, Math.floor((Math.random() * 2000) + 1));
 });
 
-AV.BigQuery.on('end', function(err, result) {
+AV.Insight.on('end', function(err, result) {
   assert.deepEqual({
     "id" : "job id",
     "status": "OK/ERROR",
