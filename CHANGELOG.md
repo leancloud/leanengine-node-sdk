@@ -1,5 +1,11 @@
 ## 更新日志
 
+### v0.1.6 (2015/08/28)
+
+* [修改 Cloud 函数的未捕获异常处理器](https://github.com/leancloud/leanengine-node-sdk/commit/d7e3f0b519b2ed7301d8ec093c952ede6ac0ee01): 出现未捕获异常时，如果还没有发出 response 响应，才发出 500 响应，否则直接忽略。
+* [支持短 header 请求](https://github.com/leancloud/leanengine-node-sdk/commit/3c8c0621c63ab15261ec0ae4d0322bfc8915ed5d): 为了缩短请求的长度，我们更改了 header 中关于 appId 等 key 的长度，比如 `x-avoscloud-application-id` 改为 `x-lc-id`。
+* [AV.BigQuery 更名为 AV.Insight](https://github.com/leancloud/leanengine-node-sdk/commit/4bfec5149b322003cff550294ff9937a0feb9476): 配合产品更名，如果仍然使用 AV.BigQuery 将会收到一条警告日志 `AV.BigQuery is deprecated, please use AV.Insight instead.`。
+
 ### v0.1.5 (2015/07/31)
 
 * [#19](https://github.com/leancloud/leanengine-node-sdk/pull/19) Bugfix: 修正 AV.Cloud.httpRequest 提示 qs 没有定义的错误。
