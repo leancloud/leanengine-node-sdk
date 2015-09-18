@@ -320,7 +320,7 @@ describe('functions', function() {
       .set('x-avoscloud-session-token', '00000000000000000000')
       .expect(400)
       .end(function(err, res) {
-        res.body.should.eql({ code: 1, error: '找不到有效用户。' });
+        res.body.should.eql({ code: 211, error: 'Could not find user' });
         done();
       });
   });
