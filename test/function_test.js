@@ -114,14 +114,13 @@ AV.Cloud.define('testRunWithUser', function(request, response) {
   });
 });
 
-// TODO 该特性待后续 rpc 方法时再支持
-//AV.Cloud.define('testRunWithAVObject', function(request, response) {
-//  AV.Cloud.run('complexObjects', {}, {
-//    success: function(datas) {
-//      response.success(datas);
-//    }
-//  });
-//})
+AV.Cloud.define('testRunWithAVObject', function(request, response) {
+ AV.Cloud.run('complexObject', {}, {
+   success: function(datas) {
+     response.success(datas);
+   }
+ });
+})
 
 AV.Cloud.define('readDir', function(request, response) {
   fs.readdir('.', function(err, dir) {
@@ -240,17 +239,17 @@ describe('functions', function() {
      })
   });
 
-  //it('return_AVObjects', function(done) {
-  //  request(AV.Cloud)
-  //    .post('/1/functions/complexObjects')
-  //    .set('X-AVOSCloud-Application-Id', appId)
-  //    .set('X-AVOSCloud-Application-Key', appKey)
-  //    .expect(200, function(err, res) {
-  //      res.body.result[0].__type.should.equal('Object');
-  //      res.body.result[0].className.should.equal('ComplexObject');
-  //      done();
-  //    })
-  //});
+  it('return_AVObjects', function(done) {
+   request(AV.Cloud)
+     .post('/__engine/1.1/rpc/complexObject')
+     .set('X-AVOSCloud-Application-Id', appId)
+     .set('X-AVOSCloud-Application-Key', appKey)
+     .expect(200, function(err, res) {
+       res.body.result.avObjects[0].__type.should.equal('Object');
+       res.body.result.avObjects[0].className.should.equal('ComplexObject');
+       done();
+     })
+  });
 
   // 测试 run 方法的有效性
   it('testRun', function(done) {
@@ -262,18 +261,17 @@ describe('functions', function() {
       .expect({}, done);
   });
 
-  // TODO 该特性待后续 rpc 方法时再支持
-  //it('testRun_AVObjects', function(done) {
-  //  request(AV.Cloud)
-  //    .post('/1/functions/testRunWithAVObject')
-  //    .set('X-AVOSCloud-Application-Id', appId)
-  //    .set('X-AVOSCloud-Application-Key', appKey)
-  //    .expect(200, function(err, res) {
-  //      res.body.result[0].__type.should.equal('Object');
-  //      res.body.result[0].className.should.equal('ComplexObject');
-  //      done();
-  //    })
-  //});
+  it('testRun_AVObjects', function(done) {
+   request(AV.Cloud)
+     .post('/__engine/1.1/rpc/testRunWithAVObject')
+     .set('X-AVOSCloud-Application-Id', appId)
+     .set('X-AVOSCloud-Application-Key', appKey)
+     .expect(200, function(err, res) {
+       res.body.result.avObjects[0].__type.should.equal('Object');
+       res.body.result.avObjects[0].className.should.equal('ComplexObject');
+       done();
+     })
+  });
 
   it('testRun_text_plain', function(done) {
     request(AV.Cloud)
