@@ -13,6 +13,7 @@ var masterKey = config.masterKey;
 AV.initialize(appId, appKey, masterKey);
 
 var TestObject = AV.Object.extend('TestObject');
+var ComplexObject = AV.Object.extend('ComplexObject');
 
 AV.Cloud.define('foo', function(request, response) {
   assert.ok(request.meta.remoteAddress);
@@ -31,27 +32,26 @@ AV.Cloud.define('choice', function(req, res) {
   }
 });
 
-// TODO 该特性待后续 rpc 方法时再支持
-//AV.Cloud.define('complexObject', function(request, response) {
-//  var query = new AV.Query(ComplexObject);
-//  query.include('fileColumn');
-//  query.ascending('createdAt');
-//  query.find({
-//    success: function(results) {
-//      response.success({
-//        foo: 'bar',
-//        i: 123,
-//        obj: {
-//          a: 'b',
-//          as: [1,2,3],
-//        },
-//        t: new Date('2015-05-14T09:21:18.273Z'),
-//        avObject: results[0],
-//        avObjects: results,
-//      });
-//    }
-//  })
-//})
+AV.Cloud.define('complexObject', function(request, response) {
+  var query = new AV.Query(ComplexObject);
+  query.include('fileColumn');
+  query.ascending('createdAt');
+  query.find({
+    success: function(results) {
+      response.success({
+        foo: 'bar',
+        i: 123,
+        obj: {
+          a: 'b',
+          as: [1, 2, 3],
+        },
+        t: new Date('2015-05-14T09:21:18.273Z'),
+        avObject: results[0],
+        avObjects: results,
+      });
+    }
+  })
+})
 
 AV.Cloud.define('testUser', function(request, response) {
   assert.equal(request.user.className, '_User');
@@ -218,27 +218,28 @@ describe('functions', function() {
       .expect({result: {action: "hello", name: "张三"}}, done);
   });
 
-  // TODO 该特性待后续 rpc 方法时再支持
-  //it('return_complexObject', function(done) {
-  //  request(AV.Cloud)
-  //    .post('/1/functions/complexObject')
-  //    .set('X-AVOSCloud-Application-Id', appId)
-  //    .set('X-AVOSCloud-Application-Key', appKey)
-  //    .expect(200, function(err, res) {
-  //      var result = res.body.result;
-  //      result.foo.should.equal('bar');
-  //      result.t.should.eql({ __type: 'Date', iso: '2015-05-14T09:21:18.273Z' });
-  //      result.avObject.numberColumn.should.equal(1.23);
-  //      result.avObject.__type.should.equal('Object');
-  //      result.avObject.className.should.equal('ComplexObject');
-  //      result.avObject.fileColumn.should.eql({ __type: 'File',
-  //                                             id: '55543fc2e4b0846760bd92f3',
-  //                                             name: 'ttt.jpg',
-  //                                             url: 'http://ac-4h2h4okw.clouddn.com/4qSbLMO866Tf4YtT9QEwJwysTlHGC9sMl7bpTwhQ.jpg' });
-  //      done();
-  //    })
-  //});
-  //
+  it('return_complexObject', function(done) {
+   request(AV.Cloud)
+     .post('/__engine/1.1/rpc/complexObject')
+     .set('X-AVOSCloud-Application-Id', appId)
+     .set('X-AVOSCloud-Application-Key', appKey)
+     .expect(200, function(err, res) {
+       var result = res.body.result;
+       result.foo.should.equal('bar');
+       result.t.should.eql({ __type: 'Date', iso: '2015-05-14T09:21:18.273Z' });
+       result.avObject.numberColumn.should.equal(1.23);
+       result.avObject.__type.should.equal('Object');
+       result.avObject.className.should.equal('ComplexObject');
+       result.avObject.fileColumn.should.eql({
+          __type: 'File',
+          id: '55543fc2e4b0846760bd92f3',
+          name: 'ttt.jpg',
+          url: 'http://ac-4h2h4okw.clouddn.com/4qSbLMO866Tf4YtT9QEwJwysTlHGC9sMl7bpTwhQ.jpg'
+       });
+       done();
+     })
+  });
+
   //it('return_AVObjects', function(done) {
   //  request(AV.Cloud)
   //    .post('/1/functions/complexObjects')
