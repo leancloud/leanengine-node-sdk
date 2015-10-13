@@ -249,16 +249,6 @@ describe('functions', function() {
       .expect({result: "bar"}, done);
   });
 
-  // 测试 `/__engine` URL namespace  的有效性
-  it('urlNamespace', function(done) {
-    request(AV.Cloud)
-      .post('/__engine/1.1/functions/foo')
-      .set('X-AVOSCloud-Application-Id', appId)
-      .set('X-AVOSCloud-Application-Key', appKey)
-      .expect(200)
-      .expect({result: "bar"}, done);
-  });
-
   // 测试参数的正确解析
   it('hello', function(done) {
     request(AV.Cloud)
@@ -273,7 +263,7 @@ describe('functions', function() {
   // 测试返回包含 AVObject 的复杂对象
   it('return_complexObject', function(done) {
     request(AV.Cloud)
-      .post('/__engine/1.1/rpc/complexObject')
+      .post('/1.1/call/complexObject')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
       .expect(200, function(err, res) {
@@ -330,7 +320,7 @@ describe('functions', function() {
   // 返回单个 AVObject
   it('return_bareAVObject', function(done) {
     request(AV.Cloud)
-      .post('/__engine/1.1/rpc/bareAVObject')
+      .post('/1.1/call/bareAVObject')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
       .expect(200, function(err, res) {
@@ -344,7 +334,7 @@ describe('functions', function() {
   // 返回 AVObject 数组
   it('return_AVObjectsArray', function(done) {
     request(AV.Cloud)
-      .post('/__engine/1.1/rpc/AVObjects')
+      .post('/1.1/call/AVObjects')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
       .expect(200, function(err, res) {
@@ -359,7 +349,7 @@ describe('functions', function() {
   // 测试发送包含 AVObject 的请求
   it('testAVObjectParams', function(done) {
     request(AV.Cloud)
-      .post('/__engine/1.1/rpc/testAVObjectParams')
+      .post('/1.1/call/testAVObjectParams')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
       .send({
@@ -392,7 +382,7 @@ describe('functions', function() {
   // 测试发送单个 AVObject 作为请求参数
   it('testBareAVObjectParams', function(done) {
     request(AV.Cloud)
-      .post('/__engine/1.1/rpc/testBareAVObjectParams')
+      .post('/1.1/call/testBareAVObjectParams')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
       .send({
@@ -424,7 +414,7 @@ describe('functions', function() {
     };
 
     request(AV.Cloud)
-      .post('/__engine/1.1/rpc/testAVObjectsArrayParams')
+      .post('/1.1/call/testAVObjectsArrayParams')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
       .send([object, object])
@@ -445,7 +435,7 @@ describe('functions', function() {
 
   it('testRun_AVObjects', function(done) {
    request(AV.Cloud)
-     .post('/__engine/1.1/rpc/testRunWithAVObject')
+     .post('/1.1/call/testRunWithAVObject')
      .set('X-AVOSCloud-Application-Id', appId)
      .set('X-AVOSCloud-Application-Key', appKey)
      .expect(200, function(err, res) {
