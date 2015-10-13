@@ -35,6 +35,12 @@ AV.Cloud.beforeSave("TestReview", function(request, response){
   }
 });
 
+AV.Cloud.beforeUpdate("TestReview", function(request, response) {
+  request.object.get('stars').should.be.equal(1);
+  request.object._updatedKeys.should.be.eql(['stars']);
+  response.success();
+});
+
 AV.Cloud.beforeSave("ErrorObject", function(request, response) {
   var a = {};
   a.noThisMethod();
@@ -184,6 +190,22 @@ describe('hook', function() {
       })
       .expect(404)
       .expect({ code: 1, error: "LeanEngine not found hook '__before_save_for_NoThisObject' for app '" + appId + "' on development." }, done);
+  });
+
+  it('beforeUpdate', function(done) {
+    request(AV.Cloud)
+      .post('/1/functions/TestReview/beforeUpdate')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .set('Content-Type', 'application/json')
+      .send({
+        "object": {
+          "_updatedKeys": ['stars'],
+          "comment": "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890",
+          "stars": 1
+        }
+      })
+      .expect(200, done);
   });
 
   it('afterSave', function(done) {
