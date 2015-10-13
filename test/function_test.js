@@ -90,6 +90,14 @@ AV.Cloud.define('testAVObjectParams', function(request, response) {
   response.success();
 });
 
+AV.Cloud.define('testBareAVObjectParams', function(request, response) {
+  request.params.should.be.instanceof(AV.Object);
+  request.params.get('name').should.be.equal('avObject');
+  request.params.get('avFile').should.be.instanceof(AV.File);
+  request.params.get('avFile').name().should.be.equal('hello.txt');
+  response.success();
+});
+
 AV.Cloud.define('testUser', function(request, response) {
   assert.equal(request.user.className, '_User');
   assert.equal(request.user.id, '54fd6a03e4b06c41e00b1f40');
@@ -366,6 +374,27 @@ describe('functions', function() {
           className: 'ComplexObject',
           name: 'avObjects'
         }]
+      })
+      .expect(200, function(err, res) {
+        done(err);
+      });
+  });
+
+  // 测试发送单个 AVObject 作为请求参数
+  it('testBareAVObjectParams', function(done) {
+    request(AV.Cloud)
+      .post('/__engine/1.1/rpc/testBareAVObjectParams')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .send({
+        __type: 'Object',
+        className: 'ComplexObject',
+        name: 'avObject',
+        avFile: {
+          __type: 'File',
+          url: 'http://ac-1qdney6b.qiniudn.com/3zLG4o0d27MsCQ0qHGRg4JUKbaXU2fiE35HdhC8j.txt',
+          name: 'hello.txt'
+        },
       })
       .expect(200, function(err, res) {
         done(err);

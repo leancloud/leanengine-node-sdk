@@ -53,6 +53,11 @@ AV.Cloud.beforeSave("ErrorObject", function(request, response) {
   response.success();
 });
 
+AV.Cloud.beforeSave('ContainsFile', function(request, response) {
+  request.object.get('file').url().should.be.equal('http://ac-4h2h4okw.clouddn.com/4qSbLMO866Tf4YtT9QEwJwysTlHGC9sMl7bpTwhQ.jpg')
+  response.success();
+});
+
 AV.Cloud.afterSave("TestReview", function(request) {
   assert.equal(request.object.className, 'TestReview');
   assert.equal(request.object.id, '5403e36be4b0b77b5746b292');
@@ -116,6 +121,24 @@ describe('hook', function() {
         "stars": 1,
         "comment": "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567..."
       }, done);
+  });
+
+  it('beforeSave_ContainsFile', function(done) {
+    request(AV.Cloud)
+      .post('/1/functions/ContainsFile/beforeSave')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .set('Content-Type', 'application/json')
+      .send({
+          object: {
+            file: {
+              __type: 'File',
+              id: '55543fc2e4b0846760bd92f3',
+              url: 'http://ac-4h2h4okw.clouddn.com/4qSbLMO866Tf4YtT9QEwJwysTlHGC9sMl7bpTwhQ.jpg'
+            }
+          }
+      })
+      .expect(200, done)
   });
 
   it('beforeSave_error', function(done) {
