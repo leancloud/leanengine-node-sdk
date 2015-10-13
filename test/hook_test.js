@@ -176,10 +176,11 @@ describe('hook', function() {
         }
       })
       .expect(500, function(err, res) {
-        res.body.should.eql({ code: 1, error: 'undefined is not a function' });
+        res.body.code.should.be.equal(1);
+        res.body.error.should.be.match(/(undefined|a\.noThisMethod) is not a function/);
         console.warn = ori;
         warnLogs.length.should.equal(1);
-        warnLogs[0][0].split('\n')[0].should.equal("Execute \'__before_save_for_ErrorObject\' failed with error: TypeError: undefined is not a function");
+        warnLogs[0][0].split('\n')[0].should.match(/Execute '__before_save_for_ErrorObject' failed with error: TypeError: (undefined|a\.noThisMethod) is not a function/);
         done();
       });
   });
