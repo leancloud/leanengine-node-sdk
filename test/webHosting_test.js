@@ -91,7 +91,7 @@ describe('webHosting', function() {
       .expect({result: "bar"}, done);
   });
   it("Should return profile.", function(done) {
-    this.timeout(10000);
+    this.timeout(20000);
     return request(app).get("/profile").expect(200, function(err, res) {
       if (err) {
         throw err;
@@ -128,7 +128,7 @@ describe('webHosting', function() {
   });
 
   it("test cookie session", function(done) {
-    this.timeout(10000);
+    this.timeout(20000);
     return request(app).post("/testCookieSession")
       .send({
         username: 'admin',
