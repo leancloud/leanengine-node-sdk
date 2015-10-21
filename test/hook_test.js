@@ -35,6 +35,18 @@ AV.Cloud.beforeSave("TestReview", function(request, response){
   }
 });
 
+AV.Cloud.beforeUpdate("TestReview", function(request, response) {
+  if (request.object.updatedKeys.indexOf('comment') != -1) {
+    if (request.object.get('comment').length <= 50) {
+      response.success();
+    } else {
+      response.error('comment must short than 50');
+    }
+  } else {
+    response.success();
+  }
+});
+
 AV.Cloud.beforeSave("ErrorObject", function(request, response) {
   var a = {};
   a.noThisMethod();
@@ -184,6 +196,55 @@ describe('hook', function() {
       })
       .expect(404)
       .expect({ code: 1, error: "LeanEngine not found hook '__before_save_for_NoThisObject' for app '" + appId + "' on development." }, done);
+  });
+
+  it('beforeUpdate', function(done) {
+    request(AV.Cloud)
+      .post('/1/functions/TestReview/beforeUpdate')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .set('Content-Type', 'application/json')
+      .send({
+        "object": {
+          "_updatedKeys": ['comment'],
+          "comment": "a short comment",
+          "stars": 1
+        }
+      })
+      .expect(200, done);
+  });
+
+  it('beforeUpdate_didNotUpdateComment', function(done) {
+    request(AV.Cloud)
+      .post('/1/functions/TestReview/beforeUpdate')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .set('Content-Type', 'application/json')
+      .send({
+        "object": {
+          "_updatedKeys": ['star'],
+          "comment": "a short comment",
+          "stars": 1
+        }
+      })
+      .expect(200, done);
+  });
+
+  it('beforeUpdate_rejected', function(done) {
+    request(AV.Cloud)
+      .post('/1/functions/TestReview/beforeUpdate')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .set('Content-Type', 'application/json')
+      .send({
+        "object": {
+          "_updatedKeys": ['comment'],
+          "comment": "a looooooooooooooooooooooooooooooooooooooog comment",
+          "stars": 1
+        }
+      })
+      .expect(400)
+      .expect({ code: 1, error: 'comment must short than 50' }, done);
   });
 
   it('afterSave', function(done) {
