@@ -1,5 +1,10 @@
 ## 更新日志
 
+### v0.2.0 (2015/10/22)
+
+* [支持 beforeUpdate](://github.com/leancloud/leanengine-node-sdk/pull/31): 可以通过该 hook 了解发生变更的字段，并且可以通过 error 回调拒绝本次修改请求。
+* [支持 RPC 调用，接受和返回 AVObject](https://github.com/leancloud/leanengine-node-sdk/commit/b4d027a16b188738c3c24ebd876b81e5e8d00eca)：和之前的 run 方法不同，现在可以在 Client 端调用云引擎的 Cloud 函数，直接返回 AVObject，具体 API 详见各 SDK。
+
 ### v0.1.6 (2015/08/28)
 
 * [修改 Cloud 函数的未捕获异常处理器](https://github.com/leancloud/leanengine-node-sdk/commit/d7e3f0b519b2ed7301d8ec093c952ede6ac0ee01): 出现未捕获异常时，如果还没有发出 response 响应，才发出 500 响应，否则直接忽略。
