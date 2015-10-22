@@ -53,6 +53,11 @@ AV.Cloud.beforeSave("ErrorObject", function(request, response) {
   response.success();
 });
 
+AV.Cloud.beforeSave('ContainsFile', function(request, response) {
+  request.object.get('file').url().should.be.equal('http://ac-4h2h4okw.clouddn.com/4qSbLMO866Tf4YtT9QEwJwysTlHGC9sMl7bpTwhQ.jpg')
+  response.success();
+});
+
 AV.Cloud.afterSave("TestReview", function(request) {
   assert.equal(request.object.className, 'TestReview');
   assert.equal(request.object.id, '5403e36be4b0b77b5746b292');
@@ -118,6 +123,24 @@ describe('hook', function() {
       }, done);
   });
 
+  it('beforeSave_ContainsFile', function(done) {
+    request(AV.Cloud)
+      .post('/1/functions/ContainsFile/beforeSave')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .set('Content-Type', 'application/json')
+      .send({
+          object: {
+            file: {
+              __type: 'File',
+              id: '55543fc2e4b0846760bd92f3',
+              url: 'http://ac-4h2h4okw.clouddn.com/4qSbLMO866Tf4YtT9QEwJwysTlHGC9sMl7bpTwhQ.jpg'
+            }
+          }
+      })
+      .expect(200, done)
+  });
+
   it('beforeSave_error', function(done) {
     request(AV.Cloud)
       .post('/1/functions/TestReview/beforeSave')
@@ -176,10 +199,11 @@ describe('hook', function() {
         }
       })
       .expect(500, function(err, res) {
-        res.body.should.eql({ code: 1, error: 'undefined is not a function' });
+        res.body.code.should.be.equal(1);
+        res.body.error.should.be.match(/(undefined|a\.noThisMethod) is not a function/);
         console.warn = ori;
         warnLogs.length.should.equal(1);
-        warnLogs[0][0].split('\n')[0].should.equal("Execute \'__before_save_for_ErrorObject\' failed with error: TypeError: undefined is not a function");
+        warnLogs[0][0].split('\n')[0].should.match(/Execute '__before_save_for_ErrorObject' failed with error: TypeError: (undefined|a\.noThisMethod) is not a function/);
         done();
       });
   });

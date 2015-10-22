@@ -19,7 +19,7 @@
     "blanket": "1.1.6",
     "expect.js ": "0.2.0",
     "express": "4.9.7",
-    "mocha": "1.9.0",
+    "mocha": "2.3.3",
     "should": "3.3.2",
     "supertest": "0.14.0"
   },

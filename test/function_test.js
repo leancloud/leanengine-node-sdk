@@ -13,6 +13,7 @@ var masterKey = config.masterKey;
 AV.initialize(appId, appKey, masterKey);
 
 var TestObject = AV.Object.extend('TestObject');
+var ComplexObject = AV.Object.extend('ComplexObject');
 
 AV.Cloud.define('foo', function(request, response) {
   assert.ok(request.meta.remoteAddress);
@@ -31,27 +32,80 @@ AV.Cloud.define('choice', function(req, res) {
   }
 });
 
-// TODO 该特性待后续 rpc 方法时再支持
-//AV.Cloud.define('complexObject', function(request, response) {
-//  var query = new AV.Query(ComplexObject);
-//  query.include('fileColumn');
-//  query.ascending('createdAt');
-//  query.find({
-//    success: function(results) {
-//      response.success({
-//        foo: 'bar',
-//        i: 123,
-//        obj: {
-//          a: 'b',
-//          as: [1,2,3],
-//        },
-//        t: new Date('2015-05-14T09:21:18.273Z'),
-//        avObject: results[0],
-//        avObjects: results,
-//      });
-//    }
-//  })
-//})
+AV.Cloud.define('complexObject', function(request, response) {
+  var query = new AV.Query(ComplexObject);
+  query.include('fileColumn');
+  query.ascending('createdAt');
+  query.find({
+    success: function(results) {
+      response.success({
+        foo: 'bar',
+        i: 123,
+        obj: {
+          a: 'b',
+          as: [1, 2, 3],
+        },
+        t: new Date('2015-05-14T09:21:18.273Z'),
+        avObject: results[0],
+        avObjects: results,
+      });
+    }
+  })
+});
+
+AV.Cloud.define('bareAVObject', function(request, response) {
+  var query = new AV.Query(ComplexObject);
+  query.include('fileColumn');
+  query.ascending('createdAt');
+  query.find({
+    success: function(results) {
+      response.success(results[0]);
+    }
+  })
+});
+
+AV.Cloud.define('AVObjects', function(request, response) {
+  var query = new AV.Query(ComplexObject);
+  query.include('fileColumn');
+  query.ascending('createdAt');
+  query.find({
+    success: function(results) {
+      response.success(results);
+    }
+  })
+});
+
+AV.Cloud.define('testAVObjectParams', function(request, response) {
+  request.params.avObject.should.be.instanceof(AV.Object);
+  request.params.avObject.get('name').should.be.equal('avObject');
+  request.params.avObject.get('pointerColumn').should.be.instanceof(AV.User);
+
+  request.params.avFile.should.be.instanceof(AV.File);
+
+  request.params.avObjects.forEach(function(object) {
+    object.should.be.instanceof(AV.Object);
+    object.get('name').should.be.equal('avObjects');
+  });
+
+  response.success();
+});
+
+AV.Cloud.define('testBareAVObjectParams', function(request, response) {
+  request.params.should.be.instanceof(AV.Object);
+  request.params.get('name').should.be.equal('avObject');
+  request.params.get('avFile').should.be.instanceof(AV.File);
+  request.params.get('avFile').name().should.be.equal('hello.txt');
+  response.success();
+});
+
+AV.Cloud.define('testAVObjectsArrayParams', function(request, response) {
+  request.params.forEach(function(object) {
+    object.get('name').should.be.equal('avObject');
+    object.get('avFile').should.be.instanceof(AV.File);
+    object.get('avFile').name().should.be.equal('hello.txt');
+  });
+  response.success();
+});
 
 AV.Cloud.define('testUser', function(request, response) {
   assert.equal(request.user.className, '_User');
@@ -114,14 +168,13 @@ AV.Cloud.define('testRunWithUser', function(request, response) {
   });
 });
 
-// TODO 该特性待后续 rpc 方法时再支持
-//AV.Cloud.define('testRunWithAVObject', function(request, response) {
-//  AV.Cloud.run('complexObjects', {}, {
-//    success: function(datas) {
-//      response.success(datas);
-//    }
-//  });
-//})
+AV.Cloud.define('testRunWithAVObject', function(request, response) {
+ AV.Cloud.run('complexObject', {}, {
+   success: function(datas) {
+     response.success(datas);
+   }
+ });
+})
 
 AV.Cloud.define('readDir', function(request, response) {
   fs.readdir('.', function(err, dir) {
@@ -169,7 +222,6 @@ AV.Insight.on('end', function(err, result) {
 var sessionToken_admin = config.sessionToken_admin;
 
 describe('functions', function() {
-
   it('ping', function(done) {
     request(AV.Cloud)
       .get('/__engine/1/ping')
@@ -187,20 +239,10 @@ describe('functions', function() {
       .expect({result: "bar"}, done);
   });
 
-  // 测试 api version 1.1 的有效性 
+  // 测试 api version 1.1 的有效性
   it('version_1.1', function(done) {
     request(AV.Cloud)
       .post('/1.1/functions/foo')
-      .set('X-AVOSCloud-Application-Id', appId)
-      .set('X-AVOSCloud-Application-Key', appKey)
-      .expect(200)
-      .expect({result: "bar"}, done);
-  });
-
-  // 测试 `/__engine` URL namespace  的有效性 
-  it('urlNamespace', function(done) {
-    request(AV.Cloud)
-      .post('/__engine/1.1/functions/foo')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
       .expect(200)
@@ -218,38 +260,168 @@ describe('functions', function() {
       .expect({result: {action: "hello", name: "张三"}}, done);
   });
 
-  // TODO 该特性待后续 rpc 方法时再支持
-  //it('return_complexObject', function(done) {
-  //  request(AV.Cloud)
-  //    .post('/1/functions/complexObject')
-  //    .set('X-AVOSCloud-Application-Id', appId)
-  //    .set('X-AVOSCloud-Application-Key', appKey)
-  //    .expect(200, function(err, res) {
-  //      var result = res.body.result;
-  //      result.foo.should.equal('bar');
-  //      result.t.should.eql({ __type: 'Date', iso: '2015-05-14T09:21:18.273Z' });
-  //      result.avObject.numberColumn.should.equal(1.23);
-  //      result.avObject.__type.should.equal('Object');
-  //      result.avObject.className.should.equal('ComplexObject');
-  //      result.avObject.fileColumn.should.eql({ __type: 'File',
-  //                                             id: '55543fc2e4b0846760bd92f3',
-  //                                             name: 'ttt.jpg',
-  //                                             url: 'http://ac-4h2h4okw.clouddn.com/4qSbLMO866Tf4YtT9QEwJwysTlHGC9sMl7bpTwhQ.jpg' });
-  //      done();
-  //    })
-  //});
-  //
-  //it('return_AVObjects', function(done) {
-  //  request(AV.Cloud)
-  //    .post('/1/functions/complexObjects')
-  //    .set('X-AVOSCloud-Application-Id', appId)
-  //    .set('X-AVOSCloud-Application-Key', appKey)
-  //    .expect(200, function(err, res) {
-  //      res.body.result[0].__type.should.equal('Object');
-  //      res.body.result[0].className.should.equal('ComplexObject');
-  //      done();
-  //    })
-  //});
+  // 测试返回包含 AVObject 的复杂对象
+  it('return_complexObject', function(done) {
+    request(AV.Cloud)
+      .post('/1.1/call/complexObject')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .expect(200, function(err, res) {
+        var result = res.body.result;
+
+        result.foo.should.equal('bar');
+        result.t.should.eql({
+          __type: 'Date',
+          iso: '2015-05-14T09:21:18.273Z'
+        });
+
+        result.avObject.__type.should.equal('Object');
+        result.avObject.className.should.equal('ComplexObject');
+        result.avObject.numberColumn.should.equal(1.23);
+        result.avObject.arrayColumn.should.eql([1, 2, 3]);
+        result.avObject.objectColumn.should.eql({foo: 'bar'});
+        result.avObject.stringColumn.should.equal('testString');
+        result.avObject.anyColumn.should.equal('');
+        result.avObject.booleanColumn.should.equal(true);
+        result.avObject.pointerColumn.should.eql({
+          __type: 'Pointer',
+          className: '_User',
+          objectId: '55069e5be4b0c93838ed8e6c'
+        });
+        result.avObject.relationColumn.should.be.eql({
+          __type: 'Relation',
+          className: 'TestObject'
+        });
+        result.avObject.geopointColumn.should.be.eql({
+          __type: 'GeoPoint',
+          latitude: 0,
+          longitude: 30
+        });
+        result.avObject.dateColumn.should.be.eql({
+          __type: 'Date',
+          iso: '2015-05-14T06:24:47.000Z'
+        });
+        result.avObject.fileColumn.should.eql({
+          __type: 'File',
+          id: '55543fc2e4b0846760bd92f3',
+          name: 'ttt.jpg',
+          url: 'http://ac-4h2h4okw.clouddn.com/4qSbLMO866Tf4YtT9QEwJwysTlHGC9sMl7bpTwhQ.jpg'
+        });
+
+        result.avObjects.forEach(function(object) {
+          object.__type.should.equal('Object');
+          object.className.should.equal('ComplexObject');
+        });
+
+        done();
+      })
+  });
+
+  // 返回单个 AVObject
+  it('return_bareAVObject', function(done) {
+    request(AV.Cloud)
+      .post('/1.1/call/bareAVObject')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .expect(200, function(err, res) {
+        res.body.result.__type.should.be.equal('Object');
+        res.body.result.className.should.be.equal('ComplexObject');
+        res.body.result.fileColumn.__type.should.be.equal('File');
+        done();
+      });
+  });
+
+  // 返回 AVObject 数组
+  it('return_AVObjectsArray', function(done) {
+    request(AV.Cloud)
+      .post('/1.1/call/AVObjects')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .expect(200, function(err, res) {
+        res.body.result.forEach(function(object) {
+          object.__type.should.be.equal('Object');
+          object.className.should.be.equal('ComplexObject');
+        });
+        done();
+      });
+  });
+
+  // 测试发送包含 AVObject 的请求
+  it('testAVObjectParams', function(done) {
+    request(AV.Cloud)
+      .post('/1.1/call/testAVObjectParams')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .send({
+        avObject: {
+          __type: 'Object',
+          className: 'ComplexObject',
+          name: 'avObject',
+          pointerColumn: {
+            __type: 'Pointer',
+            className: '_User',
+            objectId: '55069e5be4b0c93838ed8e6c'
+          }
+        },
+        avFile: {
+          __type: 'File',
+          url: 'http://ac-1qdney6b.qiniudn.com/3zLG4o0d27MsCQ0qHGRg4JUKbaXU2fiE35HdhC8j.txt',
+          name: 'hello.txt'
+        },
+        avObjects: [{
+          __type: 'Object',
+          className: 'ComplexObject',
+          name: 'avObjects'
+        }]
+      })
+      .expect(200, function(err, res) {
+        done(err);
+      });
+  });
+
+  // 测试发送单个 AVObject 作为请求参数
+  it('testBareAVObjectParams', function(done) {
+    request(AV.Cloud)
+      .post('/1.1/call/testBareAVObjectParams')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .send({
+        __type: 'Object',
+        className: 'ComplexObject',
+        name: 'avObject',
+        avFile: {
+          __type: 'File',
+          url: 'http://ac-1qdney6b.qiniudn.com/3zLG4o0d27MsCQ0qHGRg4JUKbaXU2fiE35HdhC8j.txt',
+          name: 'hello.txt'
+        },
+      })
+      .expect(200, function(err, res) {
+        done(err);
+      });
+  });
+
+  // 测试发送 AVObject 数组作为请求参数
+  it('testAVObjectsArrayParams', function(done) {
+    var object = {
+      __type: 'Object',
+      className: 'ComplexObject',
+      name: 'avObject',
+      avFile: {
+        __type: 'File',
+        url: 'http://ac-1qdney6b.qiniudn.com/3zLG4o0d27MsCQ0qHGRg4JUKbaXU2fiE35HdhC8j.txt',
+        name: 'hello.txt'
+      }
+    };
+
+    request(AV.Cloud)
+      .post('/1.1/call/testAVObjectsArrayParams')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .send([object, object])
+      .expect(200, function(err, res) {
+        done(err);
+      });
+  });
 
   // 测试 run 方法的有效性
   it('testRun', function(done) {
@@ -261,18 +433,17 @@ describe('functions', function() {
       .expect({}, done);
   });
 
-  // TODO 该特性待后续 rpc 方法时再支持
-  //it('testRun_AVObjects', function(done) {
-  //  request(AV.Cloud)
-  //    .post('/1/functions/testRunWithAVObject')
-  //    .set('X-AVOSCloud-Application-Id', appId)
-  //    .set('X-AVOSCloud-Application-Key', appKey)
-  //    .expect(200, function(err, res) {
-  //      res.body.result[0].__type.should.equal('Object');
-  //      res.body.result[0].className.should.equal('ComplexObject');
-  //      done();
-  //    })
-  //});
+  it('testRun_AVObjects', function(done) {
+   request(AV.Cloud)
+     .post('/1.1/call/testRunWithAVObject')
+     .set('X-AVOSCloud-Application-Id', appId)
+     .set('X-AVOSCloud-Application-Key', appKey)
+     .expect(200, function(err, res) {
+       res.body.result.avObjects[0].__type.should.equal('Object');
+       res.body.result.avObjects[0].className.should.equal('ComplexObject');
+       done();
+     })
+  });
 
   it('testRun_text_plain', function(done) {
     request(AV.Cloud)
@@ -402,8 +573,8 @@ describe('functions', function() {
         done();
       });
   });
- 
-  // 用户串号测试 
+
+  // 用户串号测试
   it('user_matching_func', function(done) {
     this.timeout(30000);
     var count = 0;
