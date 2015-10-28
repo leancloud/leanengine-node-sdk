@@ -11,7 +11,7 @@
 
 等它收集一段时间数据，就可以打开你的站点下的 `/__lcStatusLogger` 查看统计图表了，basicAuth 的账号是 appId，密码是 masterKey.
 
-数据会储存在你的应用云储存中的 `LeanEngineReponseLog5Min` 和 `LeanEngineCloudAPI5Min` 这两个 Class 中，你的程序（每个实例）每五分钟会分别上传一条记录，每天会上传大概五百条。
+数据会储存在你的应用云储存中的 `LeanEngineReponseLog5Min` 和 `LeanEngineCloudAPI5Min` 这两个 Class 中，你的程序（每个实例）每五分钟会分别上传一条记录到这两张表，这意味着每个 LeanEngine 实例每个月会因为统计调用情况而消耗 17k 次 api 调用。
 
 **定义自己的 URL 分组或忽略规则**：
 
@@ -20,8 +20,8 @@
     app.use(statusLogger({
       AV: AV,
       rules: [
-        {match: /^GET \/(js|css).+/, rewrite: 'GET /$1'} // 将例如 /js/jquery.js 的 URL 重写为 /js
-        {match: /^GET \/public/, ignore: true}           // 忽略 GET /public 开头的 URL
+        {match: /^GET \/(js|css).+/, rewrite: 'GET /$1'}, // 将例如 /js/jquery.js 的 URL 重写为 /js
+        {match: /^GET \/public/, ignore: true}            // 忽略 GET /public 开头的 URL
       ]
     }));
 
