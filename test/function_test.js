@@ -50,7 +50,7 @@ AV.Cloud.define('complexObject', function(request, response) {
         avObjects: results,
       });
     }
-  })
+  });
 });
 
 AV.Cloud.define('bareAVObject', function(request, response) {
@@ -72,7 +72,7 @@ AV.Cloud.define('AVObjects', function(request, response) {
     success: function(results) {
       response.success(results);
     }
-  })
+  });
 });
 
 AV.Cloud.define('testAVObjectParams', function(request, response) {
