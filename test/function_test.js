@@ -61,7 +61,7 @@ AV.Cloud.define('bareAVObject', function(request, response) {
     success: function(results) {
       response.success(results[0]);
     }
-  })
+  });
 });
 
 AV.Cloud.define('AVObjects', function(request, response) {
@@ -174,7 +174,7 @@ AV.Cloud.define('testRunWithAVObject', function(request, response) {
      response.success(datas);
    }
  });
-})
+});
 
 AV.Cloud.define('readDir', function(request, response) {
   fs.readdir('.', function(err, dir) {
@@ -314,7 +314,7 @@ describe('functions', function() {
         });
 
         done();
-      })
+      });
   });
 
   // 返回单个 AVObject
@@ -374,7 +374,7 @@ describe('functions', function() {
           name: 'avObjects'
         }]
       })
-      .expect(200, function(err, res) {
+      .expect(200, function(err) {
         done(err);
       });
   });
@@ -395,7 +395,7 @@ describe('functions', function() {
           name: 'hello.txt'
         },
       })
-      .expect(200, function(err, res) {
+      .expect(200, function(err) {
         done(err);
       });
   });
@@ -418,7 +418,7 @@ describe('functions', function() {
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
       .send([object, object])
-      .expect(200, function(err, res) {
+      .expect(200, function(err) {
         done(err);
       });
   });
@@ -442,7 +442,7 @@ describe('functions', function() {
        res.body.result.avObjects[0].__type.should.equal('Object');
        res.body.result.avObjects[0].className.should.equal('ComplexObject');
        done();
-     })
+     });
   });
 
   it('testRun_text_plain', function(done) {
@@ -587,36 +587,29 @@ describe('functions', function() {
         return done();
       }
     };
+    var doRequest = function(sessionToken, username, cb) {
+      var r = request(AV.Cloud)
+        .post('/1.1/functions/userMatching')
+        .set('X-AVOSCloud-Application-Id', appId)
+        .set('X-AVOSCloud-Application-Key', appKey);
+      if (sessionToken) {
+        r.set('X-AVOSCloud-session-token', sessionToken);
+      }
+      r.end(function(err, res) {
+          if (username) {
+            res.body.result.reqUser.username.should.equal(username);
+            res.body.result.currentUser.username.should.equal(username);
+          } else {
+            should.not.exist(res.body.reqUser);
+            should.not.exist(res.body.currentUser);
+          }
+          return cb(err);
+      });
+    };
     for (var i = 0; i <= 4; i++) {
-      request(AV.Cloud)
-        .post('/1.1/functions/userMatching')
-        .set('X-AVOSCloud-Application-Id', appId)
-        .set('X-AVOSCloud-Application-Key', appKey)
-        .set('X-AVOSCloud-session-token', sessionToken_admin)
-        .expect(200, function(err, res) {
-          res.body.result.reqUser.username.should.equal('admin');
-          res.body.result.currentUser.username.should.equal('admin');
-          return cb(err);
-      });
-      request(AV.Cloud)
-        .post('/1.1/functions/userMatching')
-        .set('X-AVOSCloud-Application-Id', appId)
-        .set('X-AVOSCloud-Application-Key', appKey)
-        .set('X-AVOSCloud-session-token', '3267fscy0q4g3i4yc9uq9rqqv')
-        .expect(200, function(err, res) {
-          res.body.result.reqUser.username.should.equal('zhangsan');
-          res.body.result.currentUser.username.should.equal('zhangsan');
-          return cb(err);
-      });
-      request(AV.Cloud)
-        .post('/1.1/functions/userMatching')
-        .set('X-AVOSCloud-Application-Id', appId)
-        .set('X-AVOSCloud-Application-Key', appKey)
-        .expect(200, function(err, res) {
-          should.not.exist(res.body.reqUser);
-          should.not.exist(res.body.currentUser);
-          return cb(err);
-      });
+      doRequest(sessionToken_admin, 'admin', cb);
+      doRequest('0hgr13u12tmgyv4x594682sv5', 'zhangsan', cb);
+      doRequest(null, null, cb);
     }
   });
 
