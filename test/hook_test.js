@@ -54,7 +54,7 @@ AV.Cloud.beforeSave("ErrorObject", function(request, response) {
 });
 
 AV.Cloud.beforeSave('ContainsFile', function(request, response) {
-  request.object.get('file').url().should.be.equal('http://ac-4h2h4okw.clouddn.com/4qSbLMO866Tf4YtT9QEwJwysTlHGC9sMl7bpTwhQ.jpg')
+  request.object.get('file').url().should.be.equal('http://ac-4h2h4okw.clouddn.com/4qSbLMO866Tf4YtT9QEwJwysTlHGC9sMl7bpTwhQ.jpg');
   response.success();
 });
 
@@ -118,10 +118,12 @@ describe('hook', function() {
           }
       })
       .expect(200)
-      .expect({
-        "stars": 1,
-        "comment": "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567..."
-      }, done);
+      .end(function(err, res) {
+        res.body.stars.should.equal(1);
+        res.body.comment.should.equal('12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567...');
+        should.exist(res.body.__before);
+        done();
+      });
   });
 
   it('beforeSave_ContainsFile', function(done) {
@@ -139,7 +141,7 @@ describe('hook', function() {
             }
           }
       })
-      .expect(200, done)
+      .expect(200, done);
   });
 
   it('beforeSave_error', function(done) {
@@ -175,13 +177,15 @@ describe('hook', function() {
         "object": {}
       })
       .expect(200)
-      .expect({
-        "user": {
+      .end(function(err, res) {
+        res.body.user.should.eql({
           "__type": "Pointer",
           "className": "_User",
           "objectId": "52aebbdee4b0c8b6fa455aa7"
-        }
-      }, done);
+        });
+        should.exist(res.body.__before);
+        done();
+      });
   });
 
   it("beforeSave_throw_error", function(done) {
