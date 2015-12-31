@@ -224,7 +224,7 @@ describe('hook', function() {
         }
       })
       .expect(404)
-      .expect({ code: 1, error: "LeanEngine not found hook '__before_save_for_NoThisObject' for app '" + appId + "' on development." }, done);
+      .expect({ code: 1, error: "LeanEngine could not find hook '__before_save_for_NoThisObject' for app '" + appId + "' on development." }, done);
   });
 
   it('beforeUpdate', function(done) {
@@ -337,7 +337,7 @@ describe('hook', function() {
       }
     })
     .expect(404)
-    .expect({ code: 1, error: "LeanEngine not found hook \'__after_save_for_NoThisClass\' for app \'" + appId + "\' on development." }, done);
+    .expect({ code: 1, error: "LeanEngine could not find hook \'__after_save_for_NoThisClass\' for app \'" + appId + "\' on development." }, done);
   });
 
   it('afterUpdate', function(done) {
