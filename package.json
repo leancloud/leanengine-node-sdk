@@ -1,6 +1,6 @@
 {
   "name": "leanengine",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "LeanCloud LeanEngine Node.js SDK.",
   "repository": {
     "type": "git",
@@ -16,7 +16,7 @@
     "on-headers": "1.0.0"
   },
   "devDependencies": {
-    "blanket": "1.1.6",
+    "blanket": "^1.2.1",
     "expect.js ": "0.2.0",
     "express": "4.9.7",
     "mocha": "2.3.3",

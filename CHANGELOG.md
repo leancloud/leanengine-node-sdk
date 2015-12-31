@@ -1,5 +1,10 @@
 ## 更新日志
 
+### v0.3.0 (2015/12/31)
+
+* [增加 disableHook 的 API ](https://github.com/leancloud/leanengine-node-sdk/pull/41): 为了防止 Hook 函数死循环调用，增加相关 API。默认情况下 request.object 会自动设置，如果用户自行创建了对象（比如对象重新 fetch 或者 createWithoutData 创建对象），为了避免循环调用，需要明确的调用该 API。
+* [修复 cookieSession 获取用户信息方式](https://github.com/leancloud/leanengine-node-sdk/pull/40)：不应该使用 fetch 接口，因为这样总是使用 id 而忽略 sessionToken。改为使用 become 接口。
+
 ### v0.2.0 (2015/10/22)
 
 * [支持 beforeUpdate](https://github.com/leancloud/leanengine-node-sdk/pull/31): 可以通过该 hook 了解发生变更的字段，并且可以通过 error 回调拒绝本次修改请求。
