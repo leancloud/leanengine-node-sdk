@@ -69,6 +69,7 @@ AV.Cloud.afterSave("TestError", function() {
 
 AV.Cloud.afterUpdate("TestClass", function(request) {
   var bizTime = new Date();
+  assert(request.object.updatedKeys.indexOf('foo') != -1);
   request.object.set('bizTime', bizTime);
   request.object.save(null, {
     success: function(obj) {
@@ -343,6 +344,7 @@ describe('hook', function() {
     .set('Content-Type', 'application/json')
     .send({
       object: {
+        "_updatedKeys": ['foo'],
         objectId: '556904d8e4b09419960c14bd',
         foo: 'bar'
       }
