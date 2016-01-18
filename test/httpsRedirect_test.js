@@ -19,6 +19,7 @@ app.get('/test', function (req, res) {
 });
 
 var request = require('supertest');
+require('should');
 
 describe('httsRedirect', function() {
   it('test', function(done) {
@@ -26,7 +27,11 @@ describe('httsRedirect', function() {
       .get('/test')
       .set('host', 'stg-abc.leanapp.cn')
       .expect(302)
-      .expect("Found. Redirecting to https://stg-abc.leanapp.cn/test", done);
+      .end(function(err, res) {
+        res.headers.location.should.equal('https://stg-abc.leanapp.cn/test');
+        res.text.should.endWith('Redirecting to https://stg-abc.leanapp.cn/test');
+        done();
+      });
   });
 
   it('not_leanapp_host', function(done) {
