@@ -20,6 +20,7 @@
     "expect.js ": "0.2.0",
     "express": "4.9.7",
     "mocha": "2.3.3",
+    "rewire": "^2.5.1",
     "should": "3.3.2",
     "supertest": "0.14.0"
   },
