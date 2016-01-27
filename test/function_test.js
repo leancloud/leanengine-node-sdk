@@ -478,7 +478,6 @@ describe('functions', function() {
 
   // 测试带有 sessionToken 时，user 对象的正确解析
   it('testUser', function(done) {
-    this.timeout(5000);
     request(AV.Cloud)
       .post('/1/functions/testUser')
       .set('X-AVOSCloud-Application-Id', appId)
@@ -489,7 +488,6 @@ describe('functions', function() {
 
   // 无效 sessionToken 测试
   it('testUser_invalid_sessionToken', function(done) {
-    this.timeout(5000);
     request(AV.Cloud)
       .post('/1/functions/testUser')
       .set('X-AVOSCloud-Application-Id', appId)
@@ -504,7 +502,6 @@ describe('functions', function() {
 
   // 测试调用 run 方法时，传递 user 对象的有效性
   it('testRunWithUser', function(done) {
-    this.timeout(5000);
     request(AV.Cloud)
       .post('/1/functions/testRunWithUser')
       .set('X-AVOSCloud-Application-Id', appId)
@@ -515,7 +512,6 @@ describe('functions', function() {
 
   // 测试调用 run 方法 options callback
   it('testRun_options_callback', function(done) {
-    this.timeout(5000);
     request(AV.Cloud)
       .post('/1/functions/testRun_options_callback')
       .set('X-AVOSCloud-Application-Id', appId)
@@ -526,7 +522,6 @@ describe('functions', function() {
 
   // 测试调用 run 方法，返回值是 promise 类型
   it('testRun_promise', function(done) {
-    this.timeout(5000);
     request(AV.Cloud)
       .post('/1/functions/testRun_promise')
       .set('X-AVOSCloud-Application-Id', appId)
