@@ -211,6 +211,12 @@ AV.Cloud.define("userMatching", function(req, res) {
   }, Math.floor((Math.random() * 2000) + 1));
 });
 
+AV.Cloud.define('testTimeout', function(req, res) {
+  setTimeout(function() {
+    res.success('ok');
+  }, req.params.delay);
+});
+
 AV.Insight.on('end', function(err, result) {
   assert.deepEqual({
     "id" : "job id",
@@ -571,6 +577,24 @@ describe('functions', function() {
         assert.equal(1, strings.length);
         global.process.stderr.write = stderr_write;
         done();
+      });
+  });
+
+  it('timeoutTest', function(done) {
+    this.timeout(17000);
+    request(AV.Cloud)
+      .post('/1.1/functions/testTimeout')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .send({
+        delay: 15200,
+      })
+      .expect(503)
+      .end(function(err, res) {
+        res.body.should.eql({code:124, error:"The request timed out on the server."});
+        setTimeout(function() { // 等待业务逻辑真正响应，确认异常信息
+          done();
+        }, 1000);
       });
   });
 
