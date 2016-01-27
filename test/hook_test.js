@@ -17,6 +17,7 @@ AV.Cloud.beforeSave("TestClass", function(request, response) {
   }
   assert.equal(request.object.className, 'TestClass');
   request.object.set('user', request.user);
+  should.exist(request.object.get('__before'));
   response.success();
 });
 
@@ -70,6 +71,7 @@ AV.Cloud.afterSave("TestError", function() {
 AV.Cloud.afterUpdate("TestClass", function(request) {
   var bizTime = new Date();
   assert(request.object.updatedKeys.indexOf('foo') != -1);
+  should.exist(request.object.get('__after'));
   request.object.set('bizTime', bizTime);
   request.object.save(null, {
     success: function(obj) {
@@ -84,6 +86,15 @@ AV.Cloud.beforeDelete("TestClass", function(request, response) {
     return response.error('important note');
   }
   response.success();
+});
+
+AV.Cloud.beforeSave("HookMarkTest", function(request, response) {
+  should.exist(request.object.get('__before'));
+  response.success(request.object);
+});
+
+AV.Cloud.afterSave("HookMarkTest", function(request) {
+  should.exist(request.object.get('__after'));
 });
 
 AV.Cloud.onVerified('sms', function(request) {
@@ -466,4 +477,71 @@ describe('hook', function() {
       });
   });
 
+  describe('hookMark', function() {
+    it('before', function(done) {
+      request(AV.Cloud)
+        .post('/1/functions/HookMarkTest/beforeSave')
+        .set('X-AVOSCloud-Application-Id', appId)
+        .set('X-AVOSCloud-Application-Key', appKey)
+        .set('Content-Type', 'application/json')
+        .send({
+            "object": {
+              "foo": "bar",
+              "__before": 'abcdefg'
+            }
+        })
+        .expect(200)
+        .end(function(err, res) {
+          res.body.__before.should.equal('abcdefg');
+          done();
+        });
+    });
+
+    it('before_no_attrib', function(done) {
+      request(AV.Cloud)
+        .post('/1/functions/HookMarkTest/beforeSave')
+        .set('X-AVOSCloud-Application-Id', appId)
+        .set('X-AVOSCloud-Application-Key', appKey)
+        .set('Content-Type', 'application/json')
+        .send({
+            "object": {
+              "foo": "bar"
+            }
+        })
+        .expect(200)
+        .end(function(err, res) {
+          should.exist(res.body.__before);
+          done();
+        });
+    });
+
+    it('after', function(done) {
+      request(AV.Cloud)
+        .post('/1/functions/HookMarkTest/afterSave')
+        .set('X-AVOSCloud-Application-Id', appId)
+        .set('X-AVOSCloud-Application-Key', appKey)
+        .set('Content-Type', 'application/json')
+        .send({
+            "object": {
+              "foo": "bar",
+              "__after": 'abcdefg'
+            }
+        })
+        .expect(200, done);
+    });
+
+    it('after_no_attrib', function(done) {
+      request(AV.Cloud)
+        .post('/1/functions/HookMarkTest/afterSave')
+        .set('X-AVOSCloud-Application-Id', appId)
+        .set('X-AVOSCloud-Application-Key', appKey)
+        .set('Content-Type', 'application/json')
+        .send({
+            "object": {
+              "foo": "bar"
+            }
+        })
+        .expect(200, done);
+    });
+  });
 });
