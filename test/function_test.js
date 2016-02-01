@@ -211,6 +211,12 @@ AV.Cloud.define("userMatching", function(req, res) {
   }, Math.floor((Math.random() * 2000) + 1));
 });
 
+AV.Cloud.define('testTimeout', function(req, res) {
+  setTimeout(function() {
+    res.success('ok');
+  }, req.params.delay);
+});
+
 AV.Insight.on('end', function(err, result) {
   assert.deepEqual({
     "id" : "job id",
@@ -472,7 +478,6 @@ describe('functions', function() {
 
   // 测试带有 sessionToken 时，user 对象的正确解析
   it('testUser', function(done) {
-    this.timeout(5000);
     request(AV.Cloud)
       .post('/1/functions/testUser')
       .set('X-AVOSCloud-Application-Id', appId)
@@ -483,7 +488,6 @@ describe('functions', function() {
 
   // 无效 sessionToken 测试
   it('testUser_invalid_sessionToken', function(done) {
-    this.timeout(5000);
     request(AV.Cloud)
       .post('/1/functions/testUser')
       .set('X-AVOSCloud-Application-Id', appId)
@@ -498,7 +502,6 @@ describe('functions', function() {
 
   // 测试调用 run 方法时，传递 user 对象的有效性
   it('testRunWithUser', function(done) {
-    this.timeout(5000);
     request(AV.Cloud)
       .post('/1/functions/testRunWithUser')
       .set('X-AVOSCloud-Application-Id', appId)
@@ -509,7 +512,6 @@ describe('functions', function() {
 
   // 测试调用 run 方法 options callback
   it('testRun_options_callback', function(done) {
-    this.timeout(5000);
     request(AV.Cloud)
       .post('/1/functions/testRun_options_callback')
       .set('X-AVOSCloud-Application-Id', appId)
@@ -520,7 +522,6 @@ describe('functions', function() {
 
   // 测试调用 run 方法，返回值是 promise 类型
   it('testRun_promise', function(done) {
-    this.timeout(5000);
     request(AV.Cloud)
       .post('/1/functions/testRun_promise')
       .set('X-AVOSCloud-Application-Id', appId)
@@ -571,6 +572,24 @@ describe('functions', function() {
         assert.equal(1, strings.length);
         global.process.stderr.write = stderr_write;
         done();
+      });
+  });
+
+  it('timeoutTest', function(done) {
+    this.timeout(17000);
+    request(AV.Cloud)
+      .post('/1.1/functions/testTimeout')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .send({
+        delay: 15200,
+      })
+      .expect(503)
+      .end(function(err, res) {
+        res.body.should.eql({code:124, error:"The request timed out on the server."});
+        setTimeout(function() { // 等待业务逻辑真正响应，确认异常信息
+          done();
+        }, 1000);
       });
   });
 
