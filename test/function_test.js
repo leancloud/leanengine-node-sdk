@@ -111,8 +111,7 @@ AV.Cloud.define('testUser', function(request, response) {
   assert.equal(request.user.className, '_User');
   assert.equal(request.user.id, '54fd6a03e4b06c41e00b1f40');
   assert.equal(request.user.get('username'), 'admin');
-  assert.equal(request.user, AV.User.current());
-  response.success("ok");
+  response.success('ok');
 });
 
 AV.Cloud.define('testRun', function(request, response) {
@@ -161,6 +160,7 @@ AV.Cloud.define('testRun_promise', function(request, response) {
 
 AV.Cloud.define('testRunWithUser', function(request, response) {
   AV.Cloud.run('testUser', {}, {
+    user: request.user,
     success: function(data) {
       assert.equal('ok', data);
       response.success();
@@ -169,11 +169,12 @@ AV.Cloud.define('testRunWithUser', function(request, response) {
 });
 
 AV.Cloud.define('testRunWithAVObject', function(request, response) {
- AV.Cloud.run('complexObject', {}, {
-   success: function(datas) {
-     response.success(datas);
-   }
- });
+  AV.Cloud.run('complexObject', {}, {
+    user: request.user,
+    success: function(datas) {
+      response.success(datas);
+    }
+  });
 });
 
 AV.Cloud.define('readDir', function(request, response) {
@@ -617,10 +618,8 @@ describe('functions', function() {
       r.end(function(err, res) {
           if (username) {
             res.body.result.reqUser.username.should.equal(username);
-            res.body.result.currentUser.username.should.equal(username);
           } else {
             should.not.exist(res.body.reqUser);
-            should.not.exist(res.body.currentUser);
           }
           return cb(err);
       });

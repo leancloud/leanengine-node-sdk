@@ -43,7 +43,11 @@
 
           onHeaders(res, function setHeaders() {
             var session = null;
-            var user = res.user || (res.req.AV && res.req.AV.user);
+            var user = res.user;
+
+            if (user === undefined) {
+              user = res.req.AV && res.req.AV.user;
+            }
 
             if (user) {
               session = {

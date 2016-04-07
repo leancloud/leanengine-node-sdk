@@ -13,7 +13,6 @@ AV.initialize(appId, appKey, masterKey);
 AV.Cloud.beforeSave("TestClass", function(request, response) {
   if (request.user) {
     assert.equal(request.user.className, '_User');
-    assert.equal(request.user, AV.User.current());
   }
   assert.equal(request.object.className, 'TestClass');
   request.object.set('user', request.user);
@@ -204,6 +203,7 @@ describe('hook', function() {
     var warnLogs = [];
     console.warn = function() {
       warnLogs.push(arguments);
+      ori.apply(console, arguments);
     };
     request(AV.Cloud)
       .post("/1.1/functions/ErrorObject/beforeSave")
@@ -218,8 +218,9 @@ describe('hook', function() {
         res.body.code.should.be.equal(1);
         res.body.error.should.be.match(/(undefined|a\.noThisMethod) is not a function/);
         console.warn = ori;
-        warnLogs.length.should.equal(1);
-        warnLogs[0][0].split('\n')[0].should.match(/Execute '__before_save_for_ErrorObject' failed with error: TypeError: (undefined|a\.noThisMethod) is not a function/);
+        warnLogs.some(function(log) {
+          return log[0].trim().match(/Execute '__before_save_for_ErrorObject' failed with error: TypeError: (undefined|a\.noThisMethod) is not a function/);
+        }).should.equal(true);
         done();
       });
   });

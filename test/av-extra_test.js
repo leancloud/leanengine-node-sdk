@@ -1,11 +1,11 @@
 'use strict';
-var should = require('should'); // jshint ignore:line
 var rewire = require("rewire");
 var AV = rewire('../lib/av-extra.js');
 
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
+var config = require('./config');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -58,7 +58,7 @@ describe('av-extra', function() {
   });
 
   it('signDisableHook', function() {
-    AV.__get__('signDisableHook')('__before_for_TestClass', 1453711871302).should.equal('1453711871302,177cbac6495f52e462aae2d054529e08a1725276');
+    AV.__get__('signDisableHook')('__before_for_TestClass', 1453711871302).should.equal('1453711871302,a9611dbc226eed1a5f4aa0e4fa20e2d014aeaeb8');
   });
 
 });
