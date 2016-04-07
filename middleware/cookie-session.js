@@ -3,12 +3,11 @@
  */
 (function() {
   'use strict';
-  var domain = require('domain');
   var Cookies = require('cookies');
   var onHeaders = require('on-headers');
   var debug = require('debug')('AV:cookieSession');
 
-  module.exports = function(av) {
+  module.exports = function(AV) {
     return function(opts) {
       opts = opts || {};
 
@@ -18,7 +17,7 @@
       // secrets
       var keys = opts.keys;
       if (!keys && opts.secret) {
-         keys = [opts.secret];
+        keys = [opts.secret];
       }
 
       // defaults
@@ -44,7 +43,8 @@
 
           onHeaders(res, function setHeaders() {
             var session = null;
-            var user = av.User.current();
+            var user = res.user || (res.req.AV && res.req.AV.user);
+
             if (user) {
               session = {
                 _uid: user.id,
@@ -69,10 +69,9 @@
           var sessionToken = session._sessionToken;
           req.AV = req.AV || {};
           if (uid && sessionToken) {
-            av.Cloud.logInByIdAndSessionToken(uid, sessionToken, opts.fetchUser, function(err, user) {
+            AV.Cloud.logInByIdAndSessionToken(uid, sessionToken, opts.fetchUser, function(err, user) {
               if(err) {
                 debug('sessionToken invalid, uid: %s', uid);
-                av.User.logOut();
                 delete req.AV.user;
               } else {
                 req.AV.user = user;
@@ -80,18 +79,11 @@
               return next();
             });
           } else {
-            av.User.logOut();
             delete req.AV.user;
             return next();
           }
         };
-        if (process.domain) {
-          return cookieSetter();
-        }
-        var d = domain.create();
-        d.add(req);
-        d.add(res);
-        d.run(cookieSetter);
+        return cookieSetter();
       };
     };
   };
@@ -103,7 +95,7 @@
    * @return {Object}
    * @private
    */
-  
+
   function decode(string) {
     var body = new Buffer(string, 'base64').toString('utf8');
     return JSON.parse(body);
@@ -116,7 +108,7 @@
    * @return {String}
    * @private
    */
-  
+
   function encode(body) {
     body = JSON.stringify(body);
     return new Buffer(body).toString('base64');
