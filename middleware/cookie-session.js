@@ -43,24 +43,18 @@
 
           onHeaders(res, function setHeaders() {
             var session = null;
-            var user = res.user;
 
-            if (user === undefined) {
-              user = res.req.AV && res.req.AV.user;
-            }
-
-            if (user) {
+            if (res.currentUser) {
               session = {
-                _uid: user.id,
-                _sessionToken: user._sessionToken
+                _uid: res.currentUser.id,
+                _sessionToken: res.currentUser._sessionToken
               };
-            }
-            if (!session) {
-              debug('clear session');
-              cookies.set(name, '', opts);
-            } else {
+
               debug('session %j', session);
               cookies.set(name, encode(session), opts);
+            } else if (res.currentUser === null) {
+              debug('clear session');
+              cookies.set(name, '', opts);
             }
           });
 
@@ -79,6 +73,8 @@
                 delete req.AV.user;
               } else {
                 req.AV.user = user;
+                req.currentUser = user;
+                req.sessionToken = user.getSessionToken();
               }
               return next();
             });

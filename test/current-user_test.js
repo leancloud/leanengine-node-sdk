@@ -24,7 +24,7 @@ describe('current user', function() {
     app.use(AV.Cloud.CookieSession({ secret: 'my secret', fetchUser: true }));
 
     AV.Cloud.define('currentUserFromRequest', function(request, response) {
-      var user = request.currentUser();
+      var user = request.currentUser;
 
       response.success({
         currentUser: user,
@@ -42,12 +42,18 @@ describe('current user', function() {
       });
     });
 
+    app.post('/logout', function(req, res) {
+      res.clearCurrentUser();
+      res.send();
+    });
+
     app.post('/currentUserFromRequest', function(req, res) {
-      var user = req.currentUser();
+      var user = req.currentUser;
 
       res.json({
         currentUser: user,
-        username: user && user.get('username')
+        username: user && user.get('username'),
+        sessionToken: req.sessionToken
       });
     });
   });
@@ -80,10 +86,8 @@ describe('current user', function() {
   describe('express', function() {
     var agent = request.agent(app);
 
-    it('use req.currentUser (no user info)', function(done) {
+    it('request req.currentUser (no user info)', function(done) {
       agent.post('/currentUserFromRequest')
-      .set('X-AVOSCloud-Application-Id', appId)
-      .set('X-AVOSCloud-Application-Key', appKey)
       .expect(200, function(err, res) {
         assert.equal(null, res.body.currentUser);
         done(err);
@@ -97,12 +101,26 @@ describe('current user', function() {
       }).expect(200, done);
     });
 
-    it('use req.currentUser (from cookie)', function(done) {
+    it('request req.currentUser (from cookie)', function(done) {
       agent.post('/currentUserFromRequest')
-      .set('X-AVOSCloud-Application-Id', appId)
-      .set('X-AVOSCloud-Application-Key', appKey)
       .expect(200, function(err, res) {
         res.body.username.should.be.equal('admin');
+        res.body.sessionToken.should.be.equal(sessionTokenAdmin);
+        done(err);
+      });
+    });
+
+    it('logOut', function(done) {
+      agent.post('/logout').send({
+        username: 'admin',
+        password: 'admin'
+      }).expect(200, done);
+    });
+
+    it('request req.currentUser (already logout)', function(done) {
+      agent.post('/currentUserFromRequest')
+      .expect(200, function(err, res) {
+        assert.equal(null, res.body.currentUser);
         done(err);
       });
     });
