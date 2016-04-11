@@ -8,7 +8,7 @@ var appId = config.appId;
 var appKey = config.appKey;
 var masterKey = config.masterKey;
 
-AV.initialize(appId, appKey, masterKey);
+AV.init(config);
 
 AV.Cloud.beforeSave("TestClass", function(request, response) {
   if (request.user) {

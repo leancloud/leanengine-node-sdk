@@ -13,7 +13,7 @@ var appKey = config.appKey;
 var masterKey = config.masterKey;
 var sessionTokenAdmin = config.sessionToken_admin;
 
-AV.initialize(appId, appKey, masterKey);
+AV.init(config);
 
 describe('current user', function() {
   var app = express();

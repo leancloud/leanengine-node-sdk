@@ -10,7 +10,7 @@ var appId = config.appId;
 var appKey = config.appKey;
 var masterKey = config.masterKey;
 
-AV.initialize(appId, appKey, masterKey);
+AV.init(config);
 
 var TestObject = AV.Object.extend('TestObject');
 var ComplexObject = AV.Object.extend('ComplexObject');

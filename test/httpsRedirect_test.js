@@ -7,7 +7,7 @@ var appId = config.appId;
 var appKey = config.appKey;
 var masterKey = config.masterKey;
 
-AV.initialize(appId, appKey, masterKey);
+AV.init(config);
 
 var app = express();
 
