@@ -1,13 +1,13 @@
 {
   "name": "leanengine",
-  "version": "0.4.0",
+  "version": "1.0.0-rc.0",
   "description": "LeanCloud LeanEngine Node.js SDK.",
   "repository": {
     "type": "git",
     "url": "https://github.com/leancloud/leanengine-node-sdk"
   },
   "dependencies": {
-    "avoscloud-sdk": "0.x",
+    "avoscloud-sdk": "1.0.0-rc8",
     "body-parser": "1.9.0",
     "connect": "3.2.0",
     "connect-timeout": "^1.7.0",
@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "blanket": "^1.2.1",
-    "expect.js ": "0.2.0",
+    "expect.js": "0.2.0",
     "express": "4.9.7",
     "mocha": "2.3.3",
     "rewire": "^2.5.1",

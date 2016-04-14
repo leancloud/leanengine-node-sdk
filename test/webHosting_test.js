@@ -9,7 +9,7 @@ var appId = config.appId;
 var appKey = config.appKey;
 var masterKey = config.masterKey;
 
-AV.initialize(appId, appKey, masterKey);
+AV.init(config);
 
 var app = express();
 app.use(AV.Cloud);
@@ -22,7 +22,8 @@ app.get('/', function (req, res) {
 
 app.post('/login', function(req, res) {
   AV.User.logIn(req.body.username, req.body.password).then(
-    function() {
+    function(user) {
+      res.saveCurrentUser(user);
       res.redirect('/profile');
     },
     function(error) {
@@ -33,25 +34,22 @@ app.post('/login', function(req, res) {
 });
 
 app.get('/logout', function(req, res) {
-  AV.User.logOut();
+  res.saveCurrentUser(null);
   res.redirect('/profile');
 });
 
 app.post('/testCookieSession', function(req, res) {
   AV.User.logIn(req.body.username, req.body.password).then(function(user) {
     assert.equal(req.body.username, user.get('username'));
-    assert.equal(AV.User.current(), user);
-    AV.User.logOut();
-    assert(!AV.User.current());
+    res.saveCurrentUser(null);
+    assert(!res.user);
     // 登出再登入不会有问题
     return AV.User.logIn(req.body.username, req.body.password);
-  }).then(function(user) {
-    assert.equal(AV.User.current(), user);
+  }).then(function() {
     // 在已登录状态，直接用另外一个账户登录
     return AV.User.logIn('zhangsan', 'zhangsan');
   }).then(function(user) {
     assert.equal('zhangsan', user.get('username'));
-    assert.equal(AV.User.current(), user);
     res.send('ok');
   }, function(err) {
     assert.ifError(err);
