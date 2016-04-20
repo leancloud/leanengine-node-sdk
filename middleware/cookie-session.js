@@ -34,56 +34,66 @@
       debug('session options %j', opts);
 
       return function cookieSession(req, res, next) {
-        var cookieSetter = function() {
-          var cookies = req.sessionCookies = new Cookies(req, res, keys);
+        var cookies = req.sessionCookies = new Cookies(req, res, keys);
+        var responseUser;
 
-          // to pass to Session()
-          req.sessionOptions = opts;
-          req.sessionKey = name;
+        // 兼容 connect
+        if (!res.req) res.req = req;
+        if (!req.res) req.res = res;
 
-          onHeaders(res, function setHeaders() {
-            var session = null;
+        // to pass to Session()
+        req.sessionOptions = opts;
+        req.sessionKey = name;
 
-            if (res.currentUser) {
-              session = {
-                _uid: res.currentUser.id,
-                _sessionToken: res.currentUser._sessionToken
-              };
-
-              debug('session %j', session);
-              cookies.set(name, encode(session), opts);
-            } else if (res.currentUser === null) {
-              debug('clear session');
-              cookies.set(name, '', opts);
-            }
-          });
-
-          var session = {};
-          var json = cookies.get(name, opts);
-          if (json) {
-            session = decode(json);
-          }
-          var uid = session._uid;
-          var sessionToken = session._sessionToken;
-          req.AV = req.AV || {};
-          if (uid && sessionToken) {
-            AV.Cloud.logInByIdAndSessionToken(uid, sessionToken, opts.fetchUser, function(err, user) {
-              if(err) {
-                debug('sessionToken invalid, uid: %s', uid);
-                delete req.AV.user;
-              } else {
-                req.AV.user = user;
-                req.currentUser = user;
-                req.sessionToken = user.getSessionToken();
-              }
-              return next();
-            });
-          } else {
-            delete req.AV.user;
-            return next();
-          }
+        res.saveCurrentUser = function(user) {
+          responseUser = user;
         };
-        return cookieSetter();
+
+        res.clearCurrentUser = function() {
+          responseUser = null;
+        };
+
+        onHeaders(res, function setHeaders() {
+          var session = null;
+
+          if (responseUser) {
+            session = {
+              _uid: responseUser.id,
+              _sessionToken: responseUser._sessionToken
+            };
+
+            debug('session %j', session);
+            cookies.set(name, encode(session), opts);
+          } else if (responseUser === null) {
+            debug('clear session');
+            cookies.set(name, '', opts);
+          }
+        });
+
+        var session = {};
+        var json = cookies.get(name, opts);
+        if (json) {
+          session = decode(json);
+        }
+        var uid = session._uid;
+        var sessionToken = session._sessionToken;
+        req.AV = req.AV || {};
+        if (uid && sessionToken) {
+          AV.Cloud.logInByIdAndSessionToken(uid, sessionToken, opts.fetchUser, function(err, user) {
+            if(err) {
+              debug('sessionToken invalid, uid: %s', uid);
+              delete req.AV.user;
+            } else {
+              req.AV.user = user;
+              req.currentUser = user;
+              req.sessionToken = user.getSessionToken();
+            }
+            return next();
+          });
+        } else {
+          delete req.AV.user;
+          return next();
+        }
       };
     };
   };
