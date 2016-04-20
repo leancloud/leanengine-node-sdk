@@ -82,7 +82,6 @@
           AV.Cloud.logInByIdAndSessionToken(uid, sessionToken, opts.fetchUser, function(err, user) {
             if(err) {
               debug('sessionToken invalid, uid: %s', uid);
-              delete req.AV.user;
             } else {
               req.AV.user = user;
               req.currentUser = user;
@@ -91,7 +90,6 @@
             return next();
           });
         } else {
-          delete req.AV.user;
           return next();
         }
       };

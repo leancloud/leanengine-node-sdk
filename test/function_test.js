@@ -115,6 +115,10 @@ AV.Cloud.define('testUser', function(request, response) {
 });
 
 AV.Cloud.define('testRun', function(request, response) {
+  if (request.params.shouldRemote && process.env.NODE_ENV != 'production') {
+    return response.error('Should be run on remote');
+  }
+
   AV.Cloud.run('hello', {name: '李四'}, {
     success: function(data) {
       assert.deepEqual(data, {action: "hello", name: '李四'});
@@ -171,6 +175,24 @@ AV.Cloud.define('testRunWithUser', function(request, response) {
 AV.Cloud.define('testRunWithAVObject', function(request, response) {
   AV.Cloud.run('complexObject', {}, {
     user: request.user,
+    success: function(datas) {
+      response.success(datas);
+    }
+  });
+});
+
+AV.Cloud.define('testRunWithSessionToken', function(request, response) {
+  AV.Cloud.run('testUser', {}, {
+    sessionToken: request.sessionToken,
+    success: function(datas) {
+      response.success(datas);
+    }
+  });
+});
+
+AV.Cloud.define('testRpcRemote', function(request, response) {
+  AV.Cloud.rpc('testRun', {shouldRemote: true}, {
+    remote: true,
     success: function(datas) {
       response.success(datas);
     }
@@ -528,6 +550,23 @@ describe('functions', function() {
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
       .set('x-avoscloud-session-token', sessionToken_admin)
+      .expect(200, done);
+  });
+
+  it('testRunWithSessionToken', function(done) {
+    request(AV.Cloud)
+      .post('/1/functions/testRunWithSessionToken')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .set('x-avoscloud-session-token', sessionToken_admin)
+      .expect(200, done);
+  });
+
+  it('testRpcRemote', function(done) {
+    request(AV.Cloud)
+      .post('/1/functions/testRpcRemote')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
       .expect(200, done);
   });
 
