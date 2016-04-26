@@ -12,9 +12,18 @@ AV.init({
   masterKey: process.env.LC_APP_MASTER_KEY
 });
 
-app.use(AV.Cloud);
+app.use(AV.express());
+
 app.listen(process.env.LC_APP_PORT);
 ```
+
+## AV.express
+
+```javascript
+AV.express(options?: object)
+```
+
+初始化一个 LeanEngine 中间件，可被挂载到 express 应用上。
 
 ## AV.Object
 
