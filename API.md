@@ -46,7 +46,7 @@ AV.Cloud.define(name: string, func: function)
 
 ### AV.Cloud.run
 
-运行已定义的云函数，与 JavaScript SDK 中会发起 HTTP 请求不同，在云引擎中会变成直接调用指定的函数。
+运行已定义的云函数，与 JavaScript SDK 中会发起 HTTP 请求不同，在云引擎中默认变成直接调用指定的函数。
 
 ```javascript
 AV.Cloud.run(name: string, data: object, options?: object): Promise
@@ -54,7 +54,13 @@ AV.Cloud.run(name: string, data: object, options?: object): Promise
 
 `options` 的属性包括：
 
-* `user: AV.User`：以特定的用户运行云函数。
+* `user: AV.User`：以特定的用户运行云函数（建议在 `remote: false` 时使用）。
+* `sessionToken: string`：以特定的 sessionToken 调用云函数（建议在 `remote: true` 时使用）。
+* `remote: boolean`：通过网络请求来调用云函数，默认 `false`.
+
+### AV.Cloud.rpc
+
+兼容 JavaScript SDK 的同名函数，是 `AV.Cloud.run` 的一个别名。
 
 ### 定义 Class Hook
 
