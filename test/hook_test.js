@@ -9,6 +9,7 @@ var appKey = config.appKey;
 var masterKey = config.masterKey;
 
 AV.init(config);
+var app = AV.express();
 
 AV.Cloud.beforeSave("TestClass", function(request, response) {
   if (request.user) {
@@ -116,7 +117,7 @@ var request = require('supertest');
 
 describe('hook', function() {
   it('beforeSave', function(done) {
-    request(AV.Cloud)
+    request(app)
       .post('/1/functions/TestReview/beforeSave')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
@@ -137,7 +138,7 @@ describe('hook', function() {
   });
 
   it('beforeSave_ContainsFile', function(done) {
-    request(AV.Cloud)
+    request(app)
       .post('/1/functions/ContainsFile/beforeSave')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
@@ -155,7 +156,7 @@ describe('hook', function() {
   });
 
   it('beforeSave_error', function(done) {
-    request(AV.Cloud)
+    request(app)
       .post('/1/functions/TestReview/beforeSave')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
@@ -170,7 +171,7 @@ describe('hook', function() {
   });
 
   it('beforeSave_user', function(done) {
-    request(AV.Cloud)
+    request(app)
       .post('/1/functions/TestClass/beforeSave')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
@@ -205,7 +206,7 @@ describe('hook', function() {
       warnLogs.push(arguments);
       ori.apply(console, arguments);
     };
-    request(AV.Cloud)
+    request(app)
       .post("/1.1/functions/ErrorObject/beforeSave")
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
@@ -226,7 +227,7 @@ describe('hook', function() {
   });
 
   it("beforeSave_not_found", function(done) {
-    request(AV.Cloud)
+    request(app)
       .post("/1.1/functions/NoThisObject/beforeSave")
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
@@ -240,7 +241,7 @@ describe('hook', function() {
   });
 
   it('beforeUpdate', function(done) {
-    request(AV.Cloud)
+    request(app)
       .post('/1/functions/TestReview/beforeUpdate')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
@@ -256,7 +257,7 @@ describe('hook', function() {
   });
 
   it('beforeUpdate_didNotUpdateComment', function(done) {
-    request(AV.Cloud)
+    request(app)
       .post('/1/functions/TestReview/beforeUpdate')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
@@ -272,7 +273,7 @@ describe('hook', function() {
   });
 
   it('beforeUpdate_rejected', function(done) {
-    request(AV.Cloud)
+    request(app)
       .post('/1/functions/TestReview/beforeUpdate')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
@@ -289,7 +290,7 @@ describe('hook', function() {
   });
 
   it('afterSave', function(done) {
-    request(AV.Cloud)
+    request(app)
       .post('/1/functions/TestReview/afterSave')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
@@ -314,7 +315,7 @@ describe('hook', function() {
     global.process.stderr.write = function(string) {
       strings.push(string);
     };
-    request(AV.Cloud)
+    request(app)
       .post('/1/functions/TestError/afterSave')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
@@ -336,7 +337,7 @@ describe('hook', function() {
   });
 
   it('hook_not_found', function(done) {
-    request(AV.Cloud)
+    request(app)
     .post('/1/functions/NoThisClass/afterSave')
     .set('X-AVOSCloud-Application-Id', appId)
     .set('X-AVOSCloud-Application-Key', appKey)
@@ -353,7 +354,7 @@ describe('hook', function() {
   });
 
   it('afterUpdate', function(done) {
-    request(AV.Cloud)
+    request(app)
     .post('/1/functions/TestClass/afterUpdate')
     .set('X-AVOSCloud-Application-Id', appId)
     .set('X-AVOSCloud-Application-Key', appKey)
@@ -374,7 +375,7 @@ describe('hook', function() {
   });
 
   it('should be deleted', function(done) {
-    request(AV.Cloud)
+    request(app)
     .post('/1/functions/TestClass/beforeDelete')
     .set('X-AVOSCloud-Application-Id', appId)
     .set('X-AVOSCloud-Application-Key', appKey)
@@ -390,7 +391,7 @@ describe('hook', function() {
   });
 
   it('should not be deleted', function(done) {
-    request(AV.Cloud)
+    request(app)
     .post('/1/functions/TestClass/beforeDelete')
     .set('X-AVOSCloud-Application-Id', appId)
     .set('X-AVOSCloud-Application-Key', appKey)
@@ -406,7 +407,7 @@ describe('hook', function() {
   });
 
   it('onVerified', function(done) {
-    request(AV.Cloud)
+    request(app)
       .post('/1/functions/onVerified/sms')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
@@ -424,7 +425,7 @@ describe('hook', function() {
   });
 
   it('on_login', function(done) {
-    request(AV.Cloud)
+    request(app)
       .post('/1/functions/_User/onLogin')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
@@ -442,7 +443,7 @@ describe('hook', function() {
   });
 
   it('on_login_error', function(done) {
-    request(AV.Cloud)
+    request(app)
       .post('/1/functions/_User/onLogin')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
@@ -461,7 +462,7 @@ describe('hook', function() {
   });
 
   it('_metadatas', function(done) {
-    request(AV.Cloud)
+    request(app)
       .get('/1/functions/_ops/metadatas')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Master-Key', masterKey)
@@ -480,7 +481,7 @@ describe('hook', function() {
 
   describe('hookMark', function() {
     it('before', function(done) {
-      request(AV.Cloud)
+      request(app)
         .post('/1/functions/HookMarkTest/beforeSave')
         .set('X-AVOSCloud-Application-Id', appId)
         .set('X-AVOSCloud-Application-Key', appKey)
@@ -499,7 +500,7 @@ describe('hook', function() {
     });
 
     it('before_no_attrib', function(done) {
-      request(AV.Cloud)
+      request(app)
         .post('/1/functions/HookMarkTest/beforeSave')
         .set('X-AVOSCloud-Application-Id', appId)
         .set('X-AVOSCloud-Application-Key', appKey)
@@ -517,7 +518,7 @@ describe('hook', function() {
     });
 
     it('after', function(done) {
-      request(AV.Cloud)
+      request(app)
         .post('/1/functions/HookMarkTest/afterSave')
         .set('X-AVOSCloud-Application-Id', appId)
         .set('X-AVOSCloud-Application-Key', appKey)
@@ -532,7 +533,7 @@ describe('hook', function() {
     });
 
     it('after_no_attrib', function(done) {
-      request(AV.Cloud)
+      request(app)
         .post('/1/functions/HookMarkTest/afterSave')
         .set('X-AVOSCloud-Application-Id', appId)
         .set('X-AVOSCloud-Application-Key', appKey)

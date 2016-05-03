@@ -19,7 +19,7 @@ describe('current user', function() {
   var app = express();
 
   before(function() {
-    app.use(AV.Cloud);
+    app.use(AV.express());
     app.use(bodyParser.json());
     app.use(AV.Cloud.CookieSession({ secret: 'my secret', fetchUser: true }));
 

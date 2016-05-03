@@ -12,7 +12,7 @@ var masterKey = config.masterKey;
 AV.init(config);
 
 var app = express();
-app.use(AV.Cloud);
+app.use(AV.express());
 app.use(bodyParser.json());
 app.use(AV.Cloud.CookieSession({ secret: 'my secret', maxAge: 3600000, fetchUser: false }));
 
