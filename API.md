@@ -38,9 +38,14 @@ LeanEngine SDK 为 AVObject 提供了这两个方法来防止死循环，当在�
 
 ```javascript
 AV.Cloud.define(name: string, func: function)
+AV.Cloud.define(name: string, options: object, func: function)
 ```
 
-定义云函数，`func` 的签名：`function(request: Request, response: Response)`。
+定义云函数有两种签名，其中 options 是一个可选的参数，`func` 的签名：`function(request: Request, response: Response)`。
+
+`options` 的属性包括：
+
+* `fetchUser: boolean`：是否自动抓取客户端的用户信息，默认为 `true`，若设置为 `false` 则 `request` 上将不会有 user 属性。
 
 `Request` 上的属性包括：
 
@@ -67,6 +72,8 @@ AV.Cloud.run(name: string, data: object, options?: object): Promise
 * `sessionToken: string`：以特定的 sessionToken 调用云函数（建议在 `remote: true` 时使用）。
 * `remote: boolean`：通过网络请求来调用云函数，默认 `false`.
 
+更多有关云函数的内容请参考文档 [云函数开发指南：云函数](https://leancloud.cn/docs/leanengine_cloudfunction_guide-node.html#云函数)。
+
 ### AV.Cloud.rpc
 
 兼容 JavaScript SDK 的同名函数，是 `AV.Cloud.run` 的一个别名。
@@ -82,7 +89,7 @@ AV.Cloud.run(name: string, data: object, options?: object): Promise
 
 这些函数的签名：`function(className: string, func: function)`。
 
-before 类 Hook 的 `func` 签名：`function(request: Request, response: Response)`，after 类 Hook 需要在执行完成后调用 `response.success` 或 `response.error` 接受或拒绝这次操作。
+before 类 Hook 的 `func` 签名：`function(request: Request, response: Response)`，before 类 Hook 需要在执行完成后调用 `response.success` 或 `response.error` 接受或拒绝这次操作。
 
 after 类 Hook 的 `func` 签名：`function(request: Request)`。
 
@@ -96,7 +103,7 @@ after 类 Hook 的 `func` 签名：`function(request: Request)`。
 * `success: function()`：允许这个操作，请在 15 秒内调用 `success`, 否则会认为操作被拒绝。
 * `error: function(err: string)`：向客户端返回一个错误并拒绝这个操作。
 
-更多有关 Hook 函数的内容请参考文档 [云函数开发指南：防止死循环调用：Hook 函数](https://leancloud.cn/docs/leanengine_cloudfunction_guide-node.html#Hook_函数)。
+更多有关 Hook 函数的内容请参考文档 [云函数开发指南：Hook 函数](https://leancloud.cn/docs/leanengine_cloudfunction_guide-node.html#Hook_函数)。
 
 ### 登录和认证 Hook
 
@@ -114,7 +121,7 @@ after 类 Hook 的 `func` 签名：`function(request: Request)`。
 * `success: function()`：允许这个操作，请在 15 秒内调用 `success`, 否则会认为操作被拒绝。
 * `error: function(err: string)`：向客户端返回一个错误并拒绝这个操作。
 
-更多有关 Hook 函数的内容请参考文档 [云函数开发指南：防止死循环调用：Hook 函数](https://leancloud.cn/docs/leanengine_cloudfunction_guide-node.html#Hook_函数)。
+更多有关 Hook 函数的内容请参考文档 [云函数开发指南：Hook 函数](https://leancloud.cn/docs/leanengine_cloudfunction_guide-node.html#Hook_函数)。
 
 ### 实时通信 Hook 函数
 
@@ -146,17 +153,7 @@ app.use(AV.Cloud.CookieSession({ secret: 'my secret', maxAge: 3600000, fetchUser
 * `fetchUser?: boolean`：是否自动查询用户信息，默认为 `false`，即不自动查询，这种情况下只能访问用户的 `id` 和 `sessionToken`.
 * `httpOnly?: boolean`: 不允许客户端读写该 Cookie，默认 `false`.
 
-### https-redirect
-
-该中间件会自动将 HTTP 请求重定向到 HTTPS 上：
-
-```javascript
-app.use(AV.Cloud.HttpsRedirect());
-```
-
-## Express
-
-当启用了 `cookie-session` 中间件后，express 的 `Request` 上会有这些属性可用：
+express 的 `Request` 上会有这些属性可用：
 
 * `currentUser?: AV.User`：和当前客户端关联的用户信息（根据 Cookie），如未开启 `cookie-session` 的 `fetchUser` 选项则只可以访问 `id` 和 `sessionToken`.
 * `sessionToken?: string`：和当前客户端关联的 `sessionToken`（根据 Cookie）。
@@ -167,3 +164,11 @@ express 的 `Response` 上会有这些属性可用：
 * `clearCurrentUser()`：清除当前客户端关联的用户（删除 Cookie）。
 
 更多有关在 express 维护用户状态的技巧见文档：[网站托管开发指南：处理用户登录和登出](https://leancloud.cn/docs/leanengine_webhosting_guide-node.html#处理用户登录和登出)。
+
+### https-redirect
+
+该中间件会自动将 HTTP 请求重定向到 HTTPS 上：
+
+```javascript
+app.use(AV.Cloud.HttpsRedirect());
+```

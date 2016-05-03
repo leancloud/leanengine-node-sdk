@@ -115,6 +115,13 @@ AV.Cloud.define('testUser', function(request, response) {
   response.success('ok');
 });
 
+AV.Cloud.define('dontFetchUser', {fetchUser: false}, function(req, res) {
+  should.not.exist(res.user);
+  should.not.exist(res.currentUser);
+  req.sessionToken.should.be.equal(sessionToken_admin);
+  res.success();
+});
+
 AV.Cloud.define('testRun', function(request, response) {
   if (request.params.shouldRemote && process.env.NODE_ENV != 'production') {
     return response.error('Should be run on remote');
@@ -504,6 +511,15 @@ describe('functions', function() {
   it('testUser', function(done) {
     request(app)
       .post('/1/functions/testUser')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .set('x-avoscloud-session-token', sessionToken_admin)
+      .expect(200, done);
+  });
+
+  it('dontFetchUser', function(done) {
+    request(app)
+      .post('/1/functions/dontFetchUser')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
       .set('x-avoscloud-session-token', sessionToken_admin)

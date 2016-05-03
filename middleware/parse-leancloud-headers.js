@@ -56,6 +56,7 @@ module.exports = function(AV, options) {
         masterKey = appKey.slice(0, appKey.indexOf(','));
         appKey = null;
       }
+      req.sessionToken = sessionToken;
       req.AV = {
         id: appId,
         key: appKey,
