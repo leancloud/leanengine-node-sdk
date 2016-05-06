@@ -7,14 +7,14 @@ var app = require('express')();
 var AV = require('leanengine');
 
 AV.init({
-  appId: process.env.APP_ID,
-  appKey: process.env.LC_APP_KEY,
-  masterKey: process.env.LC_APP_MASTER_KEY
+  appId: process.env.LEANCLOUD_APP_ID,
+  appKey: process.env.LEANCLOUD_APP_KEY,
+  masterKey: process.env.LEANCLOUD_APP_MASTER_KEY
 });
 
 app.use(AV.express());
 
-app.listen(process.env.LC_APP_PORT);
+app.listen(process.env.LEANCLOUD_APP_PORT);
 ```
 
 ## AV.express
