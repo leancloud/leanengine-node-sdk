@@ -1,5 +1,17 @@
 # 更新日志
 
+## v1.0.0 (rc 2016/05/16)
+
+* 支持新的初始化方式。
+* 更新至 JavaScript SDK 1.0.0-rc8.
+* 彻底废弃了 currentUser.
+* 默认启用与 Promise/A+ 兼容的错误处理逻辑。
+* 将中间件拆分到了单独的文件。
+* AV.Cloud.run 支持 remote 参数。
+* AV.Cloud.define 支持 fetchUser 参数。
+
+详见文档 [升级到云引擎 Node.js SDK 1.0](https://leancloud.cn/docs/leanengine-node-sdk-upgrade-1.html)。
+
 ## v0.4.0 (2016/02/01)
 
 ### Bug Fixes
