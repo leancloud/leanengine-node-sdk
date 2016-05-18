@@ -7,7 +7,7 @@
     "url": "https://github.com/leancloud/leanengine-node-sdk"
   },
   "dependencies": {
-    "avoscloud-sdk": "1.0.0-rc8",
+    "avoscloud-sdk": "1.0.0-rc9.1",
     "body-parser": "1.9.0",
     "connect": "3.2.0",
     "connect-timeout": "^1.7.0",
