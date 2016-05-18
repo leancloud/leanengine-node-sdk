@@ -3,7 +3,7 @@
 ## v1.0.0 (rc 2016/05/16)
 
 * 支持新的初始化方式。
-* 更新至 JavaScript SDK 1.0.0-rc8.
+* 更新至 JavaScript SDK 1.0.0-rc9.1.
 * 彻底废弃了 currentUser.
 * 默认启用与 Promise/A+ 兼容的错误处理逻辑。
 * 将中间件拆分到了单独的文件。
