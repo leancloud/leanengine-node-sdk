@@ -135,6 +135,52 @@ after 类 Hook 的 `func` 签名：`function(request: Request)`。
 
 这些 Hook 需要用 `AV.Cloud.define` 来定义，详见文档 [实时通信概览：云引擎 Hook](https://leancloud.cn/docs/realtime_v2.html#云引擎_Hook)
 
+### AV.Cloud.httpRequest
+
+注意：该 API 已不再维护且可能在之后的版本中去除，请使用 [request](https://www.npmjs.com/package/request) 发起 HTTP 请求！
+
+```javascript
+AV.Cloud.httpRequest(options: object);
+```
+
+options 的属性包括：
+
+* `url`：被请求的 Url, 例如 `https://api.leancloud.cn/1.1/ping`。
+* `success: function(response: Response)`：成功回调，接受一个 HTTP 响应作为参数。
+* `error: function(response: Response)`：失败回调，接受一个 HTTP 响应作为参数。
+* `method: string`：HTTP 方法，默认为 `GET`。
+* `params`：Query String，可以是对象 `{q : 'Sean Plott'}` 也可以是字符串 `q=Sean Plott`。
+* `headers: object`：HTTP 头，例如 `{'Content-Type': 'application/json'}`。
+* `body: object`：HTTP 请求正文，默认使用 urlencode 编码，如果指定了 `Content-Type` 为 `application/json` 则发送 JSON 格式的正文；不适用于 `GET` 或 `HEAD` 请求。
+* `timeout: number`：超时时间，单位秒，默认 `10000`。
+
+Response 的属性包括：
+
+* `status: number`：HTTP 响应状态码。
+* `headers: object`：HTTP 响应头。
+* `text: string`：HTTP 响应正文。
+* `buffer: Buffer`：HTTP 响应正文。
+* `data` 解析后的 HTTP 响应正文，例如对于 `Content-Type` 为 `application/json` 时，会将响应正文解析为一个对象。
+
+示例：
+
+```javascript
+AV.Cloud.httpRequest({
+  method: 'POST',
+  url: 'http://www.example.com/create_post',
+  body: {
+    title: 'Vote for Pedro',
+    body: 'If you vote for Pedro, your wildest dreams will come true'
+  },
+  success: function(httpResponse) {
+    console.log(httpResponse.text);
+  },
+  error: function(httpResponse) {
+    console.error('Request failed with response code ' + httpResponse.status);
+  }
+});
+```
+
 ## Middlewares
 
 ### cookie-session
