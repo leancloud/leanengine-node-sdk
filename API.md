@@ -50,13 +50,15 @@ AV.Cloud.define(name: string, options: object, func: function)
 `Request` 上的属性包括：
 
 * `params: object`：客户端发送的参数，当使用 `rpc` 调用时，也可能是 `AV.Object`.
-* `user?: AV.User`：客户端所关联的用户（根据客户端发送的 `LC-Session` 头）。
-* `meta: {remoteAddress}`：客户端的 IP.
+* `currentUser?: AV.User`：客户端所关联的用户（根据客户端发送的 `LC-Session` 头）。
+* `user?: AV.User`：同 `currentUser`.
+* `meta: {remoteAddress}`：`meta.remoteAddress` 是客户端的 IP.
+* `sessionToken?: string`：客户端发来的 sessionToken（`X-LC-Session` 头）。
 
 `Response` 上的属性包括：
 
-* `success: function(result)`：向客户端发送结果，可以是包括 AV.Object 在内的各种数据类型或数组，客户端解析方式见各 SDK 文档。
-* `error: function(err: string)`：向客户端返回一个错误。
+* `success: function(result?)`：向客户端发送结果，可以是包括 AV.Object 在内的各种数据类型或数组，客户端解析方式见各 SDK 文档。
+* `error: function(err?: string)`：向客户端返回一个错误。
 
 ### AV.Cloud.run
 
@@ -96,7 +98,8 @@ after 类 Hook 的 `func` 签名：`function(request: Request)`。
 `Request` 上的属性包括：
 
 * `object: AV.Object`：被操作的对象。
-* `user?: AV.User`：发起操作的用户。
+* `currentUser?: AV.User`：发起操作的用户。
+* `user?: AV.User`：同 `currentUser`.
 
 `Response` 上的属性包括：
 
@@ -114,7 +117,8 @@ after 类 Hook 的 `func` 签名：`function(request: Request)`。
 
 `Request` 上的属性包括：
 
-* `user: AV.User`：被操作的用户。
+* `currentUser: AV.User`：被操作的用户。
+* `user: AV.User`：同 `currentUser`.
 
 `Response` 上的属性包括：
 
