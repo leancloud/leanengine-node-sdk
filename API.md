@@ -141,7 +141,7 @@ after 类 Hook 的 `func` 签名：`function(request: Request)`。
 
 ### AV.Cloud.httpRequest
 
-注意：该 API 已不再维护且可能在之后的版本中去除，请使用 [request](https://www.npmjs.com/package/request) 发起 HTTP 请求！
+注意：该 API 已不再维护且可能在之后的版本中去除，请使用 [request](https://www.npmjs.com/package/request) 发起 HTTP 请求。
 
 ```javascript
 AV.Cloud.httpRequest(options: object);
