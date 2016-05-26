@@ -50,13 +50,15 @@ AV.Cloud.define(name: string, options: object, func: function)
 `Request` 上的属性包括：
 
 * `params: object`：客户端发送的参数，当使用 `rpc` 调用时，也可能是 `AV.Object`.
-* `user?: AV.User`：客户端所关联的用户（根据客户端发送的 `LC-Session` 头）。
-* `meta: {remoteAddress}`：客户端的 IP.
+* `currentUser?: AV.User`：客户端所关联的用户（根据客户端发送的 `LC-Session` 头）。
+* `user?: AV.User`：同 `currentUser`.
+* `meta: {remoteAddress}`：`meta.remoteAddress` 是客户端的 IP.
+* `sessionToken?: string`：客户端发来的 sessionToken（`X-LC-Session` 头）。
 
 `Response` 上的属性包括：
 
-* `success: function(result)`：向客户端发送结果，可以是包括 AV.Object 在内的各种数据类型或数组，客户端解析方式见各 SDK 文档。
-* `error: function(err: string)`：向客户端返回一个错误。
+* `success: function(result?)`：向客户端发送结果，可以是包括 AV.Object 在内的各种数据类型或数组，客户端解析方式见各 SDK 文档。
+* `error: function(err?: string)`：向客户端返回一个错误。
 
 ### AV.Cloud.run
 
@@ -96,7 +98,8 @@ after 类 Hook 的 `func` 签名：`function(request: Request)`。
 `Request` 上的属性包括：
 
 * `object: AV.Object`：被操作的对象。
-* `user?: AV.User`：发起操作的用户。
+* `currentUser?: AV.User`：发起操作的用户。
+* `user?: AV.User`：同 `currentUser`.
 
 `Response` 上的属性包括：
 
@@ -114,7 +117,8 @@ after 类 Hook 的 `func` 签名：`function(request: Request)`。
 
 `Request` 上的属性包括：
 
-* `user: AV.User`：被操作的用户。
+* `currentUser: AV.User`：被操作的用户。
+* `user: AV.User`：同 `currentUser`.
 
 `Response` 上的属性包括：
 
@@ -134,6 +138,52 @@ after 类 Hook 的 `func` 签名：`function(request: Request)`。
 * `_conversationRemove`
 
 这些 Hook 需要用 `AV.Cloud.define` 来定义，详见文档 [实时通信概览：云引擎 Hook](https://leancloud.cn/docs/realtime_v2.html#云引擎_Hook)
+
+### AV.Cloud.httpRequest
+
+注意：该 API 已不再维护且可能在之后的版本中去除，请使用 [request](https://www.npmjs.com/package/request) 发起 HTTP 请求。
+
+```javascript
+AV.Cloud.httpRequest(options: object);
+```
+
+options 的属性包括：
+
+* `url`：被请求的 Url, 例如 `https://api.leancloud.cn/1.1/ping`。
+* `success: function(response: Response)`：成功回调，接受一个 HTTP 响应作为参数。
+* `error: function(response: Response)`：失败回调，接受一个 HTTP 响应作为参数。
+* `method: string`：HTTP 方法，默认为 `GET`。
+* `params`：Query String，可以是对象 `{q : 'Sean Plott'}` 也可以是字符串 `q=Sean Plott`。
+* `headers: object`：HTTP 头，例如 `{'Content-Type': 'application/json'}`。
+* `body: object`：HTTP 请求正文，默认使用 urlencode 编码，如果指定了 `Content-Type` 为 `application/json` 则发送 JSON 格式的正文；不适用于 `GET` 或 `HEAD` 请求。
+* `timeout: number`：超时时间，单位秒，默认 `10000`。
+
+Response 的属性包括：
+
+* `status: number`：HTTP 响应状态码。
+* `headers: object`：HTTP 响应头。
+* `text: string`：HTTP 响应正文。
+* `buffer: Buffer`：HTTP 响应正文。
+* `data` 解析后的 HTTP 响应正文，例如对于 `Content-Type` 为 `application/json` 时，会将响应正文解析为一个对象。
+
+示例：
+
+```javascript
+AV.Cloud.httpRequest({
+  method: 'POST',
+  url: 'http://www.example.com/create_post',
+  body: {
+    title: 'Vote for Pedro',
+    body: 'If you vote for Pedro, your wildest dreams will come true'
+  },
+  success: function(httpResponse) {
+    console.log(httpResponse.text);
+  },
+  error: function(httpResponse) {
+    console.error('Request failed with response code ' + httpResponse.status);
+  }
+});
+```
 
 ## Middlewares
 
