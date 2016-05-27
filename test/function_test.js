@@ -108,10 +108,15 @@ AV.Cloud.define('testAVObjectsArrayParams', function(request, response) {
 });
 
 AV.Cloud.define('testUser', function(request, response) {
-  assert.equal(request.user.className, '_User');
-  assert.equal(request.user.id, '54fd6a03e4b06c41e00b1f40');
-  assert.equal(request.user.get('username'), 'admin');
-  assert.equal(request.user, AV.User.current());
+  if (request.params.expectedUserId) {
+    assert.equal(request.user.className, '_User');
+    assert.equal(request.user.id, '54fd6a03e4b06c41e00b1f40');
+    assert.equal(request.user.id, request.params.expectedUserId);
+    assert.equal(request.user.get('username'), 'admin');
+    assert.equal(request.user, AV.User.current());
+  } else {
+    assert.equal(request.user, undefined);
+  }
   response.success("ok");
 });
 
@@ -160,7 +165,7 @@ AV.Cloud.define('testRun_promise', function(request, response) {
 });
 
 AV.Cloud.define('testRunWithUser', function(request, response) {
-  AV.Cloud.run('testUser', {}, {
+  AV.Cloud.run('testUser', {expectedUserId: '54fd6a03e4b06c41e00b1f40'}, {
     success: function(data) {
       assert.equal('ok', data);
       response.success();
@@ -483,6 +488,9 @@ describe('functions', function() {
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
       .set('x-avoscloud-session-token', sessionToken_admin)
+      .send({
+         expectedUserId: '54fd6a03e4b06c41e00b1f40'
+      })
       .expect(200, done);
   });
 
@@ -498,6 +506,20 @@ describe('functions', function() {
         res.body.should.eql({ code: 211, error: 'Could not find user' });
         done();
       });
+  });
+
+  it('testUser_invalid_body_user', function(done) {
+    request(AV.Cloud)
+      .post('/1/functions/testUser')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .send({
+        "user": {
+          "username": "admin",
+          "objectId": "52aebbdee4b0c8b6fa455aa7"
+        }
+      })
+      .expect(200, done);
   });
 
   // 测试调用 run 方法时，传递 user 对象的有效性
