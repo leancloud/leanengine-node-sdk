@@ -1,5 +1,11 @@
 # 更新日志
 
+## [0.4.1](https://github.com/leancloud/leanengine-node-sdk/compare/0.4.0...v0.4.1) (2016-05-28)
+
+### Bug Fixes
+
+* 云函数的 user 对象固定从 header 中获取 ([9eb2eee](https://github.com/leancloud/leanengine-node-sdk/commit/9eb2eee)): 防止请求时在 body 中伪造 user 信息，提高安全性。
+
 ## v0.4.0 (2016/02/01)
 
 ### Bug Fixes
