@@ -58,7 +58,7 @@ describe('av-extra', function() {
   });
 
   it('signDisableHook', function() {
-    AV.__get__('signDisableHook')('__before_for_TestClass', 1453711871302).should.equal('1453711871302,177cbac6495f52e462aae2d054529e08a1725276');
+    AV.__get__('signDisableHook')('__before_for_TestClass', 1453711871302).should.equal('1453711871302,a9611dbc226eed1a5f4aa0e4fa20e2d014aeaeb8');
   });
 
 });
