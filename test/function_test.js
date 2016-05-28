@@ -273,6 +273,7 @@ describe('functions', function() {
 
   // 测试返回包含 AVObject 的复杂对象
   it('return_complexObject', function(done) {
+    this.timeout(20000);
     request(AV.Cloud)
       .post('/1.1/call/complexObject')
       .set('X-AVOSCloud-Application-Id', appId)
@@ -330,6 +331,7 @@ describe('functions', function() {
 
   // 返回单个 AVObject
   it('return_bareAVObject', function(done) {
+    this.timeout(20000);
     request(AV.Cloud)
       .post('/1.1/call/bareAVObject')
       .set('X-AVOSCloud-Application-Id', appId)
@@ -344,6 +346,7 @@ describe('functions', function() {
 
   // 返回 AVObject 数组
   it('return_AVObjectsArray', function(done) {
+    this.timeout(20000);
     request(AV.Cloud)
       .post('/1.1/call/AVObjects')
       .set('X-AVOSCloud-Application-Id', appId)
