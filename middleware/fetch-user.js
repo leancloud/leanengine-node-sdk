@@ -1,3 +1,5 @@
+var utils = require('../lib/utils');
+
 module.exports = function(AV) {
   return function(req, res, next) {
     if (req.AV.sessionToken && req.AV.sessionToken !== '') {
@@ -10,11 +12,6 @@ module.exports = function(AV) {
           next(err);
         }
       });
-    } else if (req.body.user) {
-      var userObj = new AV.User();
-      userObj._finishFetch(req.body.user, true);
-      req.AV.user = userObj;
-      return next();
     } else {
       return next();
     }
