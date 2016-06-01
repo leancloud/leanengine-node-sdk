@@ -504,11 +504,7 @@ describe('functions', function() {
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
       .set('x-avoscloud-session-token', '00000000000000000000')
-      .expect(400)
-      .end(function(err, res) {
-        res.body.should.eql({ code: 211, error: 'Could not find user' });
-        done();
-      });
+      .expect(200, done);
   });
 
   it('testUser_invalid_body_user', function(done) {
