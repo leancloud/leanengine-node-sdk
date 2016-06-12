@@ -248,6 +248,10 @@ AV.Cloud.define('testTimeout', function(req, res) {
   }, req.params.delay);
 });
 
+AV.Cloud.define('_messageReceived', function(request, response) {
+  response.success('ok');
+});
+
 AV.Insight.on('end', function(err, result) {
   assert.deepEqual({
     "id" : "job id",
@@ -493,6 +497,27 @@ describe('functions', function() {
       }))
       .expect(200)
       .expect({}, done);
+  });
+
+  it('test realtime hook', function(done) {
+    request(app)
+      .post('/1/functions/_messageReceived')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .send({
+        __sign: '1464591343092,6ac315b96655d04e3a49d758f5a8ae55208c98f0'
+      })
+      .expect(200)
+      .end(done);
+  });
+
+  it('test realtime hook without sign', function(done) {
+    request(app)
+      .post('/1/functions/_messageReceived')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .expect(401)
+      .end(done);
   });
 
   it('no_this_method', function(done) {
