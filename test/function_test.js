@@ -253,7 +253,7 @@ AV.Insight.on('end', function(err, result) {
     "id" : "job id",
     "status": "OK/ERROR",
     "message": "当 status 为 ERROR 时的错误消息"
-  }, result);
+  }, _.omit(result, '__sign'));
 });
 
 var sessionToken_admin = config.sessionToken_admin;
@@ -605,7 +605,8 @@ describe('functions', function() {
       .send({
         object: {
           objectId: '54fd6a03e4b06c41e00b1f40',
-          username: 'admin'
+          username: 'admin',
+          __sign: '1464591343092,b0c8463a3c12bf4241820c52963515d9a363b6bc'
         }
       })
       .expect(200)
@@ -725,7 +726,8 @@ describe('functions', function() {
       .send({
         id : "job id",
         status: "OK/ERROR",
-        message: "当 status 为 ERROR 时的错误消息"
+        message: "当 status 为 ERROR 时的错误消息",
+        __sign: '1464591343092,44c8f6a8a0520bc4636d890935aee0977ef34dd6'
       })
       .expect(200, done);
   });

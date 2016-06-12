@@ -450,7 +450,8 @@ describe('hook', function() {
       .send({
         "object": {
           "objectId": '54fd6a03e4b06c41e00b1f40',
-          "username": 'admin'
+          "username": 'admin',
+          __sign: '1464591343092,b0c8463a3c12bf4241820c52963515d9a363b6bc'
         },
       })
       .expect(200)
@@ -468,7 +469,8 @@ describe('hook', function() {
       .send({
         "object": {
           "objectId": '54fd6a03e4b06c41e00b1f40',
-          "username": 'admin'
+          "username": 'admin',
+          __sign: '1464591343092,0a890df4759cb6b781670b1eed5faa0e77cd27de'
         }
       })
       .expect(200)
@@ -486,7 +488,8 @@ describe('hook', function() {
       .send({
         "object": {
           "objectId": '55068ea4e4b0c93838ece36d',
-          "username": 'noLogin'
+          "username": 'noLogin',
+          __sign: '1464591343092,0a890df4759cb6b781670b1eed5faa0e77cd27de'
         }
       })
       .expect(400)
