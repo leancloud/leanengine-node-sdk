@@ -1,6 +1,12 @@
 # 更新日志
 
-## [0.4.1](https://github.com/leancloud/leanengine-node-sdk/compare/0.4.0...v0.4.1) (2016-05-28)
+### 0.4.2 (2016-06-15)
+
+* 添加对 X-LC-UA 头的跨域支持（适用 JavaScript SDK 1.x）
+
+### 0.4.1 (2016-05-28)
+
+见 [0.4.1](https://github.com/leancloud/leanengine-node-sdk/compare/0.4.0...v0.4.1)
 
 ### Bug Fixes
 
