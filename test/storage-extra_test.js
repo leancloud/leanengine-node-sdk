@@ -1,11 +1,10 @@
 'use strict';
-var rewire = require("rewire");
-var AV = rewire('../lib/av-extra.js');
+var rewire = require('rewire');
+var AV = rewire('../lib/storage-extra.js');
 
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
-var config = require('./config');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -23,7 +22,7 @@ after(function() {
   server.close();
 });
 
-describe('av-extra', function() {
+describe('storage-extra', function() {
   it('httpRequest', function(done) {
     AV.Cloud.httpRequest({
       url: 'http://localhost:3333/hello',
