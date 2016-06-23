@@ -4,7 +4,8 @@ var config = require('./config'),
   should = require('should'),
   fs = require('fs'),
   request = require('supertest'),
-  assert = require('assert');
+  assert = require('assert'),
+  _ = require('underscore');
 
 var appId = config.appId;
 var appKey = config.appKey;
