@@ -70,9 +70,10 @@ AV.Cloud.run(name: string, data: object, options?: object): Promise
 
 `options` 的属性包括：
 
-* `user: AV.User`：以特定的用户运行云函数（建议在 `remote: false` 时使用）。
-* `sessionToken: string`：以特定的 sessionToken 调用云函数（建议在 `remote: true` 时使用）。
-* `remote: boolean`：通过网络请求来调用云函数，默认 `false`.
+* `user?: AV.User`：以特定的用户运行云函数（建议在 `remote: false` 时使用）。
+* `sessionToken?: string`：以特定的 sessionToken 调用云函数（建议在 `remote: true` 时使用）。
+* `remote?: boolean`：通过网络请求来调用云函数，默认 `false`.
+* `req?`: Express 的 Request 对象，以便被调用的云函数得到 remoteAddress 等属性。
 
 更多有关云函数的内容请参考文档 [云函数开发指南：云函数](https://leancloud.cn/docs/leanengine_cloudfunction_guide-node.html#云函数)。
 
@@ -106,6 +107,8 @@ after 类 Hook 的 `func` 签名：`function(request: Request)`。
 * `success: function()`：允许这个操作，请在 15 秒内调用 `success`, 否则会认为操作被拒绝。
 * `error: function(err: string)`：向客户端返回一个错误并拒绝这个操作。
 
+LeanEngine 中间件会为这些 Hook 函数检查「Hook 签名」，确保调用者的确是 LeanCloud 或本地调试时的命令行工具。
+
 更多有关 Hook 函数的内容请参考文档 [云函数开发指南：Hook 函数](https://leancloud.cn/docs/leanengine_cloudfunction_guide-node.html#Hook_函数)。
 
 ### 登录和认证 Hook
@@ -133,9 +136,13 @@ after 类 Hook 的 `func` 签名：`function(request: Request)`。
 
 * `_messageReceived`
 * `_receiversOffline`
+* `_messageSent`
 * `_conversationStart`
 * `_conversationAdd`
 * `_conversationRemove`
+* `_conversationUpdate`
+
+LeanEngine 中间件会为这些 Hook 函数检查「Hook 签名」，确保调用者的确是 LeanCloud 或本地调试时的命令行工具。
 
 这些 Hook 需要用 `AV.Cloud.define` 来定义，详见文档 [实时通信概览：云引擎 Hook](https://leancloud.cn/docs/realtime_v2.html#云引擎_Hook)
 
