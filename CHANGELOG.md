@@ -6,7 +6,7 @@
 * **存在细微不兼容** 强制检查 Class Hook、User Hook、实时通讯 Hook 的签名信息，确保请求来自 LeanCloud（签名错误的请求会打印一条日志）
 * 使用 AV.Cloud.run 运行云函数时，被运行的云函数将会得到和 HTTP 调用时结构一致的 request
 
-## v1.1.1 (2016-06-15)
+## v1.0.1 (2016-06-15)
 
 * 添加对 X-LC-UA 头的跨域支持（适用 JavaScript SDK 1.x）
 
