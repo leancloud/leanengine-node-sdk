@@ -25,6 +25,14 @@ AV.express(options?: object)
 
 初始化一个 LeanEngine 中间件，可被挂载到 express 应用上。
 
+## AV.koa
+
+```javascript
+AV.koa(options?: object)
+```
+
+初始化一个 LeanEngine 中间件，可被挂载到 koa 应用上。
+
 ## AV.Object
 
 * `AV.Object#disableBeforeHook()`
