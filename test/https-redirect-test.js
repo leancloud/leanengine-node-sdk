@@ -1,11 +1,10 @@
 'use strict';
-var config = require('./config'),
-  AV = require('..'),
-  express = require('express');
+var AV = require('..');
+var express = require('express');
+var request = require('supertest');
+require('should');
 
-var appId = config.appId;
-var appKey = config.appKey;
-var masterKey = config.masterKey;
+var config = require('./config');
 
 AV.init(config);
 
@@ -18,11 +17,8 @@ app.get('/test', function (req, res) {
   res.send('Hello World!');
 });
 
-var request = require('supertest');
-require('should');
-
-describe('httsRedirect', function() {
-  it('test', function(done) {
+describe('https-redirect', function() {
+  it('should redirect', function(done) {
     request(app)
       .get('/test')
       .set('host', 'stg-abc.leanapp.cn')
@@ -34,7 +30,7 @@ describe('httsRedirect', function() {
       });
   });
 
-  it('not_leanapp_host', function(done) {
+  it('should not redirect', function(done) {
     request(app)
       .get('/test')
       .expect(200)

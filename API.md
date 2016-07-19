@@ -204,26 +204,33 @@ AV.Cloud.httpRequest({
 
 ### cookie-session
 
-该中间件提供了在 Express 中维护用户状态的能力。
+该中间件提供了在 Express 或 Koa 中维护用户状态的能力，在 Express 中：
 
 ```javascript
-app.use(AV.Cloud.CookieSession({ secret: 'my secret', maxAge: 3600000, fetchUser: true }));
+app.use(AV.Cloud.CookieSession({secret: 'my secret', maxAge: 3600000, fetchUser: true}));
+```
+
+在 Koa 中（添加 `framework: 'koa'` 参数）：
+
+```javascript
+app.use(AV.Cloud.CookieSession({framework: 'koa', secret: 'my secret', maxAge: 3600000, fetchUser: true}));
 ```
 
 参数包括：
 
+* `koa?: boolean`：返回一个 koa（而不是 express）中间件。
 * `secret: string`：对 Cookie 进行签名的密钥，请选用一个随机字符串。
 * `name?: string`：Cookie 名称，默认为 `avos.sess`。
 * `maxAge?: number`：Cookie 过期时间。
 * `fetchUser?: boolean`：是否自动查询用户信息，默认为 `false`，即不自动查询，这种情况下只能访问用户的 `id` 和 `sessionToken`.
 * `httpOnly?: boolean`: 不允许客户端读写该 Cookie，默认 `false`.
 
-express 的 `Request` 上会有这些属性可用：
+express 的 `Request`（或 koa 的 `ctx.request`）上会有这些属性可用：
 
 * `currentUser?: AV.User`：和当前客户端关联的用户信息（根据 Cookie），如未开启 `cookie-session` 的 `fetchUser` 选项则只可以访问 `id` 和 `sessionToken`.
 * `sessionToken?: string`：和当前客户端关联的 `sessionToken`（根据 Cookie）。
 
-express 的 `Response` 上会有这些属性可用：
+express 的 `Response`（或 koa 的 `ctx.response`）上会有这些属性可用：
 
 * `saveCurrentUser(user: AV.User)`：将当前客户端与特定用户关联（会写入 Cookie）。
 * `clearCurrentUser()`：清除当前客户端关联的用户（删除 Cookie）。
@@ -232,8 +239,16 @@ express 的 `Response` 上会有这些属性可用：
 
 ### https-redirect
 
-该中间件会自动将 HTTP 请求重定向到 HTTPS 上：
+该中间件会自动将 HTTP 请求重定向到 HTTPS 上，在 Express 中：
 
 ```javascript
+app.enable('trust proxy');
 app.use(AV.Cloud.HttpsRedirect());
+```
+
+Koa 中（添加 `framework: 'koa'` 参数）：
+
+```javascript
+app.proxy = true;
+app.use(AV.Cloud.HttpsRedirect({framework: 'koa'}));
 ```
