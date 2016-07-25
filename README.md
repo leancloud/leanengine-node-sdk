@@ -22,6 +22,7 @@ npm install leanengine@next --save
 * 网站托管开发指南：<https://leancloud.cn/docs/leanengine_webhosting_guide-node.html>
 * 云函数开发指南：<https://leancloud.cn/docs/leanengine_cloudfunction_guide-node.html>
 * 云引擎命令行工具使用详解：<https://leancloud.cn/docs/leanengine_cli.html>
+* API 参考文档：<https://github.com/leancloud/leanengine-node-sdk/blob/master/API.md>
 
 ## 项目示例
 

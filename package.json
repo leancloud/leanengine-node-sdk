@@ -21,9 +21,11 @@
     "blanket": "^1.2.1",
     "expect.js": "0.2.0",
     "express": "4.9.7",
+    "koa": "^1.2.0",
+    "koa-bodyparser": "^2.2.0",
     "mocha": "2.3.3",
     "rewire": "^2.5.1",
-    "should": "3.3.2",
+    "should": "10.0.0",
     "supertest": "0.14.0"
   },
   "keywords": [
@@ -48,6 +50,7 @@
   "homepage": "https://github.com/leancloud/leanengine-node-sdk",
   "scripts": {
     "test": "node_modules/mocha/bin/mocha -R spec --timeout=10000",
+    "test-koa": "FRAMEWORK=koa node_modules/mocha/bin/mocha -R spec --timeout=10000",
     "test-cov": "node_modules/mocha/bin/mocha --require blanket -R html-cov > coverage.html"
   }
 }

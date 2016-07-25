@@ -2,13 +2,21 @@
 var config = require('./config'),
   AV = require('..');
 
-var app = AV.express();
-
 var appId = config.appId;
 var appKey = config.appKey;
 var masterKey = config.masterKey;
 
 AV.init(config);
+
+var app;
+
+if (process.env.FRAMEWORK == 'koa') {
+  var koa = require('koa')();
+  koa.use(AV.koa());
+  app = koa.listen();
+} else {
+  app = AV.express();
+}
 
 AV.Cloud.define('foo', function(request, response) {
   response.success("bar");

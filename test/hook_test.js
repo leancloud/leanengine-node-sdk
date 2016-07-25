@@ -9,7 +9,16 @@ var appKey = config.appKey;
 var masterKey = config.masterKey;
 
 AV.init(config);
-var app = AV.express();
+
+var app;
+
+if (process.env.FRAMEWORK == 'koa') {
+  var koa = require('koa')();
+  koa.use(AV.koa());
+  app = koa.listen();
+} else {
+  app = AV.express();
+}
 
 AV.Cloud.beforeSave("TestClass", function(request, response) {
   if (request.user) {
