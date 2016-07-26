@@ -10,7 +10,7 @@
 npm install leanengine --save
 ```
 
-1.x 版本，推荐新用户使用（[升级到云引擎 Node.js SDK 1.0](https://leancloud.cn/docs/leanengine-node-sdk-upgrade-1.html)）：
+1.x 版本，推荐新用户使用（旧用户请 [升级到云引擎 Node.js SDK 1.0](https://leancloud.cn/docs/leanengine-node-sdk-upgrade-1.html)）：
 
 ```bash
 npm install leanengine@next --save

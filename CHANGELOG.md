@@ -1,5 +1,10 @@
 # 更新日志
 
+## v1.2.0
+
+* 升级 JavaScript SDK 到 [leancloud-storage 1.3.0](https://github.com/leancloud/javascript-sdk/releases)
+* 支持 Koa，相关文档见 <https://github.com/leancloud/docs/pull/1403>
+
 ## v1.1.0 (2016-06-23)
 
 * **可能存在细微不兼容** 升级 JavaScript SDK 到 [leancloud-storage 1.0.0](https://github.com/leancloud/javascript-sdk/releases)
