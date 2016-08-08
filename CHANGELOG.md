@@ -1,5 +1,9 @@
 # 更新日志
 
+## v1.2.1
+
+* 升级 JavaScript SDK 到 [leancloud-storage 1.3.2](https://github.com/leancloud/javascript-sdk/releases)
+
 ## v1.2.0
 
 * 升级 JavaScript SDK 到 [leancloud-storage 1.3.0](https://github.com/leancloud/javascript-sdk/releases)
