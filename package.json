@@ -11,9 +11,9 @@
     "connect": "3.2.0",
     "connect-timeout": "^1.7.0",
     "cookies": "0.5.0",
-    "debug": "2.0.0",
+    "debug": "^2.0.0",
     "iconv-lite": "^0.4.8",
-    "leancloud-storage": "~1.5.1",
+    "leancloud-storage": "^2.0.0-rc.0",
     "on-headers": "1.0.0",
     "underscore": "^1.8.3"
   },
