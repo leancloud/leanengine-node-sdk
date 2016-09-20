@@ -59,10 +59,11 @@ describe('webhosting', function() {
       password: 'admin'
     })
     .expect(302, function(err, res) {
+      if (err) return done(err);
       res.headers.location.should.equal('/profile');
       res.headers['set-cookie'][0].indexOf('avos:sess=eyJfdWlkIjoiNTRmZDZhMDNlNGIwNmM0MWUwMGIxZjQwIiwiX3Nlc3Npb25Ub2tlbiI6IncyanJ0a2JlaHAzOG90cW1oYnF1N3liczkifQ==; path=/; expires=').should.equal(0);
       res.headers['set-cookie'][1].indexOf('avos:sess.sig=jMYF3Iwhmw903-K1K12MVdAFOh0; path=/; expires=').should.equal(0);
-      done(err);
+      done();
     });
   });
 

@@ -47,8 +47,8 @@ AV.Cloud.define('complexObject', function(request, response) {
   var query = new AV.Query(ComplexObject);
   query.include('fileColumn');
   query.ascending('createdAt');
-  query.find({
-    success: function(results) {
+  query.find().then(
+    function(results) {
       response.success({
         foo: 'bar',
         i: 123,
@@ -61,29 +61,29 @@ AV.Cloud.define('complexObject', function(request, response) {
         avObjects: results,
       });
     }
-  });
+  );
 });
 
 AV.Cloud.define('bareAVObject', function(request, response) {
   var query = new AV.Query(ComplexObject);
   query.include('fileColumn');
   query.ascending('createdAt');
-  query.find({
-    success: function(results) {
+  query.find().then(
+    function(results) {
       response.success(results[0]);
     }
-  });
+  );
 });
 
 AV.Cloud.define('AVObjects', function(request, response) {
   var query = new AV.Query(ComplexObject);
   query.include('fileColumn');
   query.ascending('createdAt');
-  query.find({
-    success: function(results) {
+  query.find().then(
+    function(results) {
       response.success(results);
     }
-  });
+  );
 });
 
 AV.Cloud.define('testAVObjectParams', function(request, response) {
@@ -137,32 +137,32 @@ AV.Cloud.define('testRun', function(request, response) {
     return response.error('Should be run on remote');
   }
 
-  AV.Cloud.run('hello', {name: '李四'}, {
-    success: function(data) {
+  AV.Cloud.run('hello', {name: '李四'}).then(
+    function(data) {
       assert.deepEqual(data, {action: "hello", name: '李四'});
       response.success();
     }
-  });
+  );
 });
 
 AV.Cloud.define('testRun_options_callback', function(request, response) {
-  AV.Cloud.run('choice', {choice: true}, {
-    success: function(data) {
+  AV.Cloud.run('choice', {choice: true}).then(
+    function(data) {
       assert.equal('OK~', data);
-      AV.Cloud.run('choice', {choice: false}, {
-        success: function(data) {
+      AV.Cloud.run('choice', {choice: false}).then(
+        function(data) {
           assert.ifError(data);
         },
-        error: function(err) {
+        function(err) {
           assert.equal('OMG...', err);
           response.success();
         }
-      });
+      );
     },
-    error: function(err) {
+    function(err) {
       assert.ifError(err);
     }
-  });
+  );
 });
 
 AV.Cloud.define('testRun_promise', function(request, response) {
@@ -182,38 +182,34 @@ AV.Cloud.define('testRun_promise', function(request, response) {
 
 AV.Cloud.define('testRunWithUser', function(request, response) {
   AV.Cloud.run('testUser', {}, {
-    user: request.user,
-    success: function(data) {
-      assert.equal('ok', data);
-      response.success();
-    }
+    user: request.user
+  }).then(function(data) {
+    assert.equal('ok', data);
+    response.success();
   });
 });
 
 AV.Cloud.define('testRunWithAVObject', function(request, response) {
   AV.Cloud.run('complexObject', {}, {
-    user: request.user,
-    success: function(datas) {
-      response.success(datas);
-    }
+    user: request.user
+  }).then(function(datas) {
+    response.success(datas);
   });
 });
 
 AV.Cloud.define('testRunWithSessionToken', function(request, response) {
   AV.Cloud.run('testUser', {}, {
-    sessionToken: request.sessionToken,
-    success: function(datas) {
-      response.success(datas);
-    }
+    sessionToken: request.sessionToken
+  }).then(function(datas) {
+    response.success(datas);
   });
 });
 
 AV.Cloud.define('testRpcRemote', function(request, response) {
   AV.Cloud.rpc('testRun', {shouldRemote: true}, {
     remote: true,
-    success: function(datas) {
-      response.success(datas);
-    }
+  }).then(function(datas) {
+    response.success(datas);
   });
 });
 
@@ -241,14 +237,14 @@ AV.Cloud.define("userMatching", function(req, res) {
   setTimeout(function() {
     // 为了更加靠谱的验证串号问题，走一次网络 IO
     var query = new AV.Query(TestObject);
-    query.get('55069f5be4b0c93838ed9b17', {
-      success: function(obj) {
+    query.get('55069f5be4b0c93838ed9b17').then(
+      function(obj) {
         assert.equal(obj.get('foo'), 'bar');
         res.success({reqUser: req.user, currentUser: AV.User.current()});
-      }, error: function() {
+      }, function() {
         res.success({reqUser: req.user, currentUser: AV.User.current()});
       }
-    });
+    );
   }, Math.floor((Math.random() * 2000) + 1));
 });
 

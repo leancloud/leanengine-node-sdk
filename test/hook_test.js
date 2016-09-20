@@ -82,11 +82,11 @@ AV.Cloud.afterUpdate("TestClass", function(request) {
   assert(request.object.updatedKeys.indexOf('foo') != -1);
   should.exist(request.object.get('__after'));
   request.object.set('bizTime', bizTime);
-  request.object.save(null, {
-    success: function(obj) {
+  request.object.save().then(
+    function(obj) {
       assert.equal(bizTime, obj.get('bizTime'));
     }
-  });
+  );
 });
 
 AV.Cloud.beforeDelete("TestClass", function(request, response) {
@@ -176,7 +176,7 @@ describe('hook', function() {
         object: {
           file: {
             __type: 'File',
-            id: '55543fc2e4b0846760bd92f3',
+            objectId: '55543fc2e4b0846760bd92f3',
             url: 'http://ac-4h2h4okw.clouddn.com/4qSbLMO866Tf4YtT9QEwJwysTlHGC9sMl7bpTwhQ.jpg'
           },
           __before: '1464591343092,9761baef9f36ee98ecd582ee142dabe31fbae17a'
@@ -335,9 +335,9 @@ describe('hook', function() {
       .set('Content-Type', 'application/json')
       .send({
         "object": {
-          "id": "5403e36be4b0b77b5746b292",
+          "objectId": "5403e36be4b0b77b5746b292",
           "post": {
-            "id": "5403e36be4b0b77b5746b291"
+            "objectId": "5403e36be4b0b77b5746b291"
           },
           __after: '1464591343092,d9e59a2ffffa2fab568c6aa5372ea6fb58eed29d'
         }
@@ -362,7 +362,7 @@ describe('hook', function() {
       .send({
         "object": {
           "post": {
-            "id": "5403e36be4b0b77b5746b291"
+            "objectId": "5403e36be4b0b77b5746b291"
           },
           __after: '1464591343092,0a94f5bad8e437471fa3038caaa3f419f376222d'
         }
@@ -385,7 +385,7 @@ describe('hook', function() {
     .send({
       "object": {
         "post": {
-          "id": "5403e36be4b0b77b5746b291"
+          "objectId": "5403e36be4b0b77b5746b291"
         },
         __after: '1464591343092,8dfcc1e306877697c43d8503ad24273641a9e802'
       }
