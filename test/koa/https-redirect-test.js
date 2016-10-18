@@ -4,8 +4,8 @@ var koa = require('koa');
 var request = require('supertest');
 require('should');
 
-var AV = require('..');
-var config = require('./config');
+var AV = require('../..');
+var config = require('../config');
 
 AV.init(config);
 
