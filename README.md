@@ -4,17 +4,11 @@
 
 ## 安装
 
-0.x 版本：
-
 ```bash
 npm install leanengine --save
 ```
 
-1.x 版本，推荐新用户使用（旧用户请 [升级到云引擎 Node.js SDK 1.0](https://leancloud.cn/docs/leanengine-node-sdk-upgrade-1.html)）：
-
-```bash
-npm install leanengine@next --save
-```
+建议使用 Node.js 4.0 以上的版本（可在 `package.json` 中设置 `engines.node` 为 `4.x`）。
 
 ## 文档
 
@@ -31,9 +25,15 @@ npm install leanengine@next --save
 * 微信公众平台：<https://leancloud.cn/docs/webhosting_weixin.html>
 * 微博 OAuth 授权验证：<https://leancloud.cn/docs/webhosting_oauth.html>
 
-## 更新日志
+## 历史版本
 
 见 [Releases](https://github.com/leancloud/leanengine-node-sdk/releases)
+
+安装早期的 0.x 版本（请尽快 [升级到云引擎 Node.js SDK 1.0](https://leancloud.cn/docs/leanengine-node-sdk-upgrade-1.html)）：
+
+```bash
+npm install leanengine@0.x --save
+```
 
 ## 贡献者
 
