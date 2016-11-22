@@ -50,7 +50,7 @@
   "homepage": "https://github.com/leancloud/leanengine-node-sdk",
   "scripts": {
     "test": "node_modules/mocha/bin/mocha -R spec --timeout=10000",
-    "test-koa": "FRAMEWORK=koa node_modules/mocha/bin/mocha -R spec --timeout=10000",
+    "test-koa": "FRAMEWORK=koa node_modules/mocha/bin/mocha -R spec --timeout=10000 test test/koa",
     "test-cov": "node_modules/mocha/bin/mocha --require blanket -R html-cov > coverage.html"
   }
 }
