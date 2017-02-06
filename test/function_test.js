@@ -348,9 +348,9 @@ describe('functions', function() {
           __type: 'Date',
           iso: '2015-05-14T06:24:47.000Z'
         });
-        result.avObject.fileColumn.should.eql({
+        result.avObject.fileColumn.should.containEql({
           __type: 'File',
-          id: '55543fc2e4b0846760bd92f3',
+          objectId: '55543fc2e4b0846760bd92f3',
           name: 'ttt.jpg',
           url: 'http://ac-4h2h4okw.clouddn.com/4qSbLMO866Tf4YtT9QEwJwysTlHGC9sMl7bpTwhQ.jpg'
         });

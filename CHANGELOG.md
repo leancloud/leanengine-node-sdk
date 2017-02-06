@@ -1,5 +1,10 @@
 # 更新日志
 
+## v2.0.0
+
+* **存在不兼容改动** 升级 JavaScript SDK 到 [leancloud-storage 2.1.0](https://github.com/leancloud/javascript-sdk/releases/tag/v2.0.0)
+* **不兼容改动** 仅兼容至 Node.js 4.3 以上版本
+
 ## v1.2.3
 
 * 升级 JavaScript SDK 到 [leancloud-storage 1.5.0](https://github.com/leancloud/javascript-sdk/releases)
