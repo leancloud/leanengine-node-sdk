@@ -34,7 +34,7 @@ app.post('/login', function(req, res) {
 });
 
 app.post('/logout', function(req, res) {
-  res.saveCurrentUser(null);
+  res.clearCurrentUser();
   res.send();
 });
 
