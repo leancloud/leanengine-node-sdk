@@ -25,35 +25,7 @@ after(function() {
 });
 
 describe('storage-extra', function() {
-  it('httpRequest', function() {
-    return AV.Cloud.httpRequest({
-      url: 'http://localhost:3333/hello',
-      params: { name : '张三' }
-    }).then(
-      function(res) {
-        res.status.should.equal(200);
-        res.text.should.equal('Hello, 张三');
-      }
-    );
-  });
-
-  it('httpRequest', function() {
-    AV.Cloud.httpRequest({
-      url: 'http://localhost:3333/hello',
-      method: 'POST',
-      body: {
-        name: "张三"
-      }
-    }).then(
-      function(res) {
-        res.status.should.equal(200);
-        res.text.should.equal('Hello, 张三');
-      }
-    );
-  });
-
   it('signDisableHook', function() {
     utils.signHook(config.masterKey, '__before_for_TestClass', 1453711871302).should.equal('1453711871302,a9611dbc226eed1a5f4aa0e4fa20e2d014aeaeb8');
   });
-
 });
