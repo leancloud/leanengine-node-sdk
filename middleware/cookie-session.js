@@ -31,7 +31,7 @@ module.exports = function(AV) {
     debug('session options %j', opts);
 
     return function cookieSession(req, res, next) {
-      var cookies = req.sessionCookies = new Cookies(req, res, keys);
+      var cookies = req.sessionCookies = new Cookies(req, res, {keys: keys});
       var responseUser;
 
       // 兼容 connect
