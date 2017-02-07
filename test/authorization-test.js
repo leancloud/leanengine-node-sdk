@@ -1,28 +1,18 @@
 'use strict';
-var config = require('./config'),
-  AV = require('..');
-
-var appId = config.appId;
-var appKey = config.appKey;
-var masterKey = config.masterKey;
-
-AV.init(config);
-
-var app;
-
-if (process.env.FRAMEWORK == 'koa') {
-  var koa = require('koa')();
-  koa.use(AV.koa());
-  app = koa.listen();
-} else {
-  app = AV.express();
-}
-
-AV.Cloud.define('foo', function(request, response) {
-  response.success("bar");
-});
 
 var request = require('supertest');
+
+const AV = require('..');
+const utils = require('./utils')
+const appInfo = require('./utils/app-info');
+
+require('./utils/functions');
+
+var appId = appInfo.appId;
+var appKey = appInfo.appKey;
+var masterKey = appInfo.masterKey;
+
+const app = utils.app();
 
 describe('authorization', function() {
   it('ok', function(done) {

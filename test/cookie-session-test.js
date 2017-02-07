@@ -5,12 +5,10 @@ var bodyParser = require('body-parser');
 var request = require('supertest');
 var should = require('should');
 
-var AV = require('..');
-var config = require('./config');
+const AV = require('..');
+const appInfo = require('./utils/app-info');
 
 var app = express();
-
-AV.init(config);
 
 app.use(AV.express());
 app.use(bodyParser.json());
@@ -42,7 +40,7 @@ app.get('/profile', function(req, res) {
   res.send(req.currentUser);
 });
 
-describe('webhosting', function() {
+describe('cookie-session', function() {
   it('index', function(done) {
     request(app).get('/')
     .expect(200, function(err, res) {
@@ -53,6 +51,8 @@ describe('webhosting', function() {
   });
 
   it('loign', function(done) {
+    this.timeout(20000);
+
     request(app).post('/login')
     .send({
       username: 'admin',

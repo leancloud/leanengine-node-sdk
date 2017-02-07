@@ -4,7 +4,7 @@ var AV = require('../lib/storage-extra.js');
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
-var config = require('./config');
+const appInfo = require('./utils/app-info');
 var utils = require('../lib/utils');
 
 app.use(bodyParser.json());
@@ -26,6 +26,6 @@ after(function() {
 
 describe('storage-extra', function() {
   it('signDisableHook', function() {
-    utils.signHook(config.masterKey, '__before_for_TestClass', 1453711871302).should.equal('1453711871302,a9611dbc226eed1a5f4aa0e4fa20e2d014aeaeb8');
+    utils.signHook(appInfo.masterKey, '__before_for_TestClass', 1453711871302).should.equal('1453711871302,a9611dbc226eed1a5f4aa0e4fa20e2d014aeaeb8');
   });
 });

@@ -3,12 +3,10 @@ var bodyParser = require('koa-bodyparser');
 var request = require('supertest');
 var should = require('should');
 
-var AV = require('../..');
-var config = require('../config');
+const AV = require('../..');
+const appInfo = require('../utils/app-info');
 
 var app = koa();
-
-AV.init(config);
 
 app.use(AV.koa());
 app.use(bodyParser());

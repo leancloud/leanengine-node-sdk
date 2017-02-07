@@ -4,9 +4,7 @@ var express = require('express');
 var request = require('supertest');
 require('should');
 
-var config = require('./config');
-
-AV.init(config);
+const appInfo = require('./utils/app-info');
 
 var app = express();
 
