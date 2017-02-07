@@ -5,15 +5,13 @@ var assert = require('assert');
 var bodyParser = require('body-parser');
 
 var AV = require('..');
-var config = require('./config');
+const appInfo = require('./utils/app-info');
 var request = require('supertest');
 
-var appId = config.appId;
-var appKey = config.appKey;
-var masterKey = config.masterKey;
-var sessionTokenAdmin = config.sessionToken_admin;
-
-AV.init(config);
+var appId = appInfo.appId;
+var appKey = appInfo.appKey;
+var masterKey = appInfo.masterKey;
+var sessionTokenAdmin = appInfo.sessionTokenAdmin;
 
 describe('current user', function() {
   var app = express();
