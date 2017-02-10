@@ -2,10 +2,11 @@
 
 ## v2.0.0
 
-* **不兼容改动** 升级 JavaScript SDK 到 [leancloud-storage 2.1.0](https://github.com/leancloud/javascript-sdk/releases/tag/v2.0.0)
+* **不兼容改动** 升级 JavaScript SDK 到 [leancloud-storage 2.1.0](https://github.com/leancloud/javascript-sdk/releases/tag/v2.0.0)（请检查 JS SDK 2.0 引入的不兼容改动）
 * **不兼容改动** 仅兼容至 Node.js 4.4 以上版本
 * **不兼容改动** 重复定义云函数或 Hook 时会抛出一个异常
-* **不兼容改动** 移除 `AV.Cloud.httpRequest`
+* **不兼容改动** 移除 `AV.Cloud.httpRequest`（请改用 `request` 模块）
+* **不兼容改动** 移除 `app.use(AV.Cloud)` 的用法（请改用 `app.use(AV.express())`）
 
 ## v1.2.3
 
