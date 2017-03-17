@@ -4,7 +4,7 @@ var express = require('express');
 var request = require('supertest');
 require('should');
 
-const appInfo = require('./utils/app-info');
+const appInfo = require('./helpers/app-info');
 
 var app = express();
 

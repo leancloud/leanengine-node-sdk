@@ -4,7 +4,7 @@ var AV = require('../lib/storage-extra.js');
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
-const appInfo = require('./utils/app-info');
+const appInfo = require('./helpers/app-info');
 var utils = require('../lib/utils');
 
 app.use(bodyParser.json());

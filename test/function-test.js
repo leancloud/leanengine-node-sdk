@@ -5,18 +5,18 @@ const should = require('should');
 const assert = require('assert');
 
 const AV = require('..');
-const utils = require('./utils')
-const appInfo = require('./utils/app-info');
+const helpers = require('./helpers')
+const appInfo = require('./helpers/app-info');
 
-require('./utils/functions');
-require('./utils/hooks');
+require('./helpers/functions');
+require('./helpers/hooks');
 
 const appId = appInfo.appId;
 const appKey = appInfo.appKey;
 const masterKey = appInfo.masterKey;
 const sessionTokenAdmin = appInfo.sessionTokenAdmin;
 
-const app = utils.app();
+const app = helpers.app();
 
 describe('functions', function() {
   it('ping', function(done) {

@@ -4,7 +4,7 @@ var AV = require('..'),
   should = require('should'),
   assert = require('assert');
 
-const appInfo = require('./utils/app-info');
+const appInfo = require('./helpers/app-info');
 
 var appId = appInfo.appId;
 var appKey = appInfo.appKey;
@@ -22,7 +22,7 @@ if (process.env.FRAMEWORK == 'koa') {
 
 var request = require('supertest');
 
-request('./utils/hooks');
+request('./helpers/hooks');
 
 describe('hook', function() {
   it('beforeSave', function(done) {

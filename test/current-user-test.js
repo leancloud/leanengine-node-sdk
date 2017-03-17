@@ -5,7 +5,7 @@ var assert = require('assert');
 var bodyParser = require('body-parser');
 
 var AV = require('..');
-const appInfo = require('./utils/app-info');
+const appInfo = require('./helpers/app-info');
 var request = require('supertest');
 
 var appId = appInfo.appId;
