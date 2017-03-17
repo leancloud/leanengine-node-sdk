@@ -8,6 +8,7 @@
 - **不兼容改动** 移除 `AV.Cloud.httpRequest`（请改用 `request` 模块）
 - **不兼容改动** 移除 `app.use(AV.Cloud)` 的用法（请改用 `app.use(AV.express())`）
 - **不兼容改动** 移除基于 [domain](https://nodejs.org/api/domain.html)，开发者需要自行捕捉云函数异步代码中的异常。
+- **不兼容改动** `AV.Cloud.run` 在运行失败时不再向标准输出打印日志，请从返回的 Promise 中获取错误。
 
 新增云函数和 Class Hook 的 Promise 模式，会使用 Promise 的值作为响应内容。如果在 Promise 中抛了使用新增的 `AV.Cloud.Error` 构造的异常则作为错误返回给客户端，`AV.Cloud.Error` 的第二个参数可以指定 HTTP Status Code 和 Error Code（`AV.Cloud.Error('posts is empty', {status: 422, code: 422})`）；如果抛出了其他错误类型则视作服务器端错误，返回 500 响应并打印错误到标准输出。
 
