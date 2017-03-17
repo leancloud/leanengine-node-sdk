@@ -7,10 +7,10 @@
 - **不兼容改动** 重复定义云函数或 Hook 时会抛出一个异常
 - **不兼容改动** 移除 `AV.Cloud.httpRequest`（请改用 `request` 模块）
 - **不兼容改动** 移除 `app.use(AV.Cloud)` 的用法（请改用 `app.use(AV.express())`）
-- **不兼容改动** 移除基于 [domain](https://nodejs.org/api/domain.html)，开发者需要自行捕捉云函数异步代码中的异常。
-- **不兼容改动** `AV.Cloud.run` 在运行失败时不再向标准输出打印日志，请从返回的 Promise 中获取错误。
+- **不兼容改动** 移除基于 [domain](https://nodejs.org/api/domain.html) 的异常处理，开发者需要自行捕捉云函数异步代码中的异常。
+- **不兼容改动** `AV.Cloud.run` 不再支持 Backbone 风格的回调（`success` 和 `error`）、在运行失败时不再向标准输出打印日志，请从返回的 Promise 中获取错误。
 
-新增云函数和 Class Hook 的 Promise 模式，会使用 Promise 的值作为响应内容。如果在 Promise 中抛了使用新增的 `AV.Cloud.Error` 构造的异常则作为错误返回给客户端，`AV.Cloud.Error` 的第二个参数可以指定 HTTP Status Code 和 Error Code（`AV.Cloud.Error('posts is empty', {status: 422, code: 422})`）；如果抛出了其他错误类型则视作服务器端错误，返回 500 响应并打印错误到标准输出。
+**新增云函数和 Class Hook 的 Promise 模式**，会使用 Promise 的值作为响应内容。如果在 Promise 中抛了使用新增的 `AV.Cloud.Error` 构造的异常则作为错误返回给客户端，`AV.Cloud.Error` 的第二个参数可以指定 HTTP Status Code 和 Error Code（`AV.Cloud.Error('posts is empty', {status: 422, code: 422})`）；如果抛出了其他错误类型则视作服务器端错误，返回 500 响应并打印错误到标准输出。
 
 ```javascript
 AV.Cloud.define(function(request) {
@@ -24,7 +24,21 @@ AV.Cloud.define(function(request) {
 });
 ```
 
-如果传入 `AV.Cloud.define` 的函数有两个参数（`request` 和 `response`）则继续兼容原定义方式，需要使用 `response.success()` 发送响应。我们会继续兼容这种用法到下一个大版本，希望用户尽快迁移到 Promise 风格的云函数上。
+如果传入 `AV.Cloud.define` 的函数有两个参数（`request` 和 `response`）则继续兼容原定义方式，需要使用 `response.success()` 发送响应。我们会继续兼容这种用法到下一个大版本，希望开发者尽快迁移到 Promise 风格的云函数上。
+
+**新增了 LeanCloudHeaders 中间件**，用于在 Express 或 Koa 应用中解析 `X-LC` 开头的头，获取 Session Token 等信息：
+
+```javascript
+// 注册中间件
+app.use(AV.Cloud.LeanCloudHeaders());
+
+// 获取 Session Token
+app.get('/', (req, res) => {
+  res.json({
+    sessionToken: req.AV.sessionToken
+  })
+});
+```
 
 ## v1.2.4
 

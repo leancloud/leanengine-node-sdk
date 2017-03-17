@@ -1,14 +1,12 @@
 # LeanEngine Node.js SDK
 
-[![Build Status](https://travis-ci.org/leancloud/leanengine-node-sdk.svg?branch=master)](https://travis-ci.org/leancloud/leanengine-node-sdk)
-
 ## 安装
 
 ```bash
 npm install leanengine --save
 ```
 
-建议使用 Node.js 4.0 以上的版本（可在 `package.json` 中设置 `engines.node` 为 `4.x`）。
+建议使用 Node.js 6.0 以上的版本（可在 `package.json` 中设置 `engines.node` 为 `6.x`）。
 
 ## 文档
 
@@ -34,15 +32,3 @@ npm install leanengine --save
 ```bash
 npm install leanengine@0.x --save
 ```
-
-## 贡献者
-
-在此表示感谢！
-
-* [filod](https://github.com/filod)
-
-## 许可协议
-
-许可协议: MIT
-
-作者: wchen (wchen@leancloud.rocks)
