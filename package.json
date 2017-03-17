@@ -12,7 +12,6 @@
     "connect-timeout": "^1.8.0",
     "cookies": "^0.6.2",
     "debug": "^2.6.0",
-    "iconv-lite": "^0.4.15",
     "leancloud-storage": "^2.1.0",
     "on-headers": "^1.0.1",
     "underscore": "^1.8.3"
@@ -26,7 +25,12 @@
     "should": "^11.2.0",
     "supertest": "^3.0.0"
   },
-  "keywords": ["LeanCloud", "LeanEngine", "cloud", "BaaS"],
+  "keywords": [
+    "LeanCloud",
+    "LeanEngine",
+    "cloud",
+    "BaaS"
+  ],
   "config": {
     "blanket": {
       "pattern": "//^((?!(node_modules|test)).)*$/"

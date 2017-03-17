@@ -18,6 +18,21 @@ AV.Cloud.define('hello', function(request, response) {
   response.success({action: "hello", name: request.params.name});
 });
 
+AV.Cloud.define('getObjectPromise', function() {
+  var query = new AV.Query(TestObject);
+  return query.get('55069f5be4b0c93838ed9b17').then( object => {
+    return object;
+  });
+});
+
+AV.Cloud.define('choicePromise', function(req) {
+  if (req.params.choice) {
+    return 'OK~'
+  } else {
+    throw new AV.Cloud.Error('OMG...');
+  }
+});
+
 AV.Cloud.define('choice', function(req, res) {
   if (req.params.choice) {
     res.success('OK~');
@@ -210,6 +225,14 @@ AV.Cloud.define('testThrowError', function(request, response) {
   response.success();
 });
 
+AV.Cloud.define('clientErrorPromise', function(request) {
+  throw new AV.Cloud.Error('some message', {code: 400});
+});
+
+AV.Cloud.define('serverErrorPromise', function(request) {
+  noThisMethod();
+});
+
 AV.Cloud.define("userMatching", function(req, res) {
   setTimeout(function() {
     // 为了更加靠谱的验证串号问题，走一次网络 IO
@@ -227,7 +250,11 @@ AV.Cloud.define("userMatching", function(req, res) {
 
 AV.Cloud.define('testTimeout', function(req, res) {
   setTimeout(function() {
-    res.success('ok');
+    try {
+      res.success('ok');
+    } catch (err) {
+      console.error(err);
+    }
   }, req.params.delay);
 });
 

@@ -36,6 +36,51 @@ describe('functions', function() {
       .expect({result: "bar"}, done);
   });
 
+  it('get object (promise)', function(done) {
+    request(app)
+      .post('/1.1/functions/getObjectPromise')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .expect(200, (err, res) => {
+        res.body.result.foo.should.be.equal('bar');
+        done(err);
+      });
+  });
+
+  it('client error (promise)', function(done) {
+    request(app)
+      .post('/1.1/functions/choicePromise')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .expect(400, (err, res) => {
+        res.body.code.should.be.equal(1);
+        res.body.error.should.be.equal('OMG...');
+        done(err);
+      });
+  });
+
+  it('customized error code (promise)', function(done) {
+    request(app)
+      .post('/1.1/functions/clientErrorPromise')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .expect(400, (err, res) => {
+        res.body.code.should.be.equal(400);
+        done(err);
+      });
+  });
+
+  it('server error (promise)', function(done) {
+    request(app)
+      .post('/1.1/functions/serverErrorPromise')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .expect(500, (err, res) => {
+        res.body.error.should.be.match(/noThisMethod is not defined/);
+        done(err);
+      });
+  });
+
   // 测试 api version 1.1 的有效性
   it('version_1.1', function(done) {
     request(app)
