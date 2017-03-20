@@ -49,7 +49,7 @@ AV.Cloud.define(name: string, func: function)
 AV.Cloud.define(name: string, options: object, func: function)
 ```
 
-定义云函数有两种签名，其中 `options` 是一个可选的参数，`func` 是接受一个 Request 对象作为参数，返回 Promise 的函数，Promise 的值即为云函数的响应。在 Promise 中可以抛出使用 `AV.Cloud.Error` 构造的异常表示错误，如果抛出其他类型的异常则视作服务器端错误，会打印错误到标准输出。
+定义云函数有两种签名，其中 `options` 是一个可选的参数，`func` 是接受一个 Request 对象作为参数，返回 Promise 的函数，Promise 的值即为云函数的响应。在 Promise 中可以抛出使用 `AV.Cloud.Error` 构造的异常表示客户端错误，如参数不合法；如果抛出其他类型的异常则视作服务器端错误，会打印错误到标准输出。
 
 `options` 的属性包括：
 
@@ -63,7 +63,7 @@ AV.Cloud.define(name: string, options: object, func: function)
 * `meta: {remoteAddress}`：`meta.remoteAddress` 是客户端的 IP.
 * `sessionToken?: string`：客户端发来的 sessionToken（`X-LC-Session` 头）。
 
-1.x 兼容模式：在早期版本中，云函数和 after 类的 Hook 是接受两个参数（`request` 和 `response`）的，我们会继续兼容这种用法到下一个大版本，希望开发者尽快迁移到 Promise 风格的云函数上。
+1.x 兼容模式：在早期版本中，云函数和 before 类的 Hook 是接受两个参数（`request` 和 `response`）的，我们会继续兼容这种用法到下一个大版本，希望开发者尽快迁移到 Promise 风格的云函数上。
 
 ### AV.Cloud.Error
 
@@ -73,7 +73,7 @@ new AV.Cloud.Error(message: string, options?)
 
 继承自 `Error`，用于在云函数和 Class Hook 中表示客户端错误，其中第二个参数支持：
 
-- `status?: number`：设置 HTTP 响应代码（默认 500）
+- `status?: number`：设置 HTTP 响应代码（默认 400）
 - `code?: number`：设置响应正文中的错误代码（默认 1）
 
 ### AV.Cloud.run
@@ -106,9 +106,7 @@ AV.Cloud.run(name: string, data: object, options?: object): Promise
 * AV.Cloud.beforeDelete
 * AV.Cloud.afterDelete
 
-这些函数的签名：`function(className: string, func: function)`，其中 `func` 是接受一个 Request 对象作为参数，返回 Promise 的函数。在 before 类 Hook 中如果没有抛出异常则视作接受这次操作。如果抛出使用 `AV.Cloud.Error` 构造的异常表示客户端错误；抛出其他类型的异常视作服务器端错误，会打印到标准输出。
-
-在 Promise 中可以抛出使用 `AV.Cloud.Error` 构造的异常表示错误，如果抛出其他类型的异常则视作服务器端错误，返回 500 响应并打印错误到标准输出。
+这些函数的签名：`function(className: string, func: function)`，其中 `func` 是接受一个 Request 对象作为参数，返回 Promise 的函数。在 before 类 Hook 中如果没有抛出异常则视作接受这次操作。如果抛出使用 `AV.Cloud.Error` 构造的异常表示客户端错误，拒绝本次操作；如果抛出其他类型的异常则视作服务器端错误，返回 500 响应并打印错误到标准输出。
 
 `Request` 上的属性包括：
 
