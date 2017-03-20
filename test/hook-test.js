@@ -22,7 +22,7 @@ if (process.env.FRAMEWORK == 'koa') {
 
 var request = require('supertest');
 
-request('./helpers/hooks');
+require('./helpers/hooks');
 
 describe('hook', function() {
   it('beforeSave', function(done) {
@@ -45,6 +45,79 @@ describe('hook', function() {
         should.exist(res.body.__before);
         done();
       });
+  });
+
+  it('beforeSave (promise)', done => {
+    request(app)
+      .post('/1/functions/TestPromise/beforeSave')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .set('Content-Type', 'application/json')
+      .send({
+        object: {
+          stars: 1,
+          __before: '1464591343092,f444ef023b39542b285b2fce86df4b83acf308fe'
+        },
+      })
+      .expect(200)
+      .end(function(err, res) {
+        res.body.stars.should.equal(1);
+        done(err);
+      });
+  });
+
+  it('client error in beforeSave (promise)', (done) => {
+    request(app)
+      .post('/1/functions/TestPromiseClientError/beforeSave')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .set('Content-Type', 'application/json')
+      .send({
+        object: {
+          stars: 1,
+          __before: '1464591343092,920600126c77d422e168594b807d93ff85d96a10'
+        },
+      })
+      .expect(400)
+      .end(function(err, res) {
+        res.body.error.should.equal('OMG...');
+        done(err);
+      });
+  });
+
+  it('server error in beforeSave (promise)', done => {
+    request(app)
+      .post('/1/functions/TestPromiseServerError/beforeSave')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .set('Content-Type', 'application/json')
+      .send({
+        object: {
+          stars: 1,
+          __before: '1464591343092,8c4dbae1d25e34669a0688699030a26b9ddfdfd0'
+        },
+      })
+      .expect(500)
+      .end(function(err, res) {
+        res.body.error.should.be.match(/noThisMethod is not defined/);
+        done(err);
+      });
+  });
+
+  it('error in afterSave (promise)', done => {
+    request(app)
+      .post('/1/functions/TestPromiseServerError/afterSave')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .set('Content-Type', 'application/json')
+      .send({
+        object: {
+          stars: 1,
+          __after: '1464591343092,d636deff46791816be194997af054f06511aa664'
+        },
+      })
+      .expect(200)
+      .end(done);
   });
 
   it('beforeSave should fail without sign', function(done) {

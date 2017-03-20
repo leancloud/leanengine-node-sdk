@@ -14,6 +14,26 @@ AV.Cloud.beforeSave("TestClass", function(request, response) {
   response.success();
 });
 
+AV.Cloud.beforeSave('TestPromise', function(request) {
+  assert.equal(request.object.className, 'TestPromise');
+});
+
+AV.Cloud.beforeSave('TestPromiseClientError', function(request) {
+  throw new AV.Cloud.Error('OMG...');
+});
+
+AV.Cloud.beforeSave('TestPromiseServerError', function(request) {
+  return Promise.resolve().then( () => {
+    noThisMethod();
+  });
+});
+
+AV.Cloud.afterSave('TestPromiseServerError', function(request) {
+  return Promise.resolve().then( () => {
+    noThisMethod();
+  });
+});
+
 AV.Cloud.beforeSave("TestReview", function(request, response){
   if (request.object.get("stars") < 1) {
     response.error("you cannot give less than one star");
