@@ -184,9 +184,8 @@ app.use(AV.Cloud.CookieSession({secret: 'my secret', maxAge: 3600000, fetchUser:
 app.use(AV.Cloud.CookieSession({framework: 'koa', secret: 'my secret', maxAge: 3600000, fetchUser: true}));
 ```
 
-参数包括：
+其他参数包括：
 
-* `koa?: boolean`：返回一个 koa（而不是 express）中间件。
 * `secret: string`：对 Cookie 进行签名的密钥，请选用一个随机字符串。
 * `name?: string`：Cookie 名称，默认为 `avos.sess`。
 * `maxAge?: number`：Cookie 过期时间。

@@ -36,6 +36,8 @@
       "pattern": "//^((?!(node_modules|test)).)*$/"
     }
   },
+  "typings": "./leanengine.d.ts",
+  "types": "./leanengine.d.ts",
   "engines": {
     "node": ">=4.4.7"
   },
