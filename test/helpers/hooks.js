@@ -128,7 +128,7 @@ AV.Cloud.onVerified('sms', function(request) {
   assert.equal(request.object.get('username'), 'admin');
 });
 
-AV.Insight.on('end', function(err, result) {
+AV.Insight.on('end', function(result) {
   assert.deepEqual({
     "id" : "job id",
     "status": "OK/ERROR",

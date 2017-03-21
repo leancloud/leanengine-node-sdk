@@ -2,15 +2,17 @@
 
 ## v2.0.0
 
-- **不兼容改动** 升级 JavaScript SDK 到 [leancloud-storage 2.1.0](https://github.com/leancloud/javascript-sdk/releases/tag/v2.0.0)（请检查 JS SDK 2.0 引入的不兼容改动）
-- **不兼容改动** 仅兼容至 Node.js 4.4 以上版本
-- **不兼容改动** 重复定义云函数或 Hook 时会抛出一个异常
-- **不兼容改动** 移除 `AV.Cloud.httpRequest`（请改用 `request` 模块）
-- **不兼容改动** 移除 `app.use(AV.Cloud)` 的用法（请改用 `app.use(AV.express())`）
+- **不兼容改动** 升级 JavaScript SDK 到 [leancloud-storage 2.1.0](https://github.com/leancloud/javascript-sdk/releases/tag/v2.0.0)（请检查 JS SDK 2.0 引入的不兼容改动）。
+- **不兼容改动** 仅兼容至 Node.js 4.4 以上版本。
+- **不兼容改动** 重复定义云函数或 Hook 时会抛出一个异常。
+- **不兼容改动** 移除 `AV.Cloud.httpRequest`（请改用 `request` 模块）。
+- **不兼容改动** 移除 `app.use(AV.Cloud)` 的用法（请改用 `app.use(AV.express())`）。
 - **不兼容改动** 移除基于 [domain](https://nodejs.org/api/domain.html) 的异常处理，开发者需要自行捕捉云函数异步代码中的异常。
 - **不兼容改动** `AV.Cloud.run` 不再支持 Backbone 风格的回调（`success` 和 `error`）、在运行失败时不再向标准输出打印日志，请从返回的 Promise 中获取错误。
+- **不兼容改动** `AV.Insight.on` 注册的回调函数改为只接受一个 `result` 参数（去掉了 err 参数，请从 `result.status` 判断成功或失败）。
+- 新增 TypeScript 类型定义文件，位于 `leanengine.d.ts`。
 
-**新增云函数和 Class Hook 的 Promise 模式**，会使用 Promise 的值作为响应内容。如果在 Promise 中抛了使用新增的 `AV.Cloud.Error` 构造的异常则作为错误返回给客户端，`AV.Cloud.Error` 的第二个参数可以指定 HTTP Status Code 和 Error Code（`AV.Cloud.Error('posts is empty', {status: 422, code: 422})`）；如果抛出了其他错误类型则视作服务器端错误，返回 500 响应并打印错误到标准输出。
+**新增云函数、Class Hook 和 User Hook 的 Promise 模式**，会使用 Promise 的值作为响应内容。如果在 Promise 中抛了使用新增的 `AV.Cloud.Error` 构造的异常则作为错误返回给客户端，`AV.Cloud.Error` 的第二个参数可以指定 HTTP Status Code 和 Error Code（`AV.Cloud.Error('posts is empty', {status: 422, code: 422})`）；如果抛出了其他错误类型则视作服务器端错误，返回 500 响应并打印错误到标准输出。
 
 ```javascript
 AV.Cloud.define(function(request) {

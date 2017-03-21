@@ -43,6 +43,12 @@ declare module 'leanengine' {
     disableAfterHook(): void;
   }
 
+  export namespace Insight {
+    type InsightHandler = (result: Object) => Promise<any>;
+
+    export function on(event: string, handler: InsightHandler): Promise<any>;
+  }
+
   export namespace Cloud {
     interface DefineOptions {
       fetchUser?: boolean
