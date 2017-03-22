@@ -10,7 +10,6 @@ AV.Cloud.beforeSave("TestClass", function(request, response) {
   }
   assert.equal(request.object.className, 'TestClass');
   request.object.set('user', request.user);
-  should.exist(request.object.get('__before'));
   response.success();
 });
 
@@ -84,7 +83,6 @@ AV.Cloud.afterSave("TestError", function() {
 AV.Cloud.afterUpdate("TestClass", function(request) {
   var bizTime = new Date();
   assert(request.object.updatedKeys.indexOf('foo') != -1);
-  should.exist(request.object.get('__after'));
   request.object.set('bizTime', bizTime);
   request.object.save().then(
     function(obj) {
@@ -99,15 +97,6 @@ AV.Cloud.beforeDelete("TestClass", function(request, response) {
     return response.error('important note');
   }
   response.success();
-});
-
-AV.Cloud.beforeSave("HookMarkTest", function(request, response) {
-  should.exist(request.object.get('__before'));
-  response.success(request.object);
-});
-
-AV.Cloud.afterSave("HookMarkTest", function(request) {
-  should.exist(request.object.get('__after'));
 });
 
 AV.Cloud.onLogin(function(request, response) {
@@ -133,5 +122,5 @@ AV.Insight.on('end', function(result) {
     "id" : "job id",
     "status": "OK/ERROR",
     "message": "当 status 为 ERROR 时的错误消息"
-  }, _.omit(result, '__sign'));
+  }, result);
 });

@@ -10,6 +10,7 @@
 - **不兼容改动** 移除基于 [domain](https://nodejs.org/api/domain.html) 的异常处理，开发者需要自行捕捉云函数异步代码中的异常。
 - **不兼容改动** `AV.Cloud.run` 不再支持 Backbone 风格的回调（`success` 和 `error`）、在运行失败时不再向标准输出打印日志，请从返回的 Promise 中获取错误。
 - **不兼容改动** `AV.Insight.on` 注册的回调函数改为只接受一个 `result` 参数（去掉了 err 参数，请从 `result.status` 判断成功或失败）。
+- **不兼容改动** 一些错误提示被调整过，如果你依赖于对错误信息进行字符串匹配，请注意测试你的错误处理逻辑。
 - 新增 TypeScript 类型定义文件，位于 `leanengine.d.ts`。
 
 **新增云函数、Class Hook 和 User Hook 的 Promise 模式**，会使用 Promise 的值作为响应内容。如果在 Promise 中抛了使用新增的 `AV.Cloud.Error` 构造的异常则作为错误返回给客户端，`AV.Cloud.Error` 的第二个参数可以指定 HTTP Status Code 和 Error Code（`AV.Cloud.Error('posts is empty', {status: 422, code: 422})`）；如果抛出了其他错误类型则视作服务器端错误，返回 500 响应并打印错误到标准输出。
@@ -25,6 +26,8 @@ AV.Cloud.define(function(request) {
   });
 });
 ```
+
+对于原本不需要响应的 after 类 Hook（还包括 onVerified），现在也会按照同样的方式等待 Promise 完成再发送响应、结束链接，如果你希望收到请求后立刻结束链接，请不要在这类 Hook 中返回 Promise（或提前返回一个已经 resolve 的 Promise）。
 
 如果传入 `AV.Cloud.define` 的函数有两个参数（`request` 和 `response`）则继续兼容原定义方式，需要使用 `response.success()` 发送响应。我们会继续兼容这种用法到下一个大版本，希望开发者尽快迁移到 Promise 风格的云函数上。
 

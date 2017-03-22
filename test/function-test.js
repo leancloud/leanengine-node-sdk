@@ -14,6 +14,7 @@ require('./helpers/hooks');
 const appId = appInfo.appId;
 const appKey = appInfo.appKey;
 const masterKey = appInfo.masterKey;
+const hookKey = appInfo.hookKey;
 const sessionTokenAdmin = appInfo.sessionTokenAdmin;
 
 const app = helpers.app();
@@ -305,6 +306,7 @@ describe('functions', function() {
       .post('/1/functions/_messageReceived')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
+      .set('X-LC-Hook-Key', hookKey)
       .send({
         __sign: '1464591343092,6ac315b96655d04e3a49d758f5a8ae55208c98f0'
       })
@@ -328,8 +330,8 @@ describe('functions', function() {
       .set('X-AVOSCloud-Application-Key', appKey)
       .expect(404)
       .expect({
-        "code": 1,
-        "error": "LeanEngine not found function named 'noThisMethod' for app '" + appId + "' on development."
+        code: 1,
+        error: `No such cloud function 'noThisMethod'`
       }, done);
   });
 
@@ -376,16 +378,6 @@ describe('functions', function() {
       .expect(200, done);
   });
 
-  // 测试调用 run 方法 options callback
-  it('testRun_options_callback', function(done) {
-    request(app)
-      .post('/1/functions/testRun_options_callback')
-      .set('X-AVOSCloud-Application-Id', appId)
-      .set('X-AVOSCloud-Application-Key', appKey)
-      .set('x-avoscloud-session-token', sessionTokenAdmin)
-      .expect(200, done);
-  });
-
   // 测试调用 run 方法，返回值是 promise 类型
   it('testRun_promise', function(done) {
     request(app)
@@ -422,40 +414,15 @@ describe('functions', function() {
       .expect(200, done);
   });
 
-  // 测试 onVerified hook 的有效性
-  it('onVerified', function(done) {
-    request(app)
-      .post("/1/functions/onVerified/sms")
-      .set('X-Uluru-Application-Id', appId)
-      .set('X-Uluru-Application-Key', appKey)
-      .send({
-        object: {
-          objectId: '54fd6a03e4b06c41e00b1f40',
-          username: 'admin',
-          __sign: '1464591343092,b0c8463a3c12bf4241820c52963515d9a363b6bc'
-        }
-      })
-      .expect(200)
-      .expect({ result: 'ok'}, done);
-  });
-
   // 测试抛出异常时的处理
   it('throw Error', function(done) {
-    var stderr_write = process.stderr.write;
-    var strings = [];
-    global.process.stderr.write = function(string) {
-      strings.push(string);
-    };
     request(app)
       .post('/1/functions/testThrowError')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
-      .expect(500)
-      .expect({result: 'ok'}, function() {
-        assert.deepEqual('Execute \'testThrowError\' failed with error: ReferenceError: noThisMethod is not defined', strings[0].split('\n')[0]);
-        assert.equal(1, strings.length);
-        global.process.stderr.write = stderr_write;
-        done();
+      .expect(500, (err, res) => {
+        res.body.error.should.be.equal('noThisMethod is not defined');
+        done(err)
       });
   });
 
@@ -477,43 +444,6 @@ describe('functions', function() {
       });
   });
 
-  // 用户串号测试
-  it('user_matching_func', function(done) {
-    this.timeout(30000);
-    var count = 0;
-    var cb = function(err) {
-      if (err) {
-        throw err;
-      }
-      count++;
-      if (count === 10) {
-        return done();
-      }
-    };
-    var doRequest = function(sessionToken, username, cb) {
-      var r = request(app)
-        .post('/1.1/functions/userMatching')
-        .set('X-AVOSCloud-Application-Id', appId)
-        .set('X-AVOSCloud-Application-Key', appKey);
-      if (sessionToken) {
-        r.set('X-AVOSCloud-session-token', sessionToken);
-      }
-      r.end(function(err, res) {
-          if (username) {
-            res.body.result.reqUser.username.should.equal(username);
-          } else {
-            should.not.exist(res.body.reqUser);
-          }
-          return cb(err);
-      });
-    };
-    for (var i = 0; i <= 4; i++) {
-      doRequest(sessionTokenAdmin, 'admin', cb);
-      doRequest('0hgr13u12tmgyv4x594682sv5', 'zhangsan', cb);
-      doRequest(null, null, cb);
-    }
-  });
-
   it('_metadatas', function(done) {
     request(app)
       .get('/1/functions/_ops/metadatas')
@@ -528,8 +458,7 @@ describe('functions', function() {
           'testRunWithUser',
           'readDir',
           '__on_verified_sms',
-          'testThrowError',
-          'userMatching' ]);
+          'testThrowError']);
         done();
       });
   });
@@ -543,19 +472,4 @@ describe('functions', function() {
       .expect('access-control-allow-origin', 'http://foo.bar')
       .expect(200, done);
   });
-
-  it('onCompleteBigqueryJob', function(done) {
-    request(app)
-      .post('/1.1/functions/BigQuery/onComplete')
-      .set('X-AVOSCloud-Application-Id', appId)
-      .set('X-AVOSCloud-Application-Key', appKey)
-      .send({
-        id : "job id",
-        status: "OK/ERROR",
-        message: "当 status 为 ERROR 时的错误消息",
-        __sign: '1464591343092,44c8f6a8a0520bc4636d890935aee0977ef34dd6'
-      })
-      .expect(200, done);
-  });
-
 });

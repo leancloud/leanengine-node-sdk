@@ -143,26 +143,6 @@ AV.Cloud.define('testRun', function(request, response) {
   );
 });
 
-AV.Cloud.define('testRun_options_callback', function(request, response) {
-  AV.Cloud.run('choice', {choice: true}).then(
-    function(data) {
-      assert.equal('OK~', data);
-      AV.Cloud.run('choice', {choice: false}).then(
-        function(data) {
-          assert.ifError(data);
-        },
-        function(err) {
-          assert.equal('OMG...', err);
-          response.success();
-        }
-      );
-    },
-    function(err) {
-      assert.ifError(err);
-    }
-  );
-});
-
 AV.Cloud.define('testRun_promise', function(request, response) {
   AV.Cloud.run('choice', {choice: true}).then(function(data) {
     assert.equal('OK~', data);
@@ -231,21 +211,6 @@ AV.Cloud.define('clientErrorPromise', function(request) {
 
 AV.Cloud.define('serverErrorPromise', function(request) {
   noThisMethod();
-});
-
-AV.Cloud.define("userMatching", function(req, res) {
-  setTimeout(function() {
-    // 为了更加靠谱的验证串号问题，走一次网络 IO
-    var query = new AV.Query(TestObject);
-    query.get('55069f5be4b0c93838ed9b17').then(
-      function(obj) {
-        assert.equal(obj.get('foo'), 'bar');
-        res.success({reqUser: req.user, currentUser: AV.User.current()});
-      }, function() {
-        res.success({reqUser: req.user, currentUser: AV.User.current()});
-      }
-    );
-  }, Math.floor((Math.random() * 2000) + 1));
 });
 
 AV.Cloud.define('testTimeout', function(req, res) {
