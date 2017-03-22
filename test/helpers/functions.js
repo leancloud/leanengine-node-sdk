@@ -223,6 +223,6 @@ AV.Cloud.define('testTimeout', function(req, res) {
   }, req.params.delay);
 });
 
-AV.Cloud.define('_messageReceived', function(request, response) {
+AV.Cloud.onIMMessageReceived(function(request, response) {
   response.success('ok');
 });

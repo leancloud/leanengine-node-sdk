@@ -115,6 +115,14 @@ declare module 'leanengine' {
     export function onVerified(handler: UserHookFunction): void;
     export function onLogin(handler: UserHookFunction): void;
 
+    export function onIMMessageReceived(handler: CloudFunction): void;
+    export function onIMReceiversOffline(handler: CloudFunction): void;
+    export function onIMMessageSent(handler: CloudFunction): void;
+    export function onIMConversationStart(handler: CloudFunction): void;
+    export function onIMConversationStarted(handler: CloudFunction): void;
+    export function onIMConversationAdd(handler: CloudFunction): void;
+    export function onIMConversationUpdate(handler: CloudFunction): void;
+
     export function LeanCloudHeaders(options?: MiddlewareOptions): RequestHandler;
     export function CookieSession(options?: CookieSessionOptions): RequestHandler;
     export function HttpsRedirect(options?: MiddlewareOptions): RequestHandler;

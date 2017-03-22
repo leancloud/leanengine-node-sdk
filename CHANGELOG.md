@@ -12,6 +12,7 @@
 - **不兼容改动** `AV.Insight.on` 注册的回调函数改为只接受一个 `result` 参数（去掉了 err 参数，请从 `result.status` 判断成功或失败）。
 - **不兼容改动** 一些错误提示被调整过，如果你依赖于对错误信息进行字符串匹配，请注意测试你的错误处理逻辑。
 - 新增 TypeScript 类型定义文件，位于 `leanengine.d.ts`。
+- 新增 `AV.Cloud.onIMMessageReceived` 系列方法，用于更方便地定义实时通讯 Hook 函数。
 
 **新增云函数、Class Hook 和 User Hook 的 Promise 模式**，会使用 Promise 的值作为响应内容。如果在 Promise 中抛了使用新增的 `AV.Cloud.Error` 构造的异常则作为错误返回给客户端，`AV.Cloud.Error` 的第二个参数可以指定 HTTP Status Code 和 Error Code（`AV.Cloud.Error('posts is empty', {status: 422, code: 422})`）；如果抛出了其他错误类型则视作服务器端错误，返回 500 响应并打印错误到标准输出。
 
