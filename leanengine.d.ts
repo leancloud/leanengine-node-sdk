@@ -30,7 +30,8 @@ declare module 'leanengine' {
   }
 
   interface MiddlewareOptions {
-    timeout?: string
+    timeout?: string,
+    printFullStack?: boolean
   }
 
   export function init(options: InitializeOptions): void;
