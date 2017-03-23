@@ -118,7 +118,7 @@ describe('functions', function() {
           iso: '2015-05-14T09:21:18.273Z'
         });
 
-        result.avObject.__type.should.equal('Object');
+        result.avObject.__type.should.equal('Pointer');
         result.avObject.className.should.equal('ComplexObject');
         result.avObject.numberColumn.should.equal(1.23);
         result.avObject.arrayColumn.should.eql([1, 2, 3]);
@@ -152,7 +152,7 @@ describe('functions', function() {
         });
 
         result.avObjects.forEach(function(object) {
-          object.__type.should.equal('Object');
+          object.__type.should.equal('Pointer');
           object.className.should.equal('ComplexObject');
         });
 
@@ -282,7 +282,7 @@ describe('functions', function() {
      .set('X-AVOSCloud-Application-Id', appId)
      .set('X-AVOSCloud-Application-Key', appKey)
      .expect(200, function(err, res) {
-       res.body.result.avObjects[0].__type.should.equal('Object');
+       res.body.result.avObjects[0].__type.should.equal('Pointer');
        res.body.result.avObjects[0].className.should.equal('ComplexObject');
        done();
      });
