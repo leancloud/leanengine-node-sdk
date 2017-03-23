@@ -63,7 +63,7 @@ AV.Cloud.define(name: string, options: object, func: function)
 * `meta: {remoteAddress}`：`meta.remoteAddress` 是客户端的 IP.
 * `sessionToken?: string`：客户端发来的 sessionToken（`X-LC-Session` 头）。
 
-1.x 兼容模式：在早期版本中，云函数和 before 类的 Hook 是接受两个参数（`request` 和 `response`）的，我们会继续兼容这种用法到下一个大版本，希望开发者尽快迁移到 Promise 风格的云函数上。
+1.x 兼容模式：在早期版本中，云函数和 before 类的 Hook 是接受两个参数（`request` 和 `response`）的，**我们会继续兼容这种用法到下一个大版本，希望开发者尽快迁移到 Promise 风格的云函数上**。
 
 ### AV.Cloud.Error
 
@@ -106,7 +106,7 @@ AV.Cloud.run(name: string, data: object, options?: object): Promise
 * AV.Cloud.beforeDelete
 * AV.Cloud.afterDelete
 
-这些函数的签名：`function(className: string, func: function)`，其中 `func` 是接受一个 Request 对象作为参数，返回 Promise 的函数。在 before 类 Hook 中如果没有抛出异常则视作接受这次操作。如果抛出使用 `AV.Cloud.Error` 构造的异常表示客户端错误，拒绝本次操作；如果抛出其他类型的异常则视作服务器端错误，返回 500 响应并打印错误到标准输出。
+这些函数的签名：`function(className: string, func: function)`，其中 `func` 是接受一个 Request 对象作为参数，返回 Promise 的函数。在 before 类 Hook 中如果没有抛出异常则视作接受这次操作。如果抛出使用 `AV.Cloud.Error` 构造的异常表示客户端错误，拒绝本次操作；如果抛出其他类型的异常则视作服务器端错误，返回 500 响应并打印错误到标准输出，也会拒绝本次操作。
 
 `Request` 上的属性包括：
 
