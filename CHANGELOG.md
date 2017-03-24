@@ -1,5 +1,9 @@
 # 更新日志
 
+## v3.0.0
+
+- **不兼容改动** 升级 JavaScript SDK 到 [leancloud-storage v3.0.0-beta.1](https://github.com/leancloud/javascript-sdk/releases/tag/v3.0.0-beta.1)（请检查 JS SDK 3.0 引入的不兼容改动）。
+
 ## v2.0.4
 
 - 修复使用 remote 模式调用 `Cloud.run` 时，user 参数处理不正确的问题。
