@@ -121,6 +121,7 @@ declare module 'leanengine' {
     export function onIMConversationStart(handler: CloudFunction): void;
     export function onIMConversationStarted(handler: CloudFunction): void;
     export function onIMConversationAdd(handler: CloudFunction): void;
+    export function onIMConversationRemove(handler: CloudFunction): void;
     export function onIMConversationUpdate(handler: CloudFunction): void;
 
     export function LeanCloudHeaders(options?: MiddlewareOptions): RequestHandler;

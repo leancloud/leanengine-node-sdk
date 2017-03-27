@@ -134,17 +134,18 @@ LeanEngine 中间件会为这些 Hook 函数检查「Hook 签名」，确保调�
 
 包括：
 
-* `_messageReceived`
-* `_receiversOffline`
-* `_messageSent`
-* `_conversationStart`
-* `_conversationAdd`
-* `_conversationRemove`
-* `_conversationUpdate`
+* `onIMMessageReceived`
+* `onIMReceiversOffline`
+* `onIMMessageSent`
+* `onIMConversationStart`
+* `onIMConversationStarted`
+* `onIMConversationAdd`
+* `onIMConversationRemove`
+* `onIMConversationUpdate`
 
 LeanEngine 中间件会为这些 Hook 函数检查「Hook 签名」，确保调用者的确是 LeanCloud 或本地调试时的命令行工具。
 
-这些 Hook 需要用 `AV.Cloud.define` 来定义，详见文档 [实时通信概览：云引擎 Hook](https://leancloud.cn/docs/realtime_v2.html#云引擎_Hook)
+这些 Hook 函数签名是 `function(func: function)`，其中 `func` 是接受一个 Request 对象作为参数，返回 Promise 的函数，详见文档 [实时通信概览：云引擎 Hook](https://leancloud.cn/docs/realtime_v2.html#云引擎_Hook)
 
 ## Middlewares
 
