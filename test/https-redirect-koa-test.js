@@ -4,10 +4,8 @@ var koa = require('koa');
 var request = require('supertest');
 require('should');
 
-var AV = require('../..');
-var config = require('../config');
-
-AV.init(config);
+var AV = require('..');
+const appInfo = require('./helpers/app-info');
 
 var app = koa();
 
@@ -20,7 +18,7 @@ app.use(function *(next) {
 
 var server = app.listen();
 
-describe('https-redirect', function() {
+describe('https-redirect-koa', function() {
   it('should redirect', function(done) {
     request(server)
       .get('/test')

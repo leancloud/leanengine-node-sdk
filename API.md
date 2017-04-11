@@ -49,7 +49,7 @@ AV.Cloud.define(name: string, func: function)
 AV.Cloud.define(name: string, options: object, func: function)
 ```
 
-定义云函数有两种签名，其中 options 是一个可选的参数，`func` 的签名：`function(request: Request, response: Response)`。
+定义云函数有两种签名，其中 `options` 是一个可选的参数，`func` 是接受一个 Request 对象作为参数，返回 Promise 的函数，Promise 的值即为云函数的响应。在 Promise 中可以抛出使用 `AV.Cloud.Error` 构造的异常表示客户端错误，如参数不合法；如果抛出其他类型的异常则视作服务器端错误，会打印错误到标准输出。
 
 `options` 的属性包括：
 
@@ -63,10 +63,18 @@ AV.Cloud.define(name: string, options: object, func: function)
 * `meta: {remoteAddress}`：`meta.remoteAddress` 是客户端的 IP.
 * `sessionToken?: string`：客户端发来的 sessionToken（`X-LC-Session` 头）。
 
-`Response` 上的属性包括：
+1.x 兼容模式：在早期版本中，云函数和 before 类的 Hook 是接受两个参数（`request` 和 `response`）的，**我们会继续兼容这种用法到下一个大版本，希望开发者尽快迁移到 Promise 风格的云函数上**。
 
-* `success: function(result?)`：向客户端发送结果，可以是包括 AV.Object 在内的各种数据类型或数组，客户端解析方式见各 SDK 文档。
-* `error: function(err?: string)`：向客户端返回一个错误。
+### AV.Cloud.Error
+
+```javascript
+new AV.Cloud.Error(message: string, options?)
+```
+
+继承自 `Error`，用于在云函数和 Class Hook 中表示客户端错误，其中第二个参数支持：
+
+- `status?: number`：设置 HTTP 响应代码（默认 400）
+- `code?: number`：设置响应正文中的错误代码（默认 1）
 
 ### AV.Cloud.run
 
@@ -98,22 +106,13 @@ AV.Cloud.run(name: string, data: object, options?: object): Promise
 * AV.Cloud.beforeDelete
 * AV.Cloud.afterDelete
 
-这些函数的签名：`function(className: string, func: function)`。
-
-before 类 Hook 的 `func` 签名：`function(request: Request, response: Response)`，before 类 Hook 需要在执行完成后调用 `response.success` 或 `response.error` 接受或拒绝这次操作。
-
-after 类 Hook 的 `func` 签名：`function(request: Request)`。
+这些函数的签名：`function(className: string, func: function)`，其中 `func` 是接受一个 Request 对象作为参数，返回 Promise 的函数。在 before 类 Hook 中如果没有抛出异常则视作接受这次操作。如果抛出使用 `AV.Cloud.Error` 构造的异常表示客户端错误，拒绝本次操作；如果抛出其他类型的异常则视作服务器端错误，返回 500 响应并打印错误到标准输出，也会拒绝本次操作。
 
 `Request` 上的属性包括：
 
 * `object: AV.Object`：被操作的对象。
 * `currentUser?: AV.User`：发起操作的用户。
 * `user?: AV.User`：同 `currentUser`.
-
-`Response` 上的属性包括：
-
-* `success: function()`：允许这个操作，请在 15 秒内调用 `success`, 否则会认为操作被拒绝。
-* `error: function(err: string)`：向客户端返回一个错误并拒绝这个操作。
 
 LeanEngine 中间件会为这些 Hook 函数检查「Hook 签名」，确保调用者的确是 LeanCloud 或本地调试时的命令行工具。
 
@@ -124,83 +123,53 @@ LeanEngine 中间件会为这些 Hook 函数检查「Hook 签名」，确保调�
 * AV.Cloud.onVerified
 * AV.Cloud.onLogin
 
-这两个函数的签名：`function(func: function)`，`func` 签名：`function(request: Request, response: Response)`，Hook 需要在执行完成后调用 `response.success` 或 `response.error` 接受或拒绝这次操作。
+这两个函数的签名：`function(func: function)`，其中 `func` 是接受一个 Request 对象作为参数，返回 Promise 的函数，如果没有抛出异常则视作接受这次操作。
 
 `Request` 上的属性包括：
 
 * `currentUser: AV.User`：被操作的用户。
 * `user: AV.User`：同 `currentUser`.
 
-`Response` 上的属性包括：
-
-* `success: function()`：允许这个操作，请在 15 秒内调用 `success`, 否则会认为操作被拒绝。
-* `error: function(err: string)`：向客户端返回一个错误并拒绝这个操作。
-
-更多有关 Hook 函数的内容请参考文档 [云函数开发指南：Hook 函数](https://leancloud.cn/docs/leanengine_cloudfunction_guide-node.html#Hook_函数)。
-
 ### 实时通信 Hook 函数
 
 包括：
 
-* `_messageReceived`
-* `_receiversOffline`
-* `_messageSent`
-* `_conversationStart`
-* `_conversationAdd`
-* `_conversationRemove`
-* `_conversationUpdate`
+* `onIMMessageReceived`
+* `onIMReceiversOffline`
+* `onIMMessageSent`
+* `onIMConversationStart`
+* `onIMConversationStarted`
+* `onIMConversationAdd`
+* `onIMConversationRemove`
+* `onIMConversationUpdate`
 
 LeanEngine 中间件会为这些 Hook 函数检查「Hook 签名」，确保调用者的确是 LeanCloud 或本地调试时的命令行工具。
 
-这些 Hook 需要用 `AV.Cloud.define` 来定义，详见文档 [实时通信概览：云引擎 Hook](https://leancloud.cn/docs/realtime_v2.html#云引擎_Hook)
-
-### AV.Cloud.httpRequest
-
-注意：该 API 已不再维护且可能在之后的版本中去除，请使用 [request](https://www.npmjs.com/package/request) 发起 HTTP 请求。
-
-```javascript
-AV.Cloud.httpRequest(options: object);
-```
-
-options 的属性包括：
-
-* `url`：被请求的 Url, 例如 `https://api.leancloud.cn/1.1/ping`。
-* `success: function(response: Response)`：成功回调，接受一个 HTTP 响应作为参数。
-* `error: function(response: Response)`：失败回调，接受一个 HTTP 响应作为参数。
-* `method: string`：HTTP 方法，默认为 `GET`。
-* `params`：Query String，可以是对象 `{q : 'Sean Plott'}` 也可以是字符串 `q=Sean Plott`。
-* `headers: object`：HTTP 头，例如 `{'Content-Type': 'application/json'}`。
-* `body: object`：HTTP 请求正文，默认使用 urlencode 编码，如果指定了 `Content-Type` 为 `application/json` 则发送 JSON 格式的正文；不适用于 `GET` 或 `HEAD` 请求。
-* `timeout: number`：超时时间，单位秒，默认 `10000`。
-
-Response 的属性包括：
-
-* `status: number`：HTTP 响应状态码。
-* `headers: object`：HTTP 响应头。
-* `text: string`：HTTP 响应正文。
-* `buffer: Buffer`：HTTP 响应正文。
-* `data` 解析后的 HTTP 响应正文，例如对于 `Content-Type` 为 `application/json` 时，会将响应正文解析为一个对象。
-
-示例：
-
-```javascript
-AV.Cloud.httpRequest({
-  method: 'POST',
-  url: 'http://www.example.com/create_post',
-  body: {
-    title: 'Vote for Pedro',
-    body: 'If you vote for Pedro, your wildest dreams will come true'
-  },
-  success: function(httpResponse) {
-    console.log(httpResponse.text);
-  },
-  error: function(httpResponse) {
-    console.error('Request failed with response code ' + httpResponse.status);
-  }
-});
-```
+这些 Hook 函数签名是 `function(func: function)`，其中 `func` 是接受一个 Request 对象作为参数，返回 Promise 的函数，详见文档 [实时通信概览：云引擎 Hook](https://leancloud.cn/docs/realtime_v2.html#云引擎_Hook)
 
 ## Middlewares
+
+### leancloud-headers
+
+该中间件会将 `X-LC` 系列的头解析为 request.AV 上的属性，在 Express 中：
+
+```javascript
+app.use(AV.Cloud.LeanCloudHeaders());
+```
+
+在 Koa 中（添加 `framework: 'koa'` 参数）：
+
+```javascript
+app.use(AV.Cloud.LeanCloudHeaders({framework: 'koa'}));
+```
+
+express 的 `Request`（或 koa 的 `ctx.request`）上会有这些属性可用：
+
+* `AV.id?`：App ID
+* `AV.key?`：App Key
+* `AV.masterKey?`：App Master Key
+* `AV.prod`：`0` 或 `1`
+* `AV.sessionToken?`：Session Token
 
 ### cookie-session
 
@@ -216,9 +185,8 @@ app.use(AV.Cloud.CookieSession({secret: 'my secret', maxAge: 3600000, fetchUser:
 app.use(AV.Cloud.CookieSession({framework: 'koa', secret: 'my secret', maxAge: 3600000, fetchUser: true}));
 ```
 
-参数包括：
+其他参数包括：
 
-* `koa?: boolean`：返回一个 koa（而不是 express）中间件。
 * `secret: string`：对 Cookie 进行签名的密钥，请选用一个随机字符串。
 * `name?: string`：Cookie 名称，默认为 `avos.sess`。
 * `maxAge?: number`：Cookie 过期时间。

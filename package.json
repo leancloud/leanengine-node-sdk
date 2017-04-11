@@ -1,32 +1,29 @@
 {
   "name": "leanengine",
-  "version": "1.2.4",
+  "version": "2.0.0",
   "description": "LeanCloud LeanEngine Node.js SDK.",
   "repository": {
     "type": "git",
     "url": "https://github.com/leancloud/leanengine-node-sdk"
   },
   "dependencies": {
-    "body-parser": "1.9.0",
-    "connect": "3.2.0",
-    "connect-timeout": "^1.7.0",
-    "cookies": "0.5.0",
-    "debug": "2.0.0",
-    "iconv-lite": "^0.4.8",
-    "leancloud-storage": "1.5.4",
-    "on-headers": "1.0.0",
+    "body-parser": "^1.16.0",
+    "connect": "^3.5.0",
+    "connect-timeout": "^1.8.0",
+    "cookies": "^0.6.2",
+    "debug": "^2.6.0",
+    "leancloud-storage": "^2.1.0",
+    "on-headers": "^1.0.1",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
-    "blanket": "^1.2.1",
-    "expect.js": "0.2.0",
-    "express": "4.9.7",
-    "koa": "^1.2.0",
-    "koa-bodyparser": "^2.2.0",
-    "mocha": "2.3.3",
-    "rewire": "^2.5.1",
-    "should": "10.0.0",
-    "supertest": "0.14.0"
+    "blanket": "^1.2.3",
+    "express": "^4.14.1",
+    "koa": "^1.2.4",
+    "koa-bodyparser": "^2.3.0",
+    "mocha": "^3.2.0",
+    "should": "^11.2.0",
+    "supertest": "^3.0.0"
   },
   "keywords": [
     "LeanCloud",
@@ -39,18 +36,19 @@
       "pattern": "//^((?!(node_modules|test)).)*$/"
     }
   },
+  "typings": "./leanengine.d.ts",
+  "types": "./leanengine.d.ts",
+  "engines": {
+    "node": ">=4.4.7"
+  },
   "license": "MIT",
   "author": {
-    "name": "wchen",
-    "email": "wchen@leancloud.rocks"
+    "name": "LeanCloud",
+    "email": "support@leancloud.rocks"
   },
-  "bugs": {
-    "url": "https://github.com/leancloud/leanengine-node-sdk/issues"
-  },
-  "homepage": "https://github.com/leancloud/leanengine-node-sdk",
   "scripts": {
     "test": "node_modules/mocha/bin/mocha -R spec --timeout=10000",
-    "test-koa": "FRAMEWORK=koa node_modules/mocha/bin/mocha -R spec --timeout=10000 test test/koa",
+    "test-koa": "FRAMEWORK=koa node_modules/mocha/bin/mocha -R spec --timeout=10000",
     "test-cov": "node_modules/mocha/bin/mocha --require blanket -R html-cov > coverage.html"
   }
 }

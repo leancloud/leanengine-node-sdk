@@ -1,10 +1,10 @@
 language: node_js
 
 node_js:
-  - 0.12
   - 4
   - 6
+  - node
 
 script:
   - npm test
-  - node -v | grep 'v0.12' || npm run test-koa
+  - npm run test-koa

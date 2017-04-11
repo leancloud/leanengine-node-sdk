@@ -31,7 +31,7 @@ module.exports = function(AV) {
     debug('session options %j', opts);
 
     return function cookieSession(req, res, next) {
-      var cookies = req.sessionCookies = new Cookies(req, res, keys);
+      var cookies = new Cookies(req, res, {keys: keys});
       var responseUser;
 
       // 兼容 connect
@@ -43,6 +43,10 @@ module.exports = function(AV) {
       req.sessionKey = name;
 
       res.saveCurrentUser = function(user) {
+        if (!user || !user.getSessionToken()) {
+          console.trace('LeanEngine: saveCurrentUser: User 对象上没有 sessionToken, 无法正确保存用户状态');
+        }
+
         responseUser = user;
       };
 
