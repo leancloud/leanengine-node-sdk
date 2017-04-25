@@ -143,18 +143,14 @@ AV.Cloud.define('testRun', function(request, response) {
   );
 });
 
-AV.Cloud.define('testRun_promise', function(request, response) {
-  AV.Cloud.run('choice', {choice: true}).then(function(data) {
+AV.Cloud.define('testRun_promise', function(request) {
+  return AV.Cloud.run('choice', {choice: true}).then(function(data) {
     assert.equal('OK~', data);
     AV.Cloud.run('choice', {choice: false}).then(function(data) {
       assert.ifError(data);
     }, function(err) {
       assert.equal('OMG...', err);
-      response.success();
     });
-  },
-  function(err) {
-    assert.ifError(err);
   });
 });
 
