@@ -8,7 +8,7 @@ module.exports = function() {
       res.statusCode = 200;
       res.setHeader('Access-Control-Max-Age','86400');
       res.setHeader('Access-Control-Allow-Methods', 'HEAD, GET, POST, PUT, DELETE, OPTIONS');
-      res.setHeader('Access-Control-Allow-Headers', leancloudHeaders);
+      res.setHeader('Access-Control-Allow-Headers', leancloudHeaders.join(', '));
       res.setHeader('Content-Length', 0);
       res.end();
     } else {
