@@ -194,10 +194,12 @@ describe('hook', function() {
       })
       .expect(200)
       .end(function(err, res) {
-        res.body.user.should.eql({
-          "__type": "Pointer",
-          "className": "_User",
-          "objectId": "52aebbdee4b0c8b6fa455aa7"
+        res.body.should.eql({
+          'user': {
+            "__type": "Pointer",
+            "className": "_User",
+            "objectId": "52aebbdee4b0c8b6fa455aa7"
+          }
         });
         done();
       });
