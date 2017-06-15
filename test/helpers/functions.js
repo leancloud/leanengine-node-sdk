@@ -154,6 +154,10 @@ AV.Cloud.define('testRun_promise', function(request) {
   });
 });
 
+AV.Cloud.define('testRunUndefinedFunction', function(request) {
+  return AV.Cloud.run('undefinedFunction');
+});
+
 AV.Cloud.define('testRunWithUser', function(request, response) {
   AV.Cloud.run('testUser', {}, {
     user: request.user
