@@ -388,6 +388,14 @@ describe('functions', function() {
       .expect(200, done);
   });
 
+  it('run undefined function', function(done) {
+    request(app)
+      .post('/1/functions/testRunUndefinedFunction')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .expect(404, done);
+  });
+
   it('testRunWithSessionToken', function(done) {
     request(app)
       .post('/1/functions/testRunWithSessionToken')
