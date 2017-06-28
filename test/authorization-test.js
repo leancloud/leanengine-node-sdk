@@ -11,7 +11,7 @@ var appId = appInfo.appId;
 var appKey = appInfo.appKey;
 var masterKey = appInfo.masterKey;
 
-const app = require('./fixtures/frameworks')();
+const app = require('./fixtures/app')();
 
 describe('authorization', function() {
   it('ok', function(done) {

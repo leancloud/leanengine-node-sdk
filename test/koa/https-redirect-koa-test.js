@@ -4,10 +4,10 @@ var koa = require('koa');
 var request = require('supertest');
 require('should');
 
-var AV = require('..');
-const appInfo = require('./fixtures/app-info');
+var AV = require('../..');
+const appInfo = require('../fixtures/app-info');
 
-var app = koa();
+var app = new koa();
 
 app.proxy = true;
 app.use(AV.Cloud.HttpsRedirect({framework: 'koa'}));

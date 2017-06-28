@@ -20,8 +20,6 @@
   "devDependencies": {
     "blanket": "^1.2.3",
     "express": "^4.14.1",
-    "koa": "^1.2.4",
-    "koa-bodyparser": "^2.3.0",
     "mocha": "^3.2.0",
     "should": "^11.2.0",
     "supertest": "^3.0.0"
@@ -48,8 +46,9 @@
     "email": "support@leancloud.rocks"
   },
   "scripts": {
-    "test": "node_modules/mocha/bin/mocha -R spec --timeout=10000",
-    "test-koa": "FRAMEWORK=koa node_modules/mocha/bin/mocha -R spec --timeout=10000",
-    "test-cov": "node_modules/mocha/bin/mocha --require blanket -R html-cov > coverage.html"
+    "test": "npm run test-express && npm run test-koa1 && npm run test-koa2",
+    "test-express": "mocha test test/express",
+    "test-koa1": "env FRAMEWORK=koa npm install koa@1 koa-bodyparser@2 && mocha test test/koa",
+    "test-koa2": "env FRAMEWORK=koa npm install koa@2 koa-bodyparser@4 && mocha test test/koa test/koa2"
   }
 }

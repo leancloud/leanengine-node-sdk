@@ -12,7 +12,7 @@ var appKey = appInfo.appKey;
 var masterKey = appInfo.masterKey;
 var hookKey = appInfo.hookKey;
 
-const app = require('./fixtures/frameworks')();
+const app = require('./fixtures/app')();
 
 require('./fixtures/hooks');
 

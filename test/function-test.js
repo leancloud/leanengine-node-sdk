@@ -16,7 +16,7 @@ const masterKey = appInfo.masterKey;
 const hookKey = appInfo.hookKey;
 const sessionTokenAdmin = appInfo.sessionTokenAdmin;
 
-const app = require('./fixtures/frameworks')();
+const app = require('./fixtures/app')();
 
 describe('functions', function() {
   it('ping', function(done) {
