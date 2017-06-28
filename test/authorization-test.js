@@ -3,16 +3,15 @@
 var request = require('supertest');
 
 const AV = require('..');
-const helpers = require('./helpers')
-const appInfo = require('./helpers/app-info');
+const appInfo = require('./fixtures/app-info');
 
-require('./helpers/functions');
+require('./fixtures/functions');
 
 var appId = appInfo.appId;
 var appKey = appInfo.appKey;
 var masterKey = appInfo.masterKey;
 
-const app = helpers.app();
+const app = require('./fixtures/frameworks')();
 
 describe('authorization', function() {
   it('ok', function(done) {

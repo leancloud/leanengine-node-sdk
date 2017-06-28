@@ -5,11 +5,10 @@ const should = require('should');
 const assert = require('assert');
 
 const AV = require('..');
-const helpers = require('./helpers')
-const appInfo = require('./helpers/app-info');
+const appInfo = require('./fixtures/app-info');
 
-require('./helpers/functions');
-require('./helpers/hooks');
+require('./fixtures/functions');
+require('./fixtures/hooks');
 
 const appId = appInfo.appId;
 const appKey = appInfo.appKey;
@@ -17,7 +16,7 @@ const masterKey = appInfo.masterKey;
 const hookKey = appInfo.hookKey;
 const sessionTokenAdmin = appInfo.sessionTokenAdmin;
 
-const app = helpers.app();
+const app = require('./fixtures/frameworks')();
 
 describe('functions', function() {
   it('ping', function(done) {

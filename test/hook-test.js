@@ -1,29 +1,20 @@
 'use strict';
 
-var AV = require('..'),
-  should = require('should'),
-  assert = require('assert');
+var AV = require('..');
+var should = require('should');
+var assert = require('assert');
+var request = require('supertest');
 
-const appInfo = require('./helpers/app-info');
+const appInfo = require('./fixtures/app-info');
 
 var appId = appInfo.appId;
 var appKey = appInfo.appKey;
 var masterKey = appInfo.masterKey;
 var hookKey = appInfo.hookKey;
 
-var app;
+const app = require('./fixtures/frameworks')();
 
-if (process.env.FRAMEWORK == 'koa') {
-  var koa = require('koa')();
-  koa.use(AV.koa());
-  app = koa.listen();
-} else {
-  app = AV.express();
-}
-
-var request = require('supertest');
-
-require('./helpers/hooks');
+require('./fixtures/hooks');
 
 describe('hook', function() {
   it('beforeSave', function(done) {

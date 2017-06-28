@@ -5,7 +5,7 @@ var request = require('supertest');
 require('should');
 
 var AV = require('..');
-const appInfo = require('./helpers/app-info');
+const appInfo = require('./fixtures/app-info');
 
 var app = koa();
 
@@ -26,7 +26,7 @@ describe('https-redirect-koa', function() {
       .expect(302)
       .end(function(err, res) {
         res.headers.location.should.equal('https://stg-abc.leanapp.cn/test');
-        res.text.should.match('Redirecting to <a href="https://stg-abc.leanapp.cn/test">https://stg-abc.leanapp.cn/test</a>.');
+        res.text.should.endWith('Redirecting to https://stg-abc.leanapp.cn/test');
         done();
       });
   });
