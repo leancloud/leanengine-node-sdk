@@ -2,7 +2,15 @@
 
 ## v3.0.0
 
-- **不兼容改动** 升级 JavaScript SDK 到 [leancloud-storage v3.0.0-beta.1](https://github.com/leancloud/javascript-sdk/releases/tag/v3.0.0-beta.1)（请检查 JS SDK 3.0 引入的不兼容改动）。
+- **不兼容改动** 升级 JavaScript SDK 到 [leancloud-storage v3.0.0-beta.1](https://github.com/leancloud/javascript-sdk/releases/tag/v3.0.0)（请检查 JS SDK 3.0 引入的不兼容改动）。
+
+**新增 Koa2 支持**：
+
+```javascript
+var app = new Koa();
+app.use(AV.koa2());
+app.use(AV.Cloud.HttpsRedirect({framework: 'koa2'}));
+```
 
 ## v2.0.4
 

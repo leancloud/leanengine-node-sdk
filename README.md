@@ -18,7 +18,7 @@ npm install leanengine --save
 
 ## 项目示例
 
-* 上手示例：<https://github.com/leancloud/node-js-getting-started>
+* 项目模板：<https://github.com/leancloud/node-js-getting-started>
 * Todo 列表示例：<https://github.com/leancloud/leanengine-todo-demo>
 * 微信公众平台：<https://leancloud.cn/docs/webhosting_weixin.html>
 * 微博 OAuth 授权验证：<https://leancloud.cn/docs/webhosting_oauth.html>
