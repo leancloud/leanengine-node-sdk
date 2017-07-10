@@ -2,9 +2,9 @@
 
 ## v3.0.0
 
-- **不兼容改动** 升级 JavaScript SDK 到 [leancloud-storage v3.0.0-beta.1](https://github.com/leancloud/javascript-sdk/releases/tag/v3.0.0)（请检查 JS SDK 3.0 引入的不兼容改动）。
+- **不兼容改动** 指定 JavaScript SDK 为 peerDependency, 同时仅支持 [leancloud-storage v3.0.0](https://github.com/leancloud/javascript-sdk/releases/tag/v3.0.0) 以上版本。你需要运行 `npm install leancloud-storage@3 --save` 来额外安装 JS SDK，同时请检查 JS SDK 3.0 引入的其他不兼容改动。
 
-**新增 Koa2 支持**：
+**新增 Koa2 支持（建议使用 Node 7.0 以上版本）**：
 
 ```javascript
 var app = new Koa();

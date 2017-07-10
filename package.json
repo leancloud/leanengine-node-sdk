@@ -13,7 +13,6 @@
     "cookies": "^0.6.2",
     "debug": "^2.6.0",
     "leancloud-cors-headers": "^0.1.0",
-    "leancloud-storage": "^3.0.0",
     "on-headers": "^1.0.1",
     "underscore": "^1.8.3"
   },
@@ -23,6 +22,9 @@
     "mocha": "^3.2.0",
     "should": "^11.2.0",
     "supertest": "^3.0.0"
+  },
+  "peerDependency": {
+    "leancloud-storage": "^3.0.0"
   },
   "keywords": [
     "LeanCloud",
@@ -46,7 +48,7 @@
     "email": "support@leancloud.rocks"
   },
   "scripts": {
-    "test": "npm run test-express && npm run test-koa1 && npm run test-koa2",
+    "test": "npm install leancloud-storage@3 && npm run test-express && npm run test-koa1 && npm run test-koa2",
     "test-express": "mocha test test/express",
     "test-koa1": "env FRAMEWORK=koa npm install koa@1 koa-bodyparser@2 && mocha test test/koa",
     "test-koa2": "env FRAMEWORK=koa npm install koa@2 koa-bodyparser@4 && mocha test test/koa test/koa2"
