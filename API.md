@@ -17,21 +17,15 @@ app.use(AV.express());
 app.listen(process.env.LEANCLOUD_APP_PORT);
 ```
 
-## AV.express
+## 路由框架
+
+目前 Node SDK 支持 express、koa、koa2 三种路由框架，可以通过下面的 3 种方法创建中间件并挂载到你的路由框架上：
 
 ```javascript
 AV.express(options?: object)
-```
-
-初始化一个 LeanEngine 中间件，可被挂载到 express 应用上。
-
-## AV.koa
-
-```javascript
 AV.koa(options?: object)
+AV.koa2(options?: object)
 ```
-
-初始化一个 LeanEngine 中间件，可被挂载到 koa 应用上。
 
 ## AV.Object
 
@@ -149,6 +143,14 @@ LeanEngine 中间件会为这些 Hook 函数检查「Hook 签名」，确保调�
 
 ## Middlewares
 
+因为 Node SDK 同时支持多种路由框架，需要你在创建中间件时指定类型，默认为 express：
+
+```javascript
+app.use(AV.Cloud.LeanCloudHeaders({framework: 'express'}));
+app.use(AV.Cloud.LeanCloudHeaders({framework: 'koa'}));
+app.use(AV.Cloud.LeanCloudHeaders({framework: 'koa2'}));
+```
+
 ### leancloud-headers
 
 该中间件会将 `X-LC` 系列的头解析为 request.AV 上的属性，在 Express 中：
@@ -157,13 +159,7 @@ LeanEngine 中间件会为这些 Hook 函数检查「Hook 签名」，确保调�
 app.use(AV.Cloud.LeanCloudHeaders());
 ```
 
-在 Koa 中（添加 `framework: 'koa'` 参数）：
-
-```javascript
-app.use(AV.Cloud.LeanCloudHeaders({framework: 'koa'}));
-```
-
-express 的 `Request`（或 koa 的 `ctx.request`）上会有这些属性可用：
+express 的 `Request`（或 koa 的 `ctx`）上会有这些属性可用：
 
 * `AV.id?`：App ID
 * `AV.key?`：App Key
@@ -179,12 +175,6 @@ express 的 `Request`（或 koa 的 `ctx.request`）上会有这些属性可用�
 app.use(AV.Cloud.CookieSession({secret: 'my secret', maxAge: 3600000, fetchUser: true}));
 ```
 
-在 Koa 中（添加 `framework: 'koa'` 参数）：
-
-```javascript
-app.use(AV.Cloud.CookieSession({framework: 'koa', secret: 'my secret', maxAge: 3600000, fetchUser: true}));
-```
-
 其他参数包括：
 
 * `secret: string`：对 Cookie 进行签名的密钥，请选用一个随机字符串。
@@ -193,12 +183,12 @@ app.use(AV.Cloud.CookieSession({framework: 'koa', secret: 'my secret', maxAge: 3
 * `fetchUser?: boolean`：是否自动查询用户信息，默认为 `false`，即不自动查询，这种情况下只能访问用户的 `id` 和 `sessionToken`.
 * `httpOnly?: boolean`: 不允许客户端读写该 Cookie，默认 `false`.
 
-express 的 `Request`（或 koa 的 `ctx.request`）上会有这些属性可用：
+express 的 `Request`（或 koa 的 `ctx`）上会有这些属性可用：
 
 * `currentUser?: AV.User`：和当前客户端关联的用户信息（根据 Cookie），如未开启 `cookie-session` 的 `fetchUser` 选项则只可以访问 `id` 和 `sessionToken`.
 * `sessionToken?: string`：和当前客户端关联的 `sessionToken`（根据 Cookie）。
 
-express 的 `Response`（或 koa 的 `ctx.response`）上会有这些属性可用：
+express 的 `Response`（或 koa 的 `ctx`）上会有这些属性可用：
 
 * `saveCurrentUser(user: AV.User)`：将当前客户端与特定用户关联（会写入 Cookie）。
 * `clearCurrentUser()`：清除当前客户端关联的用户（删除 Cookie）。
@@ -214,7 +204,7 @@ app.enable('trust proxy');
 app.use(AV.Cloud.HttpsRedirect());
 ```
 
-Koa 中（添加 `framework: 'koa'` 参数）：
+Koa 中：
 
 ```javascript
 app.proxy = true;

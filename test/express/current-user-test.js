@@ -4,8 +4,8 @@ var express = require('express');
 var assert = require('assert');
 var bodyParser = require('body-parser');
 
-var AV = require('..');
-const appInfo = require('./helpers/app-info');
+var AV = require('../..');
+const appInfo = require('../fixtures/app-info');
 var request = require('supertest');
 
 var appId = appInfo.appId;

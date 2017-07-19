@@ -1,5 +1,17 @@
 # 更新日志
 
+## v3.0.0
+
+- **不兼容改动** 指定 JavaScript SDK 为 peerDependency, 同时仅支持 [leancloud-storage v3.0.0](https://github.com/leancloud/javascript-sdk/releases/tag/v3.0.0) 以上版本。你需要运行 `npm install leancloud-storage@3 --save` 来额外安装 JS SDK，同时请检查 JS SDK 3.0 引入的其他不兼容改动。
+
+**新增 Koa2 支持（建议使用 Node 7.0 以上版本）**：
+
+```javascript
+var app = new Koa();
+app.use(AV.koa2());
+app.use(AV.Cloud.HttpsRedirect({framework: 'koa2'}));
+```
+
 ## v2.0.4
 
 - 修复使用 remote 模式调用 `Cloud.run` 时，user 参数处理不正确的问题。

@@ -38,6 +38,7 @@ declare module 'leanengine' {
 
   export function express(options?: MiddlewareOptions): RequestHandler;
   export function koa(options?: MiddlewareOptions): Function;
+  export function koa2(options?: MiddlewareOptions): Function;
 
   export class Object {
     disableBeforeHook(): void;

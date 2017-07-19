@@ -4,6 +4,7 @@
 
 ```bash
 npm install leanengine --save
+npm install leancloud-storage@3 --save
 ```
 
 建议使用 Node.js 6.0 以上的版本（可在 `package.json` 中设置 `engines.node` 为 `6.x`）。
@@ -18,7 +19,7 @@ npm install leanengine --save
 
 ## 项目示例
 
-* 上手示例：<https://github.com/leancloud/node-js-getting-started>
+* 项目模板：<https://github.com/leancloud/node-js-getting-started>
 * Todo 列表示例：<https://github.com/leancloud/leanengine-todo-demo>
 * 微信公众平台：<https://leancloud.cn/docs/webhosting_weixin.html>
 * 微博 OAuth 授权验证：<https://leancloud.cn/docs/webhosting_oauth.html>
@@ -27,14 +28,6 @@ npm install leanengine --save
 
 见 [Releases](https://github.com/leancloud/leanengine-node-sdk/releases)
 
-安装 1.x 版本（建议尽快升级，见 [v2.0.0](https://github.com/leancloud/leanengine-node-sdk/releases/tag/v2.0.0)）：
-
-```
-npm install leanengine@1.x --save
-```
-
-安装早期的 0.x 版本（请尽快 [升级到云引擎 Node.js SDK 1.0](https://leancloud.cn/docs/leanengine-node-sdk-upgrade-1.html)）：
-
-```bash
-npm install leanengine@0.x --save
-```
+- `npm install leanengine@2 --save` 升级说明见 [v3.0.0](https://github.com/leancloud/leanengine-node-sdk/releases/tag/v3.0.0)
+- `npm install leanengine@1 --save` 升级说明见 [v2.0.0](https://github.com/leancloud/leanengine-node-sdk/releases/tag/v2.0.0)
+- `npm install leanengine@0 --save` 升级说明见 [升级到云引擎 Node.js SDK 1.0](https://leancloud.cn/docs/leanengine-node-sdk-upgrade-1.html)

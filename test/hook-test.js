@@ -1,29 +1,20 @@
 'use strict';
 
-var AV = require('..'),
-  should = require('should'),
-  assert = require('assert');
+var AV = require('..');
+var should = require('should');
+var assert = require('assert');
+var request = require('supertest');
 
-const appInfo = require('./helpers/app-info');
+const appInfo = require('./fixtures/app-info');
 
 var appId = appInfo.appId;
 var appKey = appInfo.appKey;
 var masterKey = appInfo.masterKey;
 var hookKey = appInfo.hookKey;
 
-var app;
+const app = require('./fixtures/app')();
 
-if (process.env.FRAMEWORK == 'koa') {
-  var koa = require('koa')();
-  koa.use(AV.koa());
-  app = koa.listen();
-} else {
-  app = AV.express();
-}
-
-var request = require('supertest');
-
-require('./helpers/hooks');
+require('./fixtures/hooks');
 
 describe('hook', function() {
   it('beforeSave', function(done) {
@@ -194,10 +185,12 @@ describe('hook', function() {
       })
       .expect(200)
       .end(function(err, res) {
-        res.body.user.should.eql({
-          "__type": "Pointer",
-          "className": "_User",
-          "objectId": "52aebbdee4b0c8b6fa455aa7"
+        res.body.should.eql({
+          'user': {
+            "__type": "Pointer",
+            "className": "_User",
+            "objectId": "52aebbdee4b0c8b6fa455aa7"
+          }
         });
         done();
       });

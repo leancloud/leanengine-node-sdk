@@ -5,8 +5,8 @@ var bodyParser = require('body-parser');
 var request = require('supertest');
 var should = require('should');
 
-const AV = require('..');
-const appInfo = require('./helpers/app-info');
+const AV = require('../..');
+const appInfo = require('../fixtures/app-info');
 
 var app = express();
 
