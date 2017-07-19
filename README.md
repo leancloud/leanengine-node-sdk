@@ -28,6 +28,6 @@ npm install leancloud-storage@3 --save
 
 见 [Releases](https://github.com/leancloud/leanengine-node-sdk/releases)
 
-- `npm install leanengine@2 --save`
-- `npm install leanengine@1 --save`，升级说明见 [v2.0.0](https://github.com/leancloud/leanengine-node-sdk/releases/tag/v2.0.0)
+- `npm install leanengine@2 --save` 升级说明见 [v3.0.0](https://github.com/leancloud/leanengine-node-sdk/releases/tag/v3.0.0)
+- `npm install leanengine@1 --save` 升级说明见 [v2.0.0](https://github.com/leancloud/leanengine-node-sdk/releases/tag/v2.0.0)
 - `npm install leanengine@0 --save` 升级说明见 [升级到云引擎 Node.js SDK 1.0](https://leancloud.cn/docs/leanengine-node-sdk-upgrade-1.html)
