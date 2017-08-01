@@ -1,6 +1,6 @@
 import {Promise} from 'es6-promise';
 import {Request, RequestHandler} from 'express';
-import {User as LCUser, Object as LCObject} from 'leancloud-storage';
+import {User, Object as LCObject} from 'leancloud-storage';
 
 declare namespace Express {
   export interface Request {
@@ -12,17 +12,18 @@ declare namespace Express {
       sessionToken: string
     };
 
-    currentUser?: LCUser;
+    currentUser?: User;
     sessionToken?: string;
   }
 
   export interface Response {
-    saveCurrentUser(user: LCUser);
+    saveCurrentUser(user: User);
     clearCurrentUser();
   }
 }
 
-declare module 'leanengine' {
+declare namespace AV {
+  
   interface InitializeOptions {
     appId: string,
     appKey: string,
@@ -39,7 +40,7 @@ declare module 'leanengine' {
   export function express(options?: MiddlewareOptions): RequestHandler;
   export function koa(options?: MiddlewareOptions): Function;
 
-  export class Object {
+  export class Object extends LCObject {
     disableBeforeHook(): void;
     disableAfterHook(): void;
   }
@@ -57,7 +58,7 @@ declare module 'leanengine' {
 
     interface RunOptions {
       remote?: boolean,
-      user?: LCUser,
+      user?: User,
       sessionToken?: string,
       req?: Request
     }
@@ -78,17 +79,17 @@ declare module 'leanengine' {
     interface CloudFunctionRequest {
       meta: CloudFunctionRequestMeta,
       params: Object,
-      currentUser?: LCUser,
+      currentUser?: User,
       sessionToken?: string
     }
 
     interface ClassHookRequest {
-      object: LCObject,
-      currentUser?: LCUser
+      object: Object,
+      currentUser?: User
     }
 
     interface UserHookRequest {
-      currentUser: LCUser
+      currentUser: User
     }
 
     type CloudFunction = (request: CloudFunctionRequest) => Promise<any>;
@@ -129,3 +130,5 @@ declare module 'leanengine' {
     export function HttpsRedirect(options?: MiddlewareOptions): RequestHandler;
   }
 }
+
+export = AV;
