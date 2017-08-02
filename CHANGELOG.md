@@ -1,5 +1,9 @@
 # 更新日志
 
+## v2.0.5
+
+- 修复 TypeScript 定义文件与 leancloud-storage 配合工作的问题。
+
 ## v2.0.4
 
 - 修复使用 remote 模式调用 `Cloud.run` 时，user 参数处理不正确的问题。

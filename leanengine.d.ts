@@ -23,7 +23,7 @@ declare namespace Express {
 }
 
 declare namespace AV {
-  
+
   interface InitializeOptions {
     appId: string,
     appKey: string,
