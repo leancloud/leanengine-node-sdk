@@ -1,5 +1,10 @@
 # 更新日志
 
+## v3.0.1
+
+- 默认加载 JavaScript 中的 LiveQuery 特性。
+- 修复 TypeScript 定义文件中的 AV.Object.
+
 ## v3.0.0
 
 - **不兼容改动** 指定 JavaScript SDK 为 peerDependency, 同时仅支持 [leancloud-storage v3.0.0](https://github.com/leancloud/javascript-sdk/releases/tag/v3.0.0) 以上版本。你需要运行 `npm install leancloud-storage@3 --save` 来额外安装 JS SDK，同时请检查 JS SDK 3.0 引入的其他不兼容改动。
