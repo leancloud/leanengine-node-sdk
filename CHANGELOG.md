@@ -1,5 +1,9 @@
 # 更新日志
 
+## v3.0.2
+
+- 修复 Promise 写法的 beforeHook 无法正确工作的问题。
+
 ## v3.0.1
 
 - 默认加载 JavaScript 中的 LiveQuery 特性。

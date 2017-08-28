@@ -362,7 +362,8 @@ describe('functions', function() {
       .set('x-avoscloud-session-token', '00000000000000000000')
       .expect(400)
       .end(function(err, res) {
-        res.body.should.eql({ code: 211, error: 'Could not find user' });
+        res.body.code.should.be.equal(211);
+        res.body.error.should.be.match(/Could not find user/);
         done();
       });
   });
