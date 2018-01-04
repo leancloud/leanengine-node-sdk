@@ -75,7 +75,7 @@ new AV.Cloud.Error(message: string, options?)
 运行已定义的云函数，与 JavaScript SDK 中会发起 HTTP 请求不同，在云引擎中默认变成直接调用指定的函数。
 
 ```javascript
-AV.Cloud.run(name: string, data: object, options?: object): Promise
+AV.Cloud.run(name: string, params: object, options?: object): Promise
 ```
 
 `options` 的属性包括：
@@ -90,6 +90,26 @@ AV.Cloud.run(name: string, data: object, options?: object): Promise
 ### AV.Cloud.rpc
 
 兼容 JavaScript SDK 的同名函数，是 `AV.Cloud.run` 的一个别名。
+
+### AV.Cloud.enqueue
+
+在队列中运行云函数。
+
+```javascript
+AV.Cloud.run(name: string, params: object, options?: object): Promise<TaskInfo>
+```
+
+`options` 的属性包括：
+
+* `attempts?: number`：最大重试次数，默认 `3`.
+* `backoff?: number`：重试间隔（毫秒），默认 `60000`.
+* `delay?: number`：延时执行（毫秒）。
+* `notify?: string`: 将执行结果通知到指定云函数。
+* `retryTimeout?: boolean`: 将超时视作失败来进行重试，默认 `true`.
+
+`TaskInfo` 的属性包括：
+
+- `uniqueId`：任务的唯一 Id，会包含在日志中。
 
 ### 定义 Class Hook
 
