@@ -1,5 +1,11 @@
 # 更新日志
 
+## v3.1.0
+
+- `AV.Express()` 添加 `onError`（全局云函数错误处理）和 `ignoreInvalidSessionToken`（忽略不正确的 Session Token 而不是返回错误）选项。
+- 修复改进 TypeScript 定义文件
+- 修复发出请求的 User Agent
+
 ## v3.0.2
 
 - 修复 Promise 写法的 beforeHook 无法正确工作的问题。

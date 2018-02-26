@@ -3,8 +3,7 @@
 ## 安装
 
 ```bash
-npm install leanengine --save
-npm install leancloud-storage@3 --save
+npm install --save leanengine leancloud-storage@3 --save
 ```
 
 建议使用 Node.js 6.0 以上的版本（可在 `package.json` 中设置 `engines.node` 为 `6.x`）。
@@ -20,7 +19,7 @@ npm install leancloud-storage@3 --save
 ## 项目示例
 
 * 项目模板：<https://github.com/leancloud/node-js-getting-started>
-* Todo 列表示例：<https://github.com/leancloud/leanengine-todo-demo>
+* Node.js Demo 汇总：<https://github.com/leancloud/leanengine-nodejs-demos>
 * 微信公众平台：<https://leancloud.cn/docs/webhosting_weixin.html>
 * 微博 OAuth 授权验证：<https://leancloud.cn/docs/webhosting_oauth.html>
 
