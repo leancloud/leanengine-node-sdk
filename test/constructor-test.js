@@ -5,8 +5,8 @@ require('./fixtures/functions');
 
 const {appId, appKey} = require('./fixtures/app-info');
 
-describe('onError option', function() {
-  it('should be called with error', function(done) {
+describe('constructor', function() {
+  it('onError option', function(done) {
     const app = require('./fixtures/app')({
       onError: (err) => {
         err.message.should.be.equal('some message');
@@ -24,5 +24,18 @@ describe('onError option', function() {
           done(err);
         }
       });
+  });
+
+  it('ignoreInvalidSessionToken option', function(done) {
+    const app = require('./fixtures/app')({
+      ignoreInvalidSessionToken: true
+    });
+
+    request(app)
+      .post('/1.1/functions/whoami')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .set('X-LC-Session', '00000000000000000000')
+      .expect(200, done);
   });
 });

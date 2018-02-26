@@ -32,7 +32,8 @@ interface InitializeOptions {
 interface MiddlewareOptions {
   timeout?: string,
   printFullStack?: boolean,
-  onError?(err: Error)
+  onError?(err: Error),
+  ignoreInvalidSessionToken?: boolean
 }
 
 export function init(options: InitializeOptions): void;
