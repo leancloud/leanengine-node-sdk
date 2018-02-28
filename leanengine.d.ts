@@ -23,7 +23,6 @@ declare namespace Express {
   }
 }
 
-  
 interface InitializeOptions {
   appId: string,
   appKey: string,
@@ -32,7 +31,9 @@ interface InitializeOptions {
 
 interface MiddlewareOptions {
   timeout?: string,
-  printFullStack?: boolean
+  printFullStack?: boolean,
+  onError?(err: Error),
+  ignoreInvalidSessionToken?: boolean
 }
 
 export function init(options: InitializeOptions): void;

@@ -1,6 +1,6 @@
 {
   "name": "leanengine",
-  "version": "3.0.2",
+  "version": "3.1.0",
   "description": "LeanCloud LeanEngine Node.js SDK.",
   "repository": {
     "type": "git",
@@ -18,8 +18,10 @@
   },
   "devDependencies": {
     "blanket": "^1.2.3",
+    "es6-promise": "^4.2.4",
     "express": "^4.14.1",
     "mocha": "^3.2.0",
+    "npm-run-all": "^4.1.2",
     "should": "^11.2.0",
     "supertest": "^3.0.0"
   },
@@ -48,9 +50,10 @@
     "email": "support@leancloud.rocks"
   },
   "scripts": {
-    "test": "npm install leancloud-storage@3 && npm run test-express && npm run test-koa1 && npm run test-koa2",
+    "test": "npm install --no-save leancloud-storage@3 && npm-run-all test-tsd test-express test-koa1 test-koa2",
     "test-express": "mocha test test/express",
-    "test-koa1": "env FRAMEWORK=koa npm install koa@1 koa-bodyparser@2 && mocha test test/koa",
-    "test-koa2": "env FRAMEWORK=koa npm install koa@2 koa-bodyparser@4 && mocha test test/koa test/koa2"
+    "test-tsd": "tsc leanengine.d.ts",
+    "test-koa1": "env FRAMEWORK=koa npm install --no-save leancloud-storage@3 koa@1 koa-bodyparser@2 && mocha test test/koa",
+    "test-koa2": "env FRAMEWORK=koa npm install --no-save leancloud-storage@3 koa@2 koa-bodyparser@4 && mocha test test/koa test/koa2"
   }
 }

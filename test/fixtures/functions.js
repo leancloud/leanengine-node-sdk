@@ -123,6 +123,10 @@ AV.Cloud.define('testUser', function(request, response) {
   response.success('ok');
 });
 
+AV.Cloud.define('whoami', function(request) {
+  return request.currentUser;
+});
+
 AV.Cloud.define('dontFetchUser', {fetchUser: false}, function(req, res) {
   should.not.exist(res.user);
   should.not.exist(res.currentUser);
