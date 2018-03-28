@@ -28,9 +28,18 @@ describe('https-redirect', function() {
       });
   });
 
-  it('should not redirect', function(done) {
+  it('should not redirect (local)', function(done) {
     request(app)
       .get('/test')
+      .expect(200)
+      .expect("Hello World!", done);
+  });
+
+  it('should not redirect (https)', function(done) {
+    request(app)
+      .get('/test')
+      .set('HOST', 'stg-abc.leanapp.cn')
+      .set('X-Forwarded-Proto', 'https')
       .expect(200)
       .expect("Hello World!", done);
   });
