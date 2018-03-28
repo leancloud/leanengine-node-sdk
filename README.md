@@ -6,7 +6,7 @@
 npm install --save leanengine leancloud-storage@3 --save
 ```
 
-建议使用 Node.js 6.0 以上的版本（可在 `package.json` 中设置 `engines.node` 为 `6.x`）。
+建议使用 Node.js 8.0 以上的版本（可在 `package.json` 中设置 `engines.node` 为 `8.x`）。
 
 ## 文档
 

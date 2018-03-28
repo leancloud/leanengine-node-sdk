@@ -1,6 +1,6 @@
 {
   "name": "leanengine",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "LeanCloud LeanEngine Node.js SDK.",
   "repository": {
     "type": "git",
@@ -29,10 +29,11 @@
     "leancloud-storage": "^3.0.0"
   },
   "keywords": [
-    "LeanCloud",
-    "LeanEngine",
+    "leancloud",
+    "leanengine",
     "cloud",
-    "BaaS"
+    "express",
+    "koa"
   ],
   "config": {
     "blanket": {
