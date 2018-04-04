@@ -147,7 +147,7 @@ describe('functions', function() {
           __type: 'File',
           objectId: '55543fc2e4b0846760bd92f3',
           name: 'ttt.jpg',
-          url: 'http://ac-4h2h4okw.clouddn.com/4qSbLMO866Tf4YtT9QEwJwysTlHGC9sMl7bpTwhQ.jpg'
+          url: 'http://lc-4h2h4okw.cn-n1.lcfile.com/4qSbLMO866Tf4YtT9QEwJwysTlHGC9sMl7bpTwhQ.jpg'
         });
 
         result.avObjects.forEach(function(object) {

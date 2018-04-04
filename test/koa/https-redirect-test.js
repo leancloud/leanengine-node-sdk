@@ -1,23 +1,36 @@
 'use strict';
-var AV = require('../..');
-var express = require('express');
+
+var Koa = require('koa');
 var request = require('supertest');
 require('should');
 
+var AV = require('../..');
 const appInfo = require('../fixtures/app-info');
 
-var app = express();
+var app = new Koa();
 
-app.enable('trust proxy');
-app.use(AV.Cloud.HttpsRedirect());
+app.proxy = true;
 
-app.get('/test', function (req, res) {
-  res.send('Hello World!');
-});
+if (process.env.KOA_VER === '1') {
+  app.use(AV.Cloud.HttpsRedirect({framework: 'koa'}));
 
-describe('https-redirect', function() {
+  app.use(function *(next) {
+    this.body = 'Hello World!';
+    yield next;
+  });
+} else {
+  app.use(AV.Cloud.HttpsRedirect({framework: 'koa2'}));
+
+  app.use(async ctx => {
+    ctx.body = 'Hello World!';
+  });
+}
+
+var server = app.listen();
+
+describe('koa/https-redirect', function() {
   it('should redirect', function(done) {
-    request(app)
+    request(server)
       .get('/test')
       .set('host', 'stg-abc.leanapp.cn')
       .expect(302)
@@ -29,14 +42,14 @@ describe('https-redirect', function() {
   });
 
   it('should not redirect (local)', function(done) {
-    request(app)
+    request(server)
       .get('/test')
       .expect(200)
       .expect("Hello World!", done);
   });
 
   it('should not redirect (https)', function(done) {
-    request(app)
+    request(server)
       .get('/test')
       .set('HOST', 'stg-abc.leanapp.cn')
       .set('X-Forwarded-Proto', 'https')

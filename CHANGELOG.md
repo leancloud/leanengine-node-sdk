@@ -1,5 +1,9 @@
 # 更新日志
 
+## v3.1.1
+
+- 修复 `AV.Cloud.HttpsRedirect` 在 koa 中会出现循环重定向的问题。
+
 ## v3.1.0
 
 - `AV.Express()` 添加 `onError`（全局云函数错误处理）和 `ignoreInvalidSessionToken`（忽略不正确的 Session Token 而不是返回错误）选项。
