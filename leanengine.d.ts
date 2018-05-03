@@ -45,6 +45,8 @@ export function koa2(options?: MiddlewareOptions): Function;
 export class Object extends LCObject {
   disableBeforeHook(): void;
   disableAfterHook(): void;
+
+  updatedKeys?: string[];
 }
 
 export namespace Insight {
