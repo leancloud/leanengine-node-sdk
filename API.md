@@ -27,6 +27,11 @@ AV.koa(options?: object)
 AV.koa2(options?: object)
 ```
 
+`options` 的属性包括：
+
+- `onError?: function(err: Error)`：全局错误处理器，当云函数和 Hook 抛出异常时会调用该回调，可用于统一的错误报告。
+- `ignoreInvalidSessionToken?: boolean`：忽略客户端发来的错误的 sessionToken（`X-LC-Session` 头），而不是报错 `211 Could not find user`。
+
 ## AV.Object
 
 * `AV.Object#disableBeforeHook()`
@@ -113,12 +118,12 @@ AV.Cloud.run(name: string, params: object, options?: object): Promise<TaskInfo>
 
 ### 定义 Class Hook
 
-* AV.Cloud.beforeSave
-* AV.Cloud.afterSave
-* AV.Cloud.beforeUpdate
-* AV.Cloud.afterUpdate
-* AV.Cloud.beforeDelete
-* AV.Cloud.afterDelete
+* `AV.Cloud.beforeSave`
+* `AV.Cloud.afterSave`
+* `AV.Cloud.beforeUpdate`
+* `AV.Cloud.afterUpdate`
+* `AV.Cloud.beforeDelete`
+* `AV.Cloud.afterDelete`
 
 这些函数的签名：`function(className: string, func: function)`，其中 `func` 是接受一个 Request 对象作为参数，返回 Promise 的函数。在 before 类 Hook 中如果没有抛出异常则视作接受这次操作。如果抛出使用 `AV.Cloud.Error` 构造的异常表示客户端错误，拒绝本次操作；如果抛出其他类型的异常则视作服务器端错误，返回 500 响应并打印错误到标准输出，也会拒绝本次操作。
 
@@ -134,8 +139,8 @@ LeanEngine 中间件会为这些 Hook 函数检查「Hook 签名」，确保调�
 
 ### 登录和认证 Hook
 
-* AV.Cloud.onVerified
-* AV.Cloud.onLogin
+* `AV.Cloud.onVerified`
+* `AV.Cloud.onLogin`
 
 这两个函数的签名：`function(func: function)`，其中 `func` 是接受一个 Request 对象作为参数，返回 Promise 的函数，如果没有抛出异常则视作接受这次操作。
 
@@ -148,14 +153,14 @@ LeanEngine 中间件会为这些 Hook 函数检查「Hook 签名」，确保调�
 
 包括：
 
-* `onIMMessageReceived`
-* `onIMReceiversOffline`
-* `onIMMessageSent`
-* `onIMConversationStart`
-* `onIMConversationStarted`
-* `onIMConversationAdd`
-* `onIMConversationRemove`
-* `onIMConversationUpdate`
+* `AV.Cloud.onIMMessageReceived`
+* `AV.Cloud.onIMReceiversOffline`
+* `AV.Cloud.onIMMessageSent`
+* `AV.Cloud.onIMConversationStart`
+* `AV.Cloud.onIMConversationStarted`
+* `AV.Cloud.onIMConversationAdd`
+* `AV.Cloud.onIMConversationRemove`
+* `AV.Cloud.onIMConversationUpdate`
 
 LeanEngine 中间件会为这些 Hook 函数检查「Hook 签名」，确保调用者的确是 LeanCloud 或本地调试时的命令行工具。
 

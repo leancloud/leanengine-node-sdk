@@ -1,5 +1,9 @@
 # 更新日志
 
+## v3.2.0
+
+- 新增 `AV.Cloud.enqueue`，任务队列支持。
+
 ## v3.1.1
 
 - 修复 `AV.Cloud.HttpsRedirect` 在 koa 中会出现循环重定向的问题。
