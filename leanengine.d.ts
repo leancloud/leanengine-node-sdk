@@ -65,6 +65,18 @@ export namespace Cloud {
     req?: Request
   }
 
+  interface EnqueueOptions {
+    attempts?: number,
+    backoff?: number,
+    delay?: number,
+    notify?: string,
+    retryTimeout?: boolean,
+  }
+
+  interface TaskInfo {
+    uniqueId: string
+  }
+
   interface MiddlewareOptions {
     framework?: string
   }
@@ -107,6 +119,7 @@ export namespace Cloud {
 
   export function run(name: string, params: Object, options?: RunOptions): Promise<any>;
   export function rpc(name: string, params: Object, options?: RunOptions): Promise<any>;
+  export function enqueue(name: string, params: Object, options?: EnqueueOptions): Promise<TaskInfo>;
 
   export function beforeSave(className: string, handler: ClassHookFunction): void;
   export function afterSave(className: string, handler: ClassHookFunction): void;
