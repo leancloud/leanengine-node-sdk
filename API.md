@@ -101,7 +101,7 @@ AV.Cloud.run(name: string, params: object, options?: object): Promise
 在队列中运行云函数。
 
 ```javascript
-AV.Cloud.run(name: string, params: object, options?: object): Promise<TaskInfo>
+AV.Cloud.enqueue(name: string, params: object, options?: object): Promise<TaskInfo>
 ```
 
 `options` 的属性包括：
