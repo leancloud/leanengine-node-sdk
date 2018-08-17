@@ -145,4 +145,7 @@ export namespace Cloud {
   export function LeanCloudHeaders(options?: MiddlewareOptions): RequestHandler;
   export function CookieSession(options?: CookieSessionOptions): RequestHandler;
   export function HttpsRedirect(options?: MiddlewareOptions): RequestHandler;
+
+  export function start(): void;
+  export function close(): void;
 }

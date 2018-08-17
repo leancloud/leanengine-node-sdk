@@ -166,6 +166,22 @@ LeanEngine 中间件会为这些 Hook 函数检查「Hook 签名」，确保调�
 
 这些 Hook 函数签名是 `function(func: function)`，其中 `func` 是接受一个 Request 对象作为参数，返回 Promise 的函数，详见文档 [实时通信概览：云引擎 Hook](https://leancloud.cn/docs/realtime_v2.html#云引擎_Hook)
 
+### 启动和停止
+
+单独运行云函数时，可以使用 `AV.Cloud.start()` 启动应用。如果该方法调用时 AV 对象尚未初始化，则 LeanEngine 中间件会使用 `LEANCLOUD_APP_ID` 等环境变量进行初始化。
+
+可以在应用收到 `SIGTERM` 信号时调用 `AV.Cloud.close()`，使应用优雅退出：
+
+```
+process.on('SIGTERM', () => {
+  console.log('Received SIGTERM. App will exit.');
+  AV.Cloud.close();
+});
+```
+
+更多关于信号量的说明见 [Node.js 文档](https://nodejs.org/api/process.html#process_signal_events)。
+
+
 ## Middlewares
 
 因为 Node SDK 同时支持多种路由框架，需要你在创建中间件时指定类型，默认为 express：
