@@ -147,5 +147,5 @@ export namespace Cloud {
   export function HttpsRedirect(options?: MiddlewareOptions): RequestHandler;
 
   export function start(): void;
-  export function close(): void;
+  export function stop(): void;
 }
