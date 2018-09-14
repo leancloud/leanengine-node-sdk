@@ -1,6 +1,6 @@
 {
   "name": "leanengine",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "description": "LeanCloud LeanEngine Node.js SDK.",
   "repository": {
     "type": "git",

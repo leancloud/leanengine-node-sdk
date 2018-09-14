@@ -1,5 +1,9 @@
 # 更新日志
 
+## 3.3.0
+
+- 添加 `AV.Cloud.start` 和 `AV.Cloud.stop`
+
 ## v3.2.0
 
 - 新增 `AV.Cloud.enqueue`，任务队列支持。
