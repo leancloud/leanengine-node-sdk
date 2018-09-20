@@ -1,5 +1,9 @@
 # 更新日志
 
+## 3.3.2
+
+- 修复 `AV.Cloud.start`
+
 ## 3.3.0
 
 - 添加 `AV.Cloud.start` 和 `AV.Cloud.stop`
