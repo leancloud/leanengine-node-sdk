@@ -119,9 +119,9 @@ export namespace Cloud {
   export function define(name: string, options: DefineOptions, handler: CloudFunction);
   export function define(name: string, handler: CloudFunction);
 
-  export function run(name: string, params: Object, options?: RunOptions): Promise<any>;
-  export function rpc(name: string, params: Object, options?: RunOptions): Promise<any>;
-  export function enqueue(name: string, params: Object, options?: EnqueueOptions): Promise<TaskInfo>;
+  export function run(name: string, params?: Object, options?: RunOptions): Promise<any>;
+  export function rpc(name: string, params?: Object, options?: RunOptions): Promise<any>;
+  export function enqueue(name: string, params?: Object, options?: EnqueueOptions): Promise<TaskInfo>;
 
   export function beforeSave(className: string, handler: ClassHookFunction): void;
   export function afterSave(className: string, handler: ClassHookFunction): void;
