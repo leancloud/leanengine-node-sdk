@@ -41,12 +41,14 @@ export function express(options?: MiddlewareOptions): RequestHandler;
 export function koa(options?: MiddlewareOptions): Function;
 export function koa2(options?: MiddlewareOptions): Function;
 
-export class HookObject extends LCObject {
+declare class HookObject extends LCObject {
   disableBeforeHook(): void;
   disableAfterHook(): void;
 
   updatedKeys?: string[];
 }
+
+export { HookObject as Object }
 
 export namespace Insight {
   type InsightHandler = (result: Object) => Promise<any>;
