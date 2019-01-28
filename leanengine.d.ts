@@ -17,8 +17,8 @@ declare namespace Express {
   }
 
   export interface Response {
-    saveCurrentUser(user: User);
-    clearCurrentUser();
+    saveCurrentUser(user: User): void;
+    clearCurrentUser(): void;
   }
 }
 
@@ -31,7 +31,7 @@ interface InitializeOptions {
 interface MiddlewareOptions {
   timeout?: string,
   printFullStack?: boolean,
-  onError?(err: Error),
+  onError?(err: Error): void,
   ignoreInvalidSessionToken?: boolean
 }
 
@@ -115,8 +115,8 @@ export namespace Cloud {
     constructor(message: string, options?: {status?: number, code?: number})
   }
 
-  export function define(name: string, options: DefineOptions, handler: CloudFunction);
-  export function define(name: string, handler: CloudFunction);
+  export function define(name: string, options: DefineOptions, handler: CloudFunction): void;
+  export function define(name: string, handler: CloudFunction): void;
 
   export function run(name: string, params?: Object, options?: RunOptions): Promise<any>;
   export function rpc(name: string, params?: Object, options?: RunOptions): Promise<any>;
