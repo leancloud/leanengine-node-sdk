@@ -1,4 +1,3 @@
-import {Promise} from 'es6-promise';
 import {Request, RequestHandler} from 'express';
 import {User, Object as LCObject} from 'leancloud-storage';
 export * from 'leancloud-storage';
@@ -42,7 +41,7 @@ export function express(options?: MiddlewareOptions): RequestHandler;
 export function koa(options?: MiddlewareOptions): Function;
 export function koa2(options?: MiddlewareOptions): Function;
 
-export class Object extends LCObject {
+export class HookObject extends LCObject {
   disableBeforeHook(): void;
   disableAfterHook(): void;
 
@@ -100,7 +99,7 @@ export namespace Cloud {
   }
 
   interface ClassHookRequest {
-    object: Object,
+    object: HookObject,
     currentUser?: User
   }
 
