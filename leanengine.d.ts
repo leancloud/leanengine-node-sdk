@@ -40,7 +40,7 @@ export function init(options: InitializeOptions): void;
 
 export function express(options?: MiddlewareOptions): RequestHandler;
 export function koa(options?: MiddlewareOptions): Function;
-export function koa2(options?: MiddlewareOptions): Function;
+export function koa2(options?: MiddlewareOptions): any;
 
 export class Object extends LCObject {
   disableBeforeHook(): void;
