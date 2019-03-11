@@ -18,7 +18,6 @@
   },
   "devDependencies": {
     "blanket": "^1.2.3",
-    "es6-promise": "^4.2.4",
     "express": "^4.14.1",
     "mocha": "^3.2.0",
     "npm-run-all": "^4.1.2",
@@ -53,7 +52,7 @@
   "scripts": {
     "test": "npm install --no-save leancloud-storage@3 typescript@2 && npm-run-all test-tsd test-express test-koa1 test-koa2",
     "test-express": "mocha test test/express",
-    "test-tsd": "tsc leanengine.d.ts",
+    "test-tsd": "tsc --strict leanengine.d.ts",
     "test-koa1": "npm install --no-save leancloud-storage@3 koa@1 koa-bodyparser@2 && env FRAMEWORK=koa KOA_VER=1 mocha test test/koa",
     "test-koa2": "npm install --no-save leancloud-storage@3 koa@2 koa-bodyparser@4 && env FRAMEWORK=koa KOA_VER=2 mocha test test/koa"
   }

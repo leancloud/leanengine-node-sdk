@@ -1,4 +1,3 @@
-import {Promise} from 'es6-promise';
 import {Request, RequestHandler} from 'express';
 import {User, Object as LCObject} from 'leancloud-storage';
 export * from 'leancloud-storage';
@@ -18,8 +17,8 @@ declare namespace Express {
   }
 
   export interface Response {
-    saveCurrentUser(user: User);
-    clearCurrentUser();
+    saveCurrentUser(user: User): void;
+    clearCurrentUser(): void;
   }
 }
 
@@ -32,7 +31,7 @@ interface InitializeOptions {
 interface MiddlewareOptions {
   timeout?: string,
   printFullStack?: boolean,
-  onError?(err: Error),
+  onError?(err: Error): void,
   ignoreInvalidSessionToken?: boolean
 }
 
@@ -42,12 +41,14 @@ export function express(options?: MiddlewareOptions): RequestHandler;
 export function koa(options?: MiddlewareOptions): Function;
 export function koa2(options?: MiddlewareOptions): Function;
 
-export class Object extends LCObject {
+declare class HookObject extends LCObject {
   disableBeforeHook(): void;
   disableAfterHook(): void;
 
   updatedKeys?: string[];
 }
+
+export { HookObject as Object }
 
 export namespace Insight {
   type InsightHandler = (result: Object) => Promise<any>;
@@ -100,7 +101,7 @@ export namespace Cloud {
   }
 
   interface ClassHookRequest {
-    object: Object,
+    object: HookObject,
     currentUser?: User
   }
 
@@ -116,8 +117,8 @@ export namespace Cloud {
     constructor(message: string, options?: {status?: number, code?: number})
   }
 
-  export function define(name: string, options: DefineOptions, handler: CloudFunction);
-  export function define(name: string, handler: CloudFunction);
+  export function define(name: string, options: DefineOptions, handler: CloudFunction): void;
+  export function define(name: string, handler: CloudFunction): void;
 
   export function run(name: string, params?: Object, options?: RunOptions): Promise<any>;
   export function rpc(name: string, params?: Object, options?: RunOptions): Promise<any>;
