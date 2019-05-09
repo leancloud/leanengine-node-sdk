@@ -134,6 +134,10 @@ AV.Cloud.define('dontFetchUser', {fetchUser: false}, function(req, res) {
   res.success();
 });
 
+AV.Cloud.define('internalFunction', {internal: true}, () => {
+
+});
+
 AV.Cloud.define('testRun', function(request, response) {
   if (request.params.shouldRemote && process.env.NODE_ENV != 'production') {
     return response.error('Should be run on remote');

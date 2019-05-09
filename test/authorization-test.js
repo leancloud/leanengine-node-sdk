@@ -118,4 +118,19 @@ describe('authorization', function() {
       .expect({code: 401, error: 'Unauthorized.'}, done);
   });
 
+  it('internal function', done => {
+    request(app)
+      .post('/1/functions/internalFunction')
+      .set('X-LC-Id', appId)
+      .set('X-LC-Key', appKey)
+      .expect(401, done);
+  })
+
+  it('internal function, master key', done => {
+    request(app)
+      .post('/1/functions/internalFunction')
+      .set('X-LC-Id', appId)
+      .set('X-LC-Key', `${masterKey},master`)
+      .expect(200, done);
+  })
 });
