@@ -53,6 +53,7 @@ AV.Cloud.define(name: string, options: object, func: function)
 `options` 的属性包括：
 
 * `fetchUser: boolean`：是否自动抓取客户端的用户信息，默认为 `true`，若设置为 `false` 则 `request` 上将不会有 user 属性。
+* `internal: boolean`：只允许在云引擎内（使用 `AV.Cloud.run` 且未开启 `remote` 选项）或 masterKey 调用（使用 `AV.Cloud.run` 时传入 `useMasterKey`），不允许客户端直接调用，默认 `false`。
 
 `Request` 上的属性包括：
 

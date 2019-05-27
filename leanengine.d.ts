@@ -59,6 +59,7 @@ export namespace Insight {
 export namespace Cloud {
   interface DefineOptions {
     fetchUser?: boolean
+    internal?: boolean
   }
 
   interface RunOptions {
