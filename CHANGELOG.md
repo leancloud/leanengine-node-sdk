@@ -1,5 +1,10 @@
 # 更新日志
 
+## 3.4.0
+
+- `Cloud.define` 添加一个 `internal` 选项。
+- 跟进云队列的新版本，添加 `Cloud.getTaskInfo`。
+
 ## 3.3.3
 
 - 修复 TypeScript 定义文件中的若干问题。
