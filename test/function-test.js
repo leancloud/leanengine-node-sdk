@@ -480,4 +480,14 @@ describe('functions', function() {
       .expect('access-control-allow-origin', 'http://foo.bar')
       .expect(200, done);
   });
+
+  it('enqueue & getTaskInfo', async function() {
+    const {uniqueId} = await AV.Cloud.enqueue('hello');
+
+    uniqueId.length.should.be.equal(36);
+
+    const taskInfo = await AV.Cloud.getTaskInfo(uniqueId);
+
+    taskInfo.status.should.be.a.String();
+  })
 });

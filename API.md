@@ -102,20 +102,43 @@ AV.Cloud.run(name: string, params: object, options?: object): Promise
 在队列中运行云函数。
 
 ```javascript
-AV.Cloud.enqueue(name: string, params: object, options?: object): Promise<TaskInfo>
+AV.Cloud.enqueue(name: string, params: object, options?: object): Promise<{uniqueId: string}>
 ```
 
 `options` 的属性包括：
 
-* `attempts?: number`：最大重试次数，默认 `3`.
-* `backoff?: number`：重试间隔（毫秒），默认 `60000`.
-* `delay?: number`：延时执行（毫秒）。
-* `notify?: string`: 将执行结果通知到指定云函数。
-* `retryTimeout?: boolean`: 将超时视作失败来进行重试，默认 `true`.
+- `attempts?: number`：最大重试次数，默认 `1`
+- `backoff?: number`：重试间隔（毫秒），默认 `60000`（一分钟）
+- `delay?: number`：延时执行（毫秒）
+- `deliveryMode?: string`：超时时的行为，值是 `atLeastOnce`（至少一次，可能会重试多次）、`atMostOnce`（至多一次，不会重试），默认是 `atLeastOnce`
+- `keepResult?: number` 在队列中保留结果的时间（毫秒），默认 `300000`（五分钟）
+- `priority?: number`：优先级，默认是当前时间戳，设置为更小的值可以在队列拥堵时让特定任务更快地被执行
+- `timeout?: number`：超时时间（毫秒），默认 `15000`，目前最大也是 `15000`，后续会提供更长的时间
+- `uniqueId?: string`：任务的唯一 ID，会据此进行去重，最长 32 个字符，默认是随机的 UUID
+
+### AV.Cloud.getTaskInfo
+
+查询队列任务结果。
+
+```javascript
+AV.Cloud.getTaskInfo(uniqueId: string): Promise<TaskInfo>
+```
 
 `TaskInfo` 的属性包括：
 
-- `uniqueId`：任务的唯一 Id，会包含在日志中。
+- `uniqueId: string`：任务的唯一 ID
+- `status: string`：任务的状态，包括 `queued`（等待或正在执行）、`success`（执行成功）、`failed`（执行失败）
+
+执行完成的 `TaskInfo` 会有：
+
+- `finishedAt?: string` 执行完成（成功或失败）的时间
+- `statusCode?: number` 云函数响应的 HTTP 状态码
+- `result?: object` 来自云函数的响应
+
+执行失败的 `TaskInfo` 会有：
+
+- `error?: string` 错误提示
+- `retryAt?: string` 下次重试的时间
 
 ### 定义 Class Hook
 

@@ -77,8 +77,20 @@ export namespace Cloud {
     retryTimeout?: boolean,
   }
 
+  enum TaskStatus {
+    Queued = 'queued',
+    Success = 'success',
+    Failed = 'failed'
+  }
+
   interface TaskInfo {
     uniqueId: string
+    status: TaskStatus
+    finishedAt?: Date
+    statusCode?: number
+    result?: any
+    error?: string
+    retryAt?: Date
   }
 
   interface MiddlewareOptions {
@@ -123,7 +135,8 @@ export namespace Cloud {
 
   export function run(name: string, params?: Object, options?: RunOptions): Promise<any>;
   export function rpc(name: string, params?: Object, options?: RunOptions): Promise<any>;
-  export function enqueue(name: string, params?: Object, options?: EnqueueOptions): Promise<TaskInfo>;
+  export function enqueue(name: string, params?: Object, options?: EnqueueOptions): Promise<{uniqueId: string}>;
+  export function getTaskInfo(uniqueId: string): Promise<TaskInfo>;
 
   export function beforeSave(className: string, handler: ClassHookFunction): void;
   export function afterSave(className: string, handler: ClassHookFunction): void;
