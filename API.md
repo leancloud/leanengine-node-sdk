@@ -30,7 +30,7 @@ AV.koa2(options?: object)
 `options` 的属性包括：
 
 - `onError?: function(err: Error)`：全局错误处理器，当云函数和 Hook 抛出异常时会调用该回调，可用于统一的错误报告。
-- `ignoreInvalidSessionToken?: boolean`：忽略客户端发来的错误的 sessionToken（`X-LC-Session` 头），而不是报错 `211 Could not find user`。
+- `ignoreInvalidSessionToken?: boolean`：忽略客户端发来的错误的 sessionToken（`X-LC-Session` 头），而不是抛出 401 错误 `{"code": 211, "error": "Verify sessionToken failed, maybe login expired: ..."}`。
 
 ## AV.Object
 
