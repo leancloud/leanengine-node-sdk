@@ -89,7 +89,7 @@ AV.Cloud.run(name: string, params: object, options?: object): Promise
 * `user?: AV.User`：以特定的用户运行云函数（建议在 `remote: false` 时使用）。
 * `sessionToken?: string`：以特定的 sessionToken 调用云函数（建议在 `remote: true` 时使用）。
 * `remote?: boolean`：通过网络请求来调用云函数，默认 `false`.
-* `req?`: Express 的 Request 对象，以便被调用的云函数得到 remoteAddress 等属性。
+* `req?`: `http.ClientRequest` 或 Express 的 Request 对象，以便被调用的云函数得到 remoteAddress 等属性。
 
 更多有关云函数的内容请参考文档 [云函数开发指南：云函数](https://leancloud.cn/docs/leanengine_cloudfunction_guide-node.html#云函数)。
 
