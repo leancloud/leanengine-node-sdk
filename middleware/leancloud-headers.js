@@ -87,7 +87,7 @@ module.exports = function(AV) {
           sign = _ref[0];
           timestamp = _ref[1];
           master = _ref[2];
-          key = master === 'master' ? AV.masterKey : ( master === 'ax-sig-1' ? AV._config.androidxKey : AV.applicationKey);
+          key = master === 'master' ? AV.masterKey : (master === 'ax-sig-1' ? AV._config.androidxKey : AV.applicationKey);
           validSign = signByKey(timestamp, key);
           if (validSign === sign.toLowerCase()) {
             if (master === 'master') {
