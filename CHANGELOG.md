@@ -1,5 +1,9 @@
 # 更新日志
 
+## 3.5.0
+
+- 添加对 Android Key 的支持。
+
 ## 3.4.0
 
 - `Cloud.define` 添加一个 `internal` 选项。
