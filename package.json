@@ -17,6 +17,7 @@
     "underscore": "^1.8.3"
   },
   "devDependencies": {
+    "@types/express": "^4.17.2",
     "blanket": "^1.2.3",
     "express": "^4.14.1",
     "mocha": "^3.2.0",
