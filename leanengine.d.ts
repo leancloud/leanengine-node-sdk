@@ -158,6 +158,7 @@ export namespace Cloud {
   export function onIMConversationUpdate(handler: CloudFunction): void;
   export function onIMClientOnline(handler: CloudFunction): void;
   export function onIMClientOffline(handler: CloudFunction): void;
+  export function onIMClientSign(handler: CloudFunction): { result: true | false, error?: string }
 
   export function LeanCloudHeaders(options?: MiddlewareOptions): RequestHandler;
   export function CookieSession(options?: CookieSessionOptions): RequestHandler;

@@ -188,6 +188,7 @@ LeanEngine 中间件会为这些 Hook 函数检查「Hook 签名」，确保调�
 * `AV.Cloud.onIMConversationUpdate`
 * `AV.Cloud.onIMClientOnline`
 * `AV.Cloud.onIMClientOffline`
+* `AV.Cloud.onIMClientSign`
 
 LeanEngine 中间件会为这些 Hook 函数检查「Hook 签名」，确保调用者的确是 LeanCloud 或本地调试时的命令行工具。
 
