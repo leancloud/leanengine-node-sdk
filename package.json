@@ -20,10 +20,12 @@
     "@types/express": "^4.17.2",
     "blanket": "^1.2.3",
     "express": "^4.14.1",
+    "leancloud-storage": "^3.15.0",
     "mocha": "^3.2.0",
     "npm-run-all": "^4.1.2",
     "should": "^11.2.0",
-    "supertest": "^3.0.0"
+    "supertest": "^3.0.0",
+    "typescript": "^3.8.3"
   },
   "peerDependency": {
     "leancloud-storage": "^3.0.0"
@@ -51,10 +53,10 @@
     "email": "support@leancloud.rocks"
   },
   "scripts": {
-    "test": "npm install --no-save leancloud-storage@3 typescript@2 && npm-run-all test-tsd test-express test-koa1 test-koa2",
+    "test": "npm-run-all test-tsd test-express test-koa1 test-koa2",
     "test-express": "mocha test --timeout 8000 test/express",
     "test-tsd": "tsc --strict leanengine.d.ts",
-    "test-koa1": "npm install --no-save leancloud-storage@3 koa@1 koa-bodyparser@2 && env FRAMEWORK=koa KOA_VER=1 mocha test --timeout 8000 test/koa",
-    "test-koa2": "npm install --no-save leancloud-storage@3 koa@2 koa-bodyparser@4 && env FRAMEWORK=koa KOA_VER=2 mocha test --timeout 8000 test/koa"
+    "test-koa1": "npm install --no-save koa@1 koa-bodyparser@2 && env FRAMEWORK=koa KOA_VER=1 mocha test --timeout 8000 test/koa",
+    "test-koa2": "npm install --no-save koa@2 koa-bodyparser@4 && env FRAMEWORK=koa KOA_VER=2 mocha test --timeout 8000 test/koa"
   }
 }
