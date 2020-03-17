@@ -10,6 +10,7 @@ AV.init({
   appId: process.env.LEANCLOUD_APP_ID,
   appKey: process.env.LEANCLOUD_APP_KEY,
   masterKey: process.env.LEANCLOUD_APP_MASTER_KEY
+  hookKey: process.env.LEANCLOUD_APP_HOOK_KEY
 });
 
 app.use(AV.express());

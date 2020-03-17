@@ -25,7 +25,8 @@ declare namespace Express {
 interface InitializeOptions {
   appId: string,
   appKey: string,
-  masterKey: string
+  masterKey?: string,
+  hookKey?: string,
 }
 
 interface MiddlewareOptions {
