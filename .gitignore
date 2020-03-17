@@ -1,7 +1,6 @@
 *~
 *.swp
 coverage.html
-package-lock.json
 
 node_modules/
 .nyc_output
