@@ -1,5 +1,17 @@
 # 更新日志
 
+## 3.6.0
+
+添加对新的即时通讯 Hook 的支持：
+
+- `AV.Cloud.onIMConversationAdded`
+- `AV.Cloud.onIMConversationRemoved`
+- `AV.Cloud.onIMClientOnline`
+- `AV.Cloud.onIMClientOffline`
+- `AV.Cloud.onIMClientSign`
+
+兼容 JS SDK (leancloud-storage) 4.5.0 及以上版本的初始化机制。
+
 ## 3.5.0
 
 - 添加对 Android Key 的支持。
