@@ -12,6 +12,8 @@
     "connect-timeout": "^1.8.0",
     "cookies": "^0.6.2",
     "debug": "^2.6.0",
+    "forwarded-parse": "^2.1.0",
+    "ipaddr.js": "^1.9.1",
     "leancloud-cors-headers": "^0.1.0",
     "on-headers": "^1.0.1",
     "underscore": "^1.8.3"

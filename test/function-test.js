@@ -452,6 +452,31 @@ describe('functions', function() {
       });
   });
 
+  it('remoteAddress', function(done) {
+    request(app)
+      .post('/1.1/functions/remoteAddress')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .set('Forwarded', 'for=1.2.3.4; proto=https, for=10.0.0.1')
+      .expect(200, (err, res) => {
+        res.body.result.should.equal('1.2.3.4')
+        done(err)
+      });
+  })
+
+  it('remoteAddress invalid Forwarded header', function(done) {
+    request(app)
+      .post('/1.1/functions/remoteAddress')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .set('Forwarded', 'for=1.2.3.456; proto=https, for=10.0.0.1')
+      .set('X-Real-IP', '5.6.7.8')
+      .expect(200, (err, res) => {
+        res.body.result.should.equal('5.6.7.8')
+        done(err)
+      });
+  })
+
   it('_metadatas', function(done) {
     request(app)
       .get('/1/functions/_ops/metadatas')

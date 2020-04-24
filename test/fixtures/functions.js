@@ -231,6 +231,10 @@ AV.Cloud.define('testTimeout', function(req, res) {
   }, req.params.delay);
 });
 
+AV.Cloud.define('remoteAddress', function(request) {
+  return request.meta.remoteAddress
+})
+
 AV.Cloud.onIMMessageReceived(function(request, response) {
   response.success('ok');
 });
