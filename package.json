@@ -16,10 +16,10 @@
     "ipaddr.js": "^1.9.1",
     "leancloud-cors-headers": "^0.1.0",
     "on-headers": "^1.0.1",
-    "underscore": "^1.8.3"
+    "underscore": "^1.10.2"
   },
   "devDependencies": {
-    "@types/express": "^4.17.2",
+    "@types/express": "^4.17.6",
     "blanket": "^1.2.3",
     "express": "^4.14.1",
     "leancloud-storage": "^3.15.0",
@@ -27,7 +27,7 @@
     "npm-run-all": "^4.1.2",
     "should": "^11.2.0",
     "supertest": "^3.0.0",
-    "typescript": "^3.8.3"
+    "typescript": "^3.9.5"
   },
   "peerDependency": {
     "leancloud-storage": "^3.0.0"
