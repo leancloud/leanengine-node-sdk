@@ -182,6 +182,7 @@ LeanEngine 中间件会为这些 Hook 函数检查「Hook 签名」，确保调�
 * `AV.Cloud.onIMMessageReceived`
 * `AV.Cloud.onIMReceiversOffline`
 * `AV.Cloud.onIMMessageSent`
+* `AV.Cloud.onIMMessageUpdate`
 * `AV.Cloud.onIMConversationStart`
 * `AV.Cloud.onIMConversationStarted`
 * `AV.Cloud.onIMConversationAdd`
