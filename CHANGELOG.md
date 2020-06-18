@@ -4,6 +4,7 @@
 
 - `req.meta.remoteAddress` 优先从 `Forwarded` 头获取客户端 IP，在线上的 Hook 中可以获取到触发 Hook 的客户端 IP。
 - `AV.Cloud.HttpsRedirect` 优先从 `Forwarded` 头判断协议，非 `.leanapp.cn` 域名的预备环境将被正确地重定向。
+- 添加新的实时通讯 Hook `AV.Cloud.onIMMessageUpdate`。
 
 ## 3.6.0
 
