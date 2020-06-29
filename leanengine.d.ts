@@ -100,7 +100,9 @@ export namespace Cloud {
 
   interface CookieSessionOptions extends MiddlewareOptions {
     secret: string
+    maxAge: number
     fetchUser?: boolean
+    name?: string
   }
 
   interface CloudFunctionRequestMeta {
