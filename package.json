@@ -30,7 +30,7 @@
     "typescript": "^3.9.5"
   },
   "peerDependency": {
-    "leancloud-storage": "^3.0.0"
+    "leancloud-storage": "^3.0.0 || ^4.0.0"
   },
   "keywords": [
     "leancloud",
