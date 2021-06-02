@@ -111,7 +111,7 @@ export namespace Cloud {
 
   interface CloudFunctionRequest {
     meta: CloudFunctionRequestMeta,
-    params: Object,
+    params: Record<string, any>,
     currentUser?: User,
     sessionToken?: string
   }
