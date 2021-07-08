@@ -506,7 +506,7 @@ describe('functions', function() {
       .expect(200, done);
   });
 
-  it.only('enqueue & getTaskInfo', async function() {
+  it('enqueue & getTaskInfo', async function() {
     const {uniqueId} = await AV.Cloud.enqueue('hello');
 
     uniqueId.length.should.be.equal(36);
