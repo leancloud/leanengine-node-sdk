@@ -125,8 +125,8 @@ AV.Insight.on('end', function(result) {
   }, result);
 });
 
-AV.Cloud.beforeAuthDataMatch( request => {
-  let authData = request.params.authData;
+AV.Cloud.onAuthDataTransform( request => {
+  let authData = request.authData;
 
   if (authData.weixin.code === '12345') {
     authData.weixin.accessToken = '45678';
@@ -135,12 +135,4 @@ AV.Cloud.beforeAuthDataMatch( request => {
   }
 
   return authData;
-});
-
-AV.Cloud.beforeAuthDataCommit( request => {
-  let authData = request.params.authData;
-  let user = request.params.user;
-
-  assert.equal(authData.weixin.code, '12345')
-  assert.equal(user.username, 'admin')
 });

@@ -504,9 +504,9 @@ describe('hook', function() {
       .expect(200, done);
   });
 
-  it('beforeAuthDataMatch', function(done) {
+  it('onAuthDataTransform', function(done) {
     request(app)
-      .post('/1.1/functions/_User/userBeforeAuthDataMatch')
+      .post('/1.1/functions/_User/onAuthDataTransform')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
       .set('X-LC-Hook-Key', hookKey)
@@ -521,29 +521,5 @@ describe('hook', function() {
         res.body.result.weixin.accessToken.should.equal('45678');
         done();
       });
-  });
-
-  it('beforeAuthDataCommit', function(done) {
-    request(app)
-      .post('/1.1/functions/_User/userBeforeAuthDataCommit')
-      .set('X-AVOSCloud-Application-Id', appId)
-      .set('X-AVOSCloud-Application-Key', appKey)
-      .set('X-LC-Hook-Key', hookKey)
-      .send({
-        "user": {
-          "username": "admin",
-          "importFromParse": true,
-          "emailVerified": false,
-          "objectId": "52aebbdee4b0c8b6fa455aa7",
-          "createdAt": "2013-12-16T16:37:50.059Z",
-          "updatedAt": "2013-12-16T16:37:50.059Z"
-        },
-        authData: {
-          weixin: {
-            code: '12345'
-          }
-        }
-      })
-      .expect(200, done);
   });
 });
