@@ -125,9 +125,14 @@ export namespace Cloud {
     currentUser: User
   }
 
+  interface AuthDataTransformRequest {
+    authData: {[provider: string]: any}
+  }
+
   type CloudFunction = (request: CloudFunctionRequest) => Promise<any>;
   type ClassHookFunction = (request: ClassHookRequest) => Promise<any>;
   type UserHookFunction = (request: UserHookRequest) => Promise<any>;
+  type AuthDataTransformFunction = (request: AuthDataTransformRequest) => Promise<{[provider: string]: any}>;
 
   export class Error {
     constructor(message: string, options?: {status?: number, code?: number})
@@ -150,6 +155,7 @@ export namespace Cloud {
 
   export function onVerified(handler: UserHookFunction): void;
   export function onLogin(handler: UserHookFunction): void;
+  export function onAuthDataTransform(handler: AuthDataTransformFunction): void;
 
   export function onIMMessageReceived(handler: CloudFunction): void;
   export function onIMReceiversOffline(handler: CloudFunction): void;
