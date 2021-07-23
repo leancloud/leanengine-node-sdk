@@ -174,9 +174,9 @@ LeanEngine 中间件会为这些 Hook 函数检查「Hook 签名」，确保调�
 * `currentUser: AV.User`：被操作的用户。
 * `user: AV.User`：同 `currentUser`.
 * `object: AV.User`：同 `currentUser`，因为登录认证 hook 被操作的对象正好是发起操作的用户。
-* `authData: {[provider: string]: any}`，客户端发送的第三方登录信息（仅 `onAuthDataTransform`）。
+* `authData: {[provider: string]: any}`，客户端发送的第三方登录信息（仅 `onAuthData`）。
 
-#### `AV.Cloud.onAuthDataTransform`
+#### `AV.Cloud.onAuthData`
 
 这个函数的签名：`function(func: function)`，其中 `func` 是接受一个 Request 对象作为参数，返回新的 authData 的异步函数，如果抛出异常会中断第三方登录。
 

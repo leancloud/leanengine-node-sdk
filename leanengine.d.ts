@@ -155,7 +155,7 @@ export namespace Cloud {
 
   export function onVerified(handler: UserHookFunction): void;
   export function onLogin(handler: UserHookFunction): void;
-  export function onAuthDataTransform(handler: AuthDataTransformFunction): void;
+  export function onAuthData(handler: AuthDataTransformFunction): void;
 
   export function onIMMessageReceived(handler: CloudFunction): void;
   export function onIMReceiversOffline(handler: CloudFunction): void;

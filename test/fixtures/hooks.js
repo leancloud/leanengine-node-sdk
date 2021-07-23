@@ -125,7 +125,7 @@ AV.Insight.on('end', function(result) {
   }, result);
 });
 
-AV.Cloud.onAuthDataTransform( request => {
+AV.Cloud.onAuthData( request => {
   let authData = request.authData;
 
   if (authData.weixin.code === '12345') {

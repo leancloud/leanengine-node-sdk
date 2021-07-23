@@ -504,9 +504,9 @@ describe('hook', function() {
       .expect(200, done);
   });
 
-  it('onAuthDataTransform', function(done) {
+  it('onAuthData', function(done) {
     request(app)
-      .post('/1.1/functions/_User/onAuthDataTransform')
+      .post('/1.1/functions/_User/onAuthData')
       .set('X-AVOSCloud-Application-Id', appId)
       .set('X-AVOSCloud-Application-Key', appKey)
       .set('X-LC-Hook-Key', hookKey)
