@@ -1,5 +1,10 @@
 # 更新日志
 
+## 3.8.0
+
+- 添加对新的 Hook（`onAuthData`）的支持，这个 Hook 会在云存储处理第三方登录的 authData 时触发，开发者可以在这个 Hook 中进行对 authData 的校验。
+- 正式支持 JS SDK (leancloud-storage) 4.x，对于新的项目会自动安装 4.x 版本的 JS SDK（不影响既有项目）。
+
 ## 3.7.0
 
 - `req.meta.remoteAddress` 优先从 `Forwarded` 头获取客户端 IP，在线上的 Hook 中可以获取到触发 Hook 的客户端 IP。
