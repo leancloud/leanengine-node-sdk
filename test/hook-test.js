@@ -503,4 +503,23 @@ describe('hook', function() {
       })
       .expect(200, done);
   });
+
+  it('onAuthData', function(done) {
+    request(app)
+      .post('/1.1/functions/_User/onAuthData')
+      .set('X-AVOSCloud-Application-Id', appId)
+      .set('X-AVOSCloud-Application-Key', appKey)
+      .set('X-LC-Hook-Key', hookKey)
+      .send({
+        authData: {
+          weixin: {
+            code: '12345'
+          }
+        }
+      })
+      .expect(200, function(err, res) {
+        res.body.result.weixin.accessToken.should.equal('45678');
+        done();
+      });
+  });
 });

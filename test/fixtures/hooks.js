@@ -124,3 +124,15 @@ AV.Insight.on('end', function(result) {
     "message": "当 status 为 ERROR 时的错误消息"
   }, result);
 });
+
+AV.Cloud.onAuthData( request => {
+  let authData = request.authData;
+
+  if (authData.weixin.code === '12345') {
+    authData.weixin.accessToken = '45678';
+  } else {
+    throw new Error('invalid code');
+  }
+
+  return authData;
+});
